@@ -1,0 +1,2438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<!-- 
+  Plataforma IA Sindical · IASindical.ccoo
+  Autora: Esther Izquierdo
+  Organización: CCOO Servicios Málaga
+  Creado: 2025 · Última actualización: Abril 2026
+  Licencia: Todos los derechos reservados
+-->
+<meta name="author" content="Esther Izquierdo">
+<meta name="copyright" content="© 2025-2026 Esther Izquierdo · CCOO Servicios Málaga">
+<meta name="description" content="Plataforma IA Sindical creada por Esther Izquierdo para CCOO Servicios Málaga. Formación en IA para representantes sindicales.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Plataforma IA Sindical · Abril 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#D62828;--rojo-d:#9B1B1B;--negro:#0D0D0D;--blanco:#F5F0EB;--gris:#1A1A1A;--gris2:#232323;--gris3:#2E2E2E;--acento:#F7B731;--acento2:#00C6AE;--borde:rgba(245,240,235,0.1);--muted:#888;--sw:280px;--th:58px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--negro);color:var(--blanco);min-height:100vh;overflow-x:hidden;}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:var(--negro);}
+::-webkit-scrollbar-thumb{background:#333;border-radius:3px;}
+.topbar{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(13,13,13,0.97);backdrop-filter:blur(16px);border-bottom:1px solid var(--borde);height:var(--th);display:flex;align-items:center;padding:0 1.5rem;gap:1rem;}
+.topbar-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;letter-spacing:-0.02em;white-space:nowrap;}
+.topbar-logo span{color:var(--rojo);}
+.topbar-badge{background:var(--rojo);color:#fff;font-size:0.65rem;font-weight:700;padding:3px 8px;border-radius:20px;letter-spacing:0.08em;text-transform:uppercase;}
+.topbar-spacer{flex:1;}
+.topbar-admin-btn{background:rgba(247,183,49,0.12);border:1px solid rgba(247,183,49,0.3);color:var(--acento);font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:600;padding:6px 14px;border-radius:6px;cursor:pointer;transition:.2s;}
+.topbar-admin-btn:hover{background:rgba(247,183,49,0.25);}
+.topbar-admin-btn.active{background:var(--acento);color:var(--negro);}
+.hamburger{display:none;background:none;border:1px solid var(--borde);border-radius:6px;color:var(--blanco);cursor:pointer;padding:5px 9px;font-size:1.1rem;line-height:1;transition:.2s;}
+.hamburger:hover{border-color:var(--rojo);color:var(--rojo);}
+.layout{display:flex;min-height:100vh;padding-top:var(--th);}
+.sidebar{width:var(--sw);flex-shrink:0;background:var(--gris);border-right:1px solid var(--borde);position:fixed;top:var(--th);bottom:0;left:0;overflow-y:auto;z-index:150;transition:transform .3s cubic-bezier(.4,0,.2,1);}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:149;backdrop-filter:blur(2px);}
+.sidebar-section{padding:1rem 0 0.5rem;}
+.sidebar-label{font-size:0.65rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);padding:0 1.2rem 0.5rem;}
+.sidebar-item{display:flex;align-items:center;gap:10px;padding:9px 1.2rem;cursor:pointer;transition:.15s;border-left:3px solid transparent;font-size:0.85rem;color:rgba(245,240,235,0.65);}
+.sidebar-item:hover{background:rgba(245,240,235,0.05);color:var(--blanco);}
+.sidebar-item.active{background:rgba(214,40,40,0.1);border-left-color:var(--rojo);color:var(--blanco);font-weight:600;}
+.sidebar-item .mod-num{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--muted);background:rgba(245,240,235,0.06);padding:2px 6px;border-radius:3px;flex-shrink:0;}
+.sidebar-divider{height:1px;background:var(--borde);margin:0.5rem 1.2rem;}
+.main{margin-left:var(--sw);flex:1;min-height:calc(100vh - var(--th));}
+.page{display:none;animation:fadeIn .3s ease;}
+.page.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.home-hero{min-height:calc(100vh - var(--th));display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:3rem 2rem;position:relative;overflow:hidden;}
+.home-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 55% at 50% 40%,rgba(214,40,40,0.13) 0%,transparent 70%);}
+.hero-badge{display:inline-block;border:1px solid var(--rojo);color:var(--rojo);font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:1.5rem;position:relative;}
+.home-hero h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2rem,6vw,5rem);line-height:1.05;letter-spacing:-0.03em;max-width:820px;margin-bottom:1.2rem;position:relative;}
+.home-hero h1 em{color:var(--rojo);font-style:normal;}
+.home-hero p{font-size:1.05rem;color:var(--muted);max-width:580px;line-height:1.75;margin-bottom:2.5rem;position:relative;}
+.stats-row{display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;margin-bottom:3rem;position:relative;}
+.stat-pill{text-align:center;}
+.stat-num{font-family:'Syne',sans-serif;font-weight:800;font-size:2rem;color:var(--rojo);display:block;line-height:1;}
+.stat-lbl{font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;}
+.modules-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem;max-width:1100px;width:100%;}
+.mod-card{background:var(--gris2);border:1px solid var(--borde);border-radius:12px;padding:1.5rem;cursor:pointer;transition:.2s;text-align:left;position:relative;overflow:hidden;}
+.mod-card:hover{border-color:rgba(214,40,40,0.4);transform:translateY(-2px);}
+.mod-card-num{font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--muted);background:rgba(245,240,235,0.06);padding:2px 8px;border-radius:3px;display:inline-block;margin-bottom:0.8rem;}
+.mod-card-icon{font-size:1.6rem;margin-bottom:0.6rem;display:block;}
+.mod-card-title{font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;margin-bottom:0.4rem;}
+.mod-card-desc{font-size:0.8rem;color:var(--muted);line-height:1.5;}
+.mod-card-time{font-size:0.72rem;color:var(--rojo);margin-top:0.8rem;font-weight:600;}
+.mod-card-arrow{position:absolute;bottom:1rem;right:1rem;color:var(--muted);font-size:1rem;}
+.page-header{background:var(--gris);border-bottom:1px solid var(--borde);padding:2rem 2.5rem 1.5rem;}
+.page-header-top{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:0.5rem;}
+.page-back{background:none;border:1px solid var(--borde);color:var(--muted);font-size:0.8rem;padding:6px 12px;border-radius:6px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:.2s;display:flex;align-items:center;gap:6px;}
+.page-back:hover{border-color:var(--blanco);color:var(--blanco);}
+.page-tag{font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--rojo);margin-bottom:0.3rem;}
+.page-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(1.4rem,3.5vw,2.5rem);letter-spacing:-0.02em;line-height:1.1;}
+.page-subtitle{font-size:0.92rem;color:var(--muted);margin-top:0.4rem;line-height:1.6;}
+.page-body{padding:2rem 2.5rem 4rem;}
+.card{background:var(--gris2);border:1px solid var(--borde);border-radius:10px;padding:1.5rem;}
+.card-title{font-family:'Syne',sans-serif;font-weight:700;font-size:0.88rem;margin-bottom:0.7rem;}
+.card-text{font-size:0.85rem;color:var(--muted);line-height:1.65;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
+.gridAuto{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;}
+.highlight{background:rgba(214,40,40,0.08);border:1px solid rgba(214,40,40,0.25);border-radius:10px;padding:1.2rem;margin-bottom:1.2rem;}
+.highlight-label{font-size:0.65rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--rojo);margin-bottom:0.4rem;}
+.highlight-text{font-size:0.95rem;line-height:1.65;}
+.highlight.cyan{background:rgba(0,198,174,0.07);border-color:rgba(0,198,174,0.25);}
+.highlight.cyan .highlight-label{color:var(--acento2);}
+.highlight.yellow{background:rgba(247,183,49,0.07);border-color:rgba(247,183,49,0.25);}
+.highlight.yellow .highlight-label{color:var(--acento);}
+.sect-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1.2rem;margin-bottom:0.3rem;margin-top:2rem;}
+.sect-title:first-child{margin-top:0;}
+.sect-sub{font-size:0.82rem;color:var(--muted);margin-bottom:1rem;}
+.divider{height:1px;background:var(--borde);margin:2rem 0;}
+.check-list{list-style:none;display:flex;flex-direction:column;gap:0.5rem;}
+.check-list li{display:flex;align-items:flex-start;gap:8px;font-size:0.87rem;color:var(--muted);line-height:1.55;}
+.check-list li::before{content:'→';color:var(--rojo);flex-shrink:0;margin-top:1px;}
+.check-list li strong{color:var(--blanco);}
+.step-card{background:var(--gris2);border:1px solid var(--borde);border-radius:10px;padding:1.2rem 1.4rem;display:flex;gap:1rem;align-items:flex-start;transition:.2s;}
+.step-card:hover{border-color:rgba(214,40,40,0.3);}
+.step-num{width:36px;height:36px;border-radius:50%;background:var(--rojo);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:0.9rem;flex-shrink:0;color:#fff;}
+.step-body{flex:1;min-width:0;}
+.step-title{font-weight:700;font-size:0.92rem;margin-bottom:0.3rem;}
+.step-desc{font-size:0.82rem;color:var(--muted);line-height:1.55;}
+.step-link{display:inline-flex;align-items:center;gap:5px;margin-top:0.5rem;font-size:0.78rem;color:var(--acento2);text-decoration:none;font-weight:600;}
+.step-link:hover{text-decoration:underline;}
+.platform-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:0.8rem;margin-top:0.8rem;}
+.platform-card{background:var(--gris3);border:1px solid var(--borde);border-radius:8px;padding:1rem;text-align:center;cursor:pointer;transition:.2s;}
+.platform-card:hover{border-color:rgba(245,240,235,0.3);}
+.platform-card .p-icon{font-size:2rem;display:block;margin-bottom:0.5rem;}
+.platform-card .p-name{font-weight:700;font-size:0.88rem;margin-bottom:0.2rem;}
+.platform-card .p-url{font-size:0.72rem;color:var(--acento2);}
+.token-demo{background:var(--gris3);border:1px solid var(--borde);border-radius:10px;padding:1.2rem;}
+.token-input-el{width:100%;background:var(--gris);border:1px solid var(--borde);border-radius:6px;padding:8px 12px;color:var(--blanco);font-family:'JetBrains Mono',monospace;font-size:0.88rem;outline:none;margin-bottom:0.8rem;}
+.token-input-el:focus{border-color:var(--rojo);}
+.token-output{display:flex;flex-wrap:wrap;gap:4px;min-height:36px;}
+.token-chip{padding:3px 7px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:0.75rem;border:1px solid;cursor:default;transition:transform .1s;}
+.token-chip:hover{transform:scale(1.1);}
+.token-stats{margin-top:0.8rem;display:flex;gap:1.2rem;font-size:0.78rem;font-family:'JetBrains Mono',monospace;color:var(--muted);flex-wrap:wrap;}
+.token-stats span b{color:var(--acento2);}
+.prompt-builder{background:var(--gris3);border:1px solid var(--borde);border-radius:10px;padding:1.5rem;}
+.prompt-part{margin-bottom:1rem;}
+.prompt-part label{font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:0.4rem;}
+.prompt-part input,.prompt-part textarea,.prompt-part select{width:100%;background:var(--gris);border:1px solid var(--borde);border-radius:6px;padding:8px 12px;color:var(--blanco);font-family:'DM Sans',sans-serif;font-size:0.88rem;outline:none;transition:.2s;}
+.prompt-part input:focus,.prompt-part textarea:focus,.prompt-part select:focus{border-color:var(--rojo);}
+.prompt-part textarea{resize:vertical;min-height:70px;}
+.prompt-preview{background:rgba(0,0,0,0.4);border:1px solid rgba(214,40,40,0.3);border-radius:8px;padding:1rem;font-family:'JetBrains Mono',monospace;font-size:0.8rem;line-height:1.7;white-space:pre-wrap;color:rgba(245,240,235,0.85);margin-top:1rem;word-break:break-word;}
+.prompt-preview .part-rol{color:#fbbf24;}
+.prompt-preview .part-ctx{color:#67e8f9;}
+.prompt-preview .part-task{color:#86efac;}
+.prompt-preview .part-fmt{color:#c4b5fd;}
+.bad-box{background:rgba(214,40,40,0.07);border:1px solid rgba(214,40,40,0.3);border-radius:8px;padding:1rem;}
+.good-box{background:rgba(0,198,174,0.07);border:1px solid rgba(0,198,174,0.3);border-radius:8px;padding:1rem;}
+.box-label{font-size:0.68rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.5rem;display:block;}
+.bad-box .box-label{color:#ff7070;}
+.good-box .box-label{color:var(--acento2);}
+.box-text{font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:rgba(245,240,235,0.75);line-height:1.65;word-break:break-word;}
+.exercise-box{background:rgba(247,183,49,0.06);border:1px solid rgba(247,183,49,0.2);border-radius:10px;padding:1.5rem;}
+.exercise-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;margin-bottom:0.5rem;color:var(--acento);}
+.exercise-desc{font-size:0.85rem;color:var(--muted);margin-bottom:1rem;line-height:1.6;}
+.btn{background:var(--rojo);border:none;color:#fff;font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.85rem;padding:10px 20px;border-radius:7px;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:6px;}
+.btn:hover{background:#b51e1e;transform:translateY(-1px);}
+.btn-outline{background:transparent;border:1px solid var(--borde);color:var(--blanco);}
+.btn-outline:hover{border-color:var(--blanco);background:rgba(245,240,235,0.05);}
+.btn-cyan{background:var(--acento2);color:var(--negro);}
+.btn-cyan:hover{background:#00a89a;}
+.btn-sm{padding:6px 12px;font-size:0.78rem;}
+.output-box{background:rgba(0,0,0,0.5);border:1px solid var(--borde);border-radius:8px;padding:1rem;font-size:0.85rem;color:rgba(245,240,235,0.8);line-height:1.7;margin-top:1rem;min-height:80px;white-space:pre-wrap;font-family:'DM Sans',sans-serif;word-break:break-word;}
+.output-box.loading{color:var(--muted);font-style:italic;}
+.case-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.2rem;}
+.case-tab{padding:7px 14px;border-radius:6px;font-size:0.78rem;font-weight:500;cursor:pointer;border:1px solid var(--borde);background:transparent;color:var(--muted);transition:.2s;font-family:'DM Sans',sans-serif;}
+.case-tab.active{background:var(--rojo);color:#fff;border-color:var(--rojo);}
+.case-panel{display:none;}
+.case-panel.active{display:block;animation:fadeIn .25s ease;}
+.action-item{background:var(--gris2);border:1px solid var(--borde);border-radius:10px;padding:1.2rem 1.4rem;margin-bottom:0.8rem;}
+.action-head{display:flex;align-items:center;gap:10px;margin-bottom:0.5rem;flex-wrap:wrap;}
+.action-num{width:30px;height:30px;border-radius:50%;background:var(--rojo);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.8rem;flex-shrink:0;font-family:'Syne',sans-serif;}
+.action-title{font-weight:700;font-size:0.92rem;}
+.action-desc{font-size:0.82rem;color:var(--muted);line-height:1.55;}
+.action-checklist{margin-top:0.8rem;display:flex;flex-direction:column;gap:5px;}
+.action-check{display:flex;align-items:center;gap:8px;font-size:0.82rem;cursor:pointer;color:var(--muted);}
+.action-check input[type=checkbox]{accent-color:var(--acento2);}
+.action-check.checked{color:var(--acento2);}
+.tools-table{width:100%;border-collapse:collapse;font-size:0.82rem;}
+.tools-table thead tr{border-bottom:2px solid var(--rojo);}
+.tools-table th{padding:10px 12px;text-align:left;font-family:'Syne',sans-serif;font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);}
+.tools-table td{padding:9px 12px;border-bottom:1px solid var(--borde);vertical-align:middle;}
+.tools-table tr:last-child td{border-bottom:none;}
+.shortcut-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;}
+.shortcut-card{background:var(--gris2);border:1px solid var(--borde);border-radius:10px;overflow:hidden;}
+.shortcut-header{background:var(--gris3);padding:0.8rem 1.2rem;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--borde);}
+.shortcut-header .sh-name{font-weight:700;font-size:0.9rem;}
+.shortcut-item{display:flex;justify-content:space-between;align-items:center;padding:7px 1.2rem;border-bottom:1px solid var(--borde);}
+.shortcut-item:last-child{border-bottom:none;}
+.shortcut-item .sh-action{font-size:0.8rem;color:var(--muted);}
+.shortcut-key{font-family:'JetBrains Mono',monospace;background:rgba(245,240,235,0.06);border:1px solid var(--borde);padding:2px 7px;border-radius:4px;font-size:0.72rem;color:var(--acento);}
+.admin-bar{background:rgba(247,183,49,0.08);border-bottom:2px dashed rgba(247,183,49,0.3);padding:0.8rem 1.5rem;display:none;align-items:center;gap:0.7rem;flex-wrap:wrap;}
+.admin-bar.show{display:flex;}
+.admin-bar-title{font-size:0.78rem;font-weight:700;color:var(--acento);letter-spacing:0.08em;text-transform:uppercase;}
+.admin-btn{background:rgba(247,183,49,0.15);border:1px solid rgba(247,183,49,0.35);color:var(--acento);font-size:0.75rem;font-weight:600;padding:5px 12px;border-radius:5px;cursor:pointer;transition:.2s;font-family:'DM Sans',sans-serif;}
+.admin-btn:hover{background:rgba(247,183,49,0.3);}
+.admin-btn.danger{background:rgba(214,40,40,0.1);border-color:rgba(214,40,40,0.3);color:#ff7070;}
+.admin-btn.danger:hover{background:rgba(214,40,40,0.25);}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:500;align-items:center;justify-content:center;padding:1.5rem;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:var(--gris);border:1px solid var(--borde);border-radius:14px;max-width:700px;width:100%;max-height:90vh;overflow-y:auto;padding:2rem;}
+.modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;}
+.modal-head h3{font-family:'Syne',sans-serif;font-weight:700;font-size:1.15rem;}
+.modal-close{background:none;border:1px solid var(--borde);color:var(--muted);width:32px;height:32px;border-radius:6px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:.2s;}
+.modal-close:hover{background:var(--rojo);color:#fff;border-color:var(--rojo);}
+.form-group{margin-bottom:1rem;}
+.form-label{font-size:0.75rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:0.4rem;}
+.form-input{width:100%;background:var(--negro);border:1px solid var(--borde);border-radius:7px;padding:9px 12px;color:var(--blanco);font-family:'DM Sans',sans-serif;font-size:0.88rem;outline:none;transition:.2s;}
+.form-input:focus{border-color:var(--acento);}
+.form-textarea{width:100%;background:var(--negro);border:1px solid var(--borde);border-radius:7px;padding:9px 12px;color:var(--blanco);font-family:'DM Sans',sans-serif;font-size:0.88rem;outline:none;transition:.2s;resize:vertical;min-height:90px;}
+.form-textarea:focus{border-color:var(--acento);}
+.resource-list{display:flex;flex-direction:column;gap:0.8rem;}
+.resource-item{background:var(--gris2);border:1px solid var(--borde);border-radius:9px;padding:1rem 1.2rem;display:flex;align-items:flex-start;gap:12px;transition:.2s;}
+.resource-item:hover{border-color:rgba(245,240,235,0.2);}
+.resource-icon{font-size:1.5rem;flex-shrink:0;}
+.resource-title{font-weight:600;font-size:0.88rem;margin-bottom:2px;}
+.resource-desc{font-size:0.78rem;color:var(--muted);line-height:1.5;}
+.resource-link{font-size:0.75rem;color:var(--acento2);text-decoration:none;margin-top:4px;display:inline-block;}
+.resource-link:hover{text-decoration:underline;}
+.quiz-q{font-family:'Syne',sans-serif;font-weight:700;font-size:1.05rem;margin-bottom:1.2rem;}
+.quiz-opts{display:flex;flex-direction:column;gap:9px;margin-bottom:1.2rem;}
+.quiz-opt{background:var(--gris2);border:1px solid var(--borde);border-radius:8px;padding:0.9rem 1.1rem;cursor:pointer;transition:.2s;font-size:0.87rem;display:flex;align-items:center;gap:10px;}
+.quiz-opt:hover{border-color:rgba(245,240,235,0.25);}
+.quiz-opt.correct{background:rgba(0,198,174,0.1);border-color:var(--acento2);color:var(--acento2);}
+.quiz-opt.wrong{background:rgba(214,40,40,0.1);border-color:var(--rojo);color:#ff7070;}
+.quiz-letter{width:26px;height:26px;border-radius:50%;background:rgba(245,240,235,0.07);display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;flex-shrink:0;}
+.quiz-feedback{padding:0.9rem;border-radius:8px;font-size:0.83rem;display:none;margin-bottom:1rem;line-height:1.6;}
+.quiz-feedback.show{display:block;}
+.quiz-feedback.ok{background:rgba(0,198,174,0.1);border:1px solid rgba(0,198,174,0.3);color:var(--acento2);}
+.quiz-feedback.fail{background:rgba(214,40,40,0.1);border:1px solid rgba(214,40,40,0.3);color:#ff7070;}
+.quiz-progress-bar{height:3px;background:var(--borde);border-radius:2px;margin-bottom:0.8rem;overflow:hidden;}
+.quiz-progress-bar-fill{height:100%;background:var(--rojo);border-radius:2px;transition:width .4s;}
+.conceptos-frame-wrapper{background:var(--negro);min-height:calc(100vh - var(--th));}
+.conceptos-embed{width:100%;border:none;display:block;min-height:calc(100vh - var(--th));}
+.app-footer{background:#0a0a0a;border-top:1px solid rgba(245,240,235,0.07);padding:0.9rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;margin-left:var(--sw);font-size:0.72rem;color:#444;}
+.app-footer .footer-author{color:#555;letter-spacing:0.02em;}
+.app-footer .footer-author strong{color:#666;}
+.app-footer .footer-right{display:flex;align-items:center;gap:1rem;}
+.app-footer .footer-cc{color:#333;font-size:0.65rem;letter-spacing:0.04em;}
+@media(max-width:900px){.app-footer{margin-left:0;padding:0.7rem 1rem;}}
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--gris2);border:1px solid var(--borde);border-radius:8px;padding:0.8rem 1.2rem;font-size:0.83rem;z-index:999;transform:translateY(80px);opacity:0;transition:.3s;max-width:300px;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.success{border-color:rgba(0,198,174,0.5);color:var(--acento2);}
+.toast.error{border-color:rgba(214,40,40,0.5);color:#ff7070;}
+
+/* ══ RESPONSIVE ══ */
+@media(max-width:900px){
+  .sidebar{transform:translateX(-100%);width:min(var(--sw),85vw);z-index:300;box-shadow:4px 0 24px rgba(0,0,0,0.5);}
+  .sidebar.open{transform:translateX(0);}
+  .sidebar-overlay.open{display:block;}
+  .main{margin-left:0;}
+  .hamburger{display:flex;align-items:center;justify-content:center;}
+  .topbar{padding:0 0.9rem;gap:0.7rem;}
+  .grid2,.grid3{grid-template-columns:1fr;}
+  .gridAuto{grid-template-columns:1fr 1fr;}
+  .home-hero{padding:2.5rem 1.2rem 5rem;min-height:auto;}
+  .stats-row{gap:1.2rem;}
+  .stat-num{font-size:1.5rem;}
+  .modules-grid{grid-template-columns:1fr;}
+  .page-header{padding:1.5rem 1.2rem 1rem;}
+  .page-body{padding:1.2rem 1.2rem 5rem;}
+  .prompt-builder .grid2{grid-template-columns:1fr;}
+  .case-tab{padding:6px 10px;font-size:0.72rem;}
+  .token-stats{flex-direction:column;gap:0.3rem;}
+  .shortcut-grid{grid-template-columns:1fr;}
+  .platform-row{grid-template-columns:1fr 1fr;}
+  .admin-bar{padding:0.7rem 1rem;}
+  .modal-box{padding:1.5rem 1.2rem;}
+}
+@media(max-width:480px){
+  .topbar-badge{display:none;}
+  .gridAuto{grid-template-columns:1fr;}
+  .home-hero h1{font-size:1.9rem;}
+  .page-title{font-size:1.4rem;}
+  .stat-num{font-size:1.3rem;}
+  .mod-card{padding:1.2rem;}
+  .step-card{padding:0.9rem 1rem;}
+  .step-num{width:30px;height:30px;font-size:0.8rem;}
+  .tools-table td,.tools-table th{padding:7px 8px;font-size:0.75rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <button class="hamburger" id="hamburgerBtn" onclick="toggleSidebar()" aria-label="Menu">&#9776;</button>
+  <div class="topbar-logo">IA<span>Sindical</span></div>
+  <div class="topbar-badge">Abril 2026</div>
+  <div class="topbar-spacer"></div>
+  <button class="topbar-admin-btn" id="adminToggle" onclick="toggleAdmin()">&#9881;&#65039; Admin</button>
+</div>
+
+<!-- ADMIN BAR -->
+<div class="admin-bar" id="adminBar">
+  <span class="admin-bar-title">&#9998;&#65039; Modo Edicion</span>
+  <button class="admin-btn" onclick="openModal('addCursoModal')">+ Modulo</button>
+  <button class="admin-btn" onclick="openModal('addRecursoModal')">+ Recurso</button>
+  <button class="admin-btn" onclick="toggleEditable()">&#9998; Editar Texto</button>
+  <button class="admin-btn" onclick="saveChanges()">&#128190; Guardar</button>
+  <button class="admin-btn danger" onclick="resetAll()">&#8635; Resetear</button>
+</div>
+
+<!-- SIDEBAR OVERLAY -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<div class="layout">
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-section">
+    <div class="sidebar-label">Navegacion</div>
+    <div class="sidebar-item active" onclick="showPage('home');closeSidebar()">&#127968; <span>Inicio</span></div>
+    <div class="sidebar-item" onclick="showPage('conceptos20');closeSidebar()">&#129504; <span class="mod-num">M0</span> 20 Conceptos IA</div>
+  </div>
+  <div class="sidebar-divider"></div>
+  <div class="sidebar-section">
+    <div class="sidebar-label">Modulos del Curso</div>
+    <div class="sidebar-item" onclick="showPage('mod0');closeSidebar()"><span class="mod-num">M1</span> Intro &amp; Setup</div>
+    <div class="sidebar-item" onclick="showPage('mod1');closeSidebar()"><span class="mod-num">M2</span> Que es la IA</div>
+    <div class="sidebar-item" onclick="showPage('mod2');closeSidebar()"><span class="mod-num">M3</span> Arte del Prompting</div>
+    <div class="sidebar-item" onclick="showPage('mod3');closeSidebar()"><span class="mod-num">M4</span> IA para el Sindicato</div>
+    <div class="sidebar-item" onclick="showPage('mod4');closeSidebar()"><span class="mod-num">M5</span> Herramientas Avanzadas</div>
+    <div class="sidebar-item" onclick="showPage('mod5');closeSidebar()"><span class="mod-num">M6</span> Plan de Accion</div>
+  </div>
+  <div class="sidebar-divider"></div>
+  <div class="sidebar-section">
+    <div class="sidebar-label">Extra</div>
+    <div class="sidebar-item" onclick="showPage('recursos');closeSidebar()">&#128206; Recursos y URLs</div>
+    <div class="sidebar-item" onclick="showPage('quiz');closeSidebar()">&#129504; Quiz Interactivo</div>
+    <div class="sidebar-item" onclick="showPage('shortcuts');closeSidebar()">&#9000;&#65039; Atajos Rapidos</div>
+    <div class="sidebar-item" onclick="showPage('biblioteca');closeSidebar()">&#127902;&#65039; Biblioteca de Formacion</div>
+  </div>
+  <div class="sidebar-divider"></div>
+  <div class="sidebar-section">
+    <div class="sidebar-label">Plataformas IA</div>
+    <div class="sidebar-item" onclick="showPage('plat-google');closeSidebar()">&#128994; Ecosistema Google</div>
+    <div class="sidebar-item" onclick="showPage('plat-chatgpt');closeSidebar()">&#129001; ChatGPT &amp; Custom GPTs</div>
+    <div class="sidebar-item" onclick="showPage('plat-claude');closeSidebar()">&#128992; Claude Projects</div>
+    <div class="sidebar-item" onclick="showPage('plat-perplexity');closeSidebar()">&#128316; Perplexity &amp; Espacios</div>
+    <div class="sidebar-item" onclick="showPage('plat-ollama');closeSidebar()">&#129422; Ollama &amp; Gemma 4</div>
+  </div>
+  <div class="sidebar-section" id="extraModulesSection" style="display:none;">
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-label">Modulos Anadidos</div>
+    <div id="extraModulesList"></div>
+  </div>
+</div>
+
+<div class="main" id="mainContent">
+
+<!-- HOME -->
+<div class="page active" id="page-home">
+  <div class="home-hero">
+    <span class="hero-badge">Formacion Intensiva · 3 Horas · Google Meet</span>
+    <h1>Domina la IA<br><em>Sin Quedarte Atras</em></h1>
+    <p>Plataforma interactiva para representantes sindicales de CCOO Servicios Malaga. Modulos completos, ejercicios practicos y todas las herramientas de IA 2026.</p>
+    <div class="stats-row">
+      <div class="stat-pill"><span class="stat-num">6</span><span class="stat-lbl">Modulos</span></div>
+      <div class="stat-pill"><span class="stat-num">20</span><span class="stat-lbl">Conceptos</span></div>
+      <div class="stat-pill"><span class="stat-num">3h</span><span class="stat-lbl">Duracion</span></div>
+      <div class="stat-pill"><span class="stat-num">100%</span><span class="stat-lbl">Practico</span></div>
+    </div>
+    <div class="modules-grid">
+      <div class="mod-card" onclick="showPage('conceptos20')">
+        <span class="mod-card-num">NUEVO · M0</span>
+        <span class="mod-card-icon">&#129504;</span>
+        <div class="mod-card-title">20 Conceptos Fundamentales de IA</div>
+        <div class="mod-card-desc">Guia interactiva completa: tokens, modelos, RAG, agentes y mas.</div>
+        <div class="mod-card-time">Autoestudio · 20 conceptos</div>
+        <div class="mod-card-arrow">&#8594;</div>
+      </div>
+      <div class="mod-card" onclick="showPage('mod0')">
+        <span class="mod-card-num">M1 · 15 min</span>
+        <span class="mod-card-icon">&#128640;</span>
+        <div class="mod-card-title">Intro &amp; Setup de Cuentas</div>
+        <div class="mod-card-desc">Crea tus cuentas en Claude, ChatGPT, Gemini y Perplexity paso a paso.</div>
+        <div class="mod-card-time">10:00 - 10:15</div>
+        <div class="mod-card-arrow">&#8594;</div>
+      </div>
+      <div class="mod-card" onclick="showPage('mod1')">
+        <span class="mod-card-num">M2 · 30 min</span>
+        <span class="mod-card-icon">&#128161;</span>
+        <div class="mod-card-title">Que es la IA y Como Funciona</div>
+        <div class="mod-card-desc">LLMs, modelos 2026, alucinaciones, privacidad y etica.</div>
+        <div class="mod-card-time">10:15 - 10:45</div>
+        <div class="mod-card-arrow">&#8594;</div>
+      </div>
+      <div class="mod-card" onclick="showPage('mod2')">
+        <span class="mod-card-num">M3 · 40 min</span>
+        <span class="mod-card-icon">&#9997;&#65039;</span>
+        <div class="mod-card-title">El Arte del Prompting Efectivo</div>
+        <div class="mod-card-desc">Constructor interactivo de prompts y tecnicas avanzadas.</div>
+        <div class="mod-card-time">10:50 - 11:30</div>
+        <div class="mod-card-arrow">&#8594;</div>
+      </div>
+      <div class="mod-card" onclick="showPage('mod3')">
+        <span class="mod-card-num">M4 · 50 min</span>
+        <span class="mod-card-icon">&#9878;&#65039;</span>
+        <div class="mod-card-title">IA para el Trabajo Sindical</div>
+        <div class="mod-card-desc">Casos reales: convenios, escritos, negociacion, investigacion.</div>
+        <div class="mod-card-time">11:30 - 12:20</div>
+        <div class="mod-card-arrow">&#8594;</div>
+      </div>
+      <div class="mod-card" onclick="showPage('mod4')">
+        <span class="mod-card-num">M5 · 35 min</span>
+        <span class="mod-card-icon">&#9889;</span>
+        <div class="mod-card-title">Herramientas Avanzadas</div>
+        <div class="mod-card-desc">PDFs, multimodal, Perplexity, Google Workspace, Copilot.</div>
+        <div class="mod-card-time">12:30 - 13:05</div>
+        <div class="mod-card-arrow">&#8594;</div>
+      </div>
+      <div class="mod-card" onclick="showPage('mod5')">
+        <span class="mod-card-num">M6 · 25 min</span>
+        <span class="mod-card-icon">&#127919;</span>
+        <div class="mod-card-title">Plan de Accion Personal</div>
+        <div class="mod-card-desc">Crea tu hoja de ruta personal y define tus primeros casos de uso.</div>
+        <div class="mod-card-time">13:05 - 13:30</div>
+        <div class="mod-card-arrow">&#8594;</div>
+      </div>
+      <div class="mod-card" onclick="showPage('plat-google')">
+        <span class="mod-card-num">EXTRA · Plataformas</span>
+        <span class="mod-card-icon">&#128994;</span>
+        <div class="mod-card-title">Ecosistema Google</div>
+        <div class="mod-card-desc">Gemini Gems, NotebookLM, Gmail, Docs y Drive con IA.</div>
+        <div class="mod-card-time">Interactivo</div>
+        <div class="mod-card-arrow">&#8594;</div>
+      </div>
+      <div class="mod-card" onclick="showPage('plat-chatgpt')">
+        <span class="mod-card-num">EXTRA · Plataformas</span>
+        <span class="mod-card-icon">&#129001;</span>
+        <div class="mod-card-title">ChatGPT &amp; Custom GPTs</div>
+        <div class="mod-card-desc">Chats, proyectos, Custom GPTs y Code Interpreter.</div>
+        <div class="mod-card-time">Interactivo</div>
+        <div class="mod-card-arrow">&#8594;</div>
+      </div>
+      <div class="mod-card" onclick="showPage('plat-claude')">
+        <span class="mod-card-num">EXTRA · Plataformas</span>
+        <span class="mod-card-icon">&#128992;</span>
+        <div class="mod-card-title">Claude Projects</div>
+        <div class="mod-card-desc">Proyectos, chats, artefactos y 200K tokens.</div>
+        <div class="mod-card-time">Interactivo</div>
+        <div class="mod-card-arrow">&#8594;</div>
+      </div>
+      <div class="mod-card" onclick="showPage('plat-perplexity')">
+        <span class="mod-card-num">EXTRA · Plataformas</span>
+        <span class="mod-card-icon">&#128316;</span>
+        <div class="mod-card-title">Perplexity &amp; Espacios</div>
+        <div class="mod-card-desc">Motor de busqueda con IA, computadora y espacios.</div>
+        <div class="mod-card-time">Interactivo</div>
+        <div class="mod-card-arrow">&#8594;</div>
+      </div>
+      <div class="mod-card" onclick="showPage('plat-ollama')">
+        <span class="mod-card-num">EXTRA · IA Local</span>
+        <span class="mod-card-icon">&#129422;</span>
+        <div class="mod-card-title">Ollama &amp; Gemma 4</div>
+        <div class="mod-card-desc">IA local gratuita, sin enviar datos, privacidad total.</div>
+        <div class="mod-card-time">Interactivo</div>
+        <div class="mod-card-arrow">&#8594;</div>
+      </div>
+      <div class="mod-card" onclick="showPage('biblioteca')">
+        <span class="mod-card-num">BIBLIOTECA</span>
+        <span class="mod-card-icon">&#127902;&#65039;</span>
+        <div class="mod-card-title">Biblioteca de Formacion</div>
+        <div class="mod-card-desc">Videos, presentaciones y materiales de los cursos CCOO.</div>
+        <div class="mod-card-time">Multimedia</div>
+        <div class="mod-card-arrow">&#8594;</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COCO ASISTENTE -->
+<div class="page" id="page-conceptos20">
+  <div class="page-header">
+    <div class="page-header-top"><button class="page-back" onclick="showPage('home')">&#8592; Volver</button></div>
+    <div class="page-tag">Modulo 0 - Autoestudio</div>
+    <div class="page-title">20 Conceptos Fundamentales de IA</div>
+    <div class="page-subtitle">Guia interactiva completa - CCOO Servicios Malaga</div>
+  </div>
+  <div class="conceptos-frame-wrapper">
+    <iframe id="conceptosFrame" class="conceptos-embed" src="about:blank" title="20 Conceptos IA"></iframe>
+  </div>
+</div>
+
+<!-- M1: SETUP -->
+<div class="page" id="page-mod0">
+  <div class="page-header">
+    <div class="page-header-top"><button class="page-back" onclick="showPage('home')">&#8592; Volver</button></div>
+    <div class="page-tag">Modulo 1 - 15 min - 10:00-10:15</div>
+    <div class="page-title">Intro &amp; Setup de Cuentas</div>
+    <div class="page-subtitle">Crea tus cuentas en las principales herramientas de IA paso a paso</div>
+  </div>
+  <div class="page-body">
+    <div class="highlight yellow">
+      <div class="highlight-label">Antes de empezar</div>
+      <div class="highlight-text">Tendras todo listo en 10-15 minutos. Solo necesitas: email activo, conexion a internet. Todo es gratuito.</div>
+    </div>
+    <div class="sect-title">Plataformas que crearemos hoy</div>
+    <div class="platform-row" style="margin-bottom:2rem;">
+      <div class="platform-card"><span class="p-icon">&#128992;</span><div class="p-name">Claude</div><div class="p-url">claude.ai</div></div>
+      <div class="platform-card"><span class="p-icon">&#128994;</span><div class="p-name">ChatGPT</div><div class="p-url">chat.openai.com</div></div>
+      <div class="platform-card"><span class="p-icon">&#128997;</span><div class="p-name">Gemini</div><div class="p-url">gemini.google.com</div></div>
+      <div class="platform-card"><span class="p-icon">&#128316;</span><div class="p-name">Perplexity</div><div class="p-url">perplexity.ai</div></div>
+    </div>
+    <div class="sect-title">Claude (Anthropic)</div>
+    <div style="display:flex;flex-direction:column;gap:0.7rem;margin-bottom:2rem;">
+      <div class="step-card"><div class="step-num">1</div><div class="step-body"><div class="step-title">Abre claude.ai en tu navegador</div><div class="step-desc">Ve a claude.ai - no hace falta instalar nada.</div><a class="step-link" href="https://claude.ai" target="_blank">Abrir Claude</a></div></div>
+      <div class="step-card"><div class="step-num">2</div><div class="step-body"><div class="step-title">Haz clic en Sign up</div><div class="step-desc">Puedes registrarte con email o con tu cuenta de Google.</div></div></div>
+      <div class="step-card"><div class="step-num">3</div><div class="step-body"><div class="step-title">Confirma tu email</div><div class="step-desc">Anthropic te enviara un enlace de verificacion.</div></div></div>
+      <div class="step-card"><div class="step-num">4</div><div class="step-body"><div class="step-title">Prueba este primer prompt</div><div class="step-desc">Escribe: "Explica en 3 lineas que es un convenio colectivo"</div></div></div>
+    </div>
+    <div class="sect-title">ChatGPT (OpenAI)</div>
+    <div style="display:flex;flex-direction:column;gap:0.7rem;margin-bottom:2rem;">
+      <div class="step-card"><div class="step-num">1</div><div class="step-body"><div class="step-title">Ve a chat.openai.com</div><div class="step-desc">Haz clic en Sign up.</div><a class="step-link" href="https://chat.openai.com" target="_blank">Abrir ChatGPT</a></div></div>
+      <div class="step-card"><div class="step-num">2</div><div class="step-body"><div class="step-title">Elige metodo de registro</div><div class="step-desc">Email, Google, Microsoft o Apple.</div></div></div>
+      <div class="step-card"><div class="step-num">3</div><div class="step-body"><div class="step-title">Activa la busqueda web</div><div class="step-desc">En la barra de chat activa el icono del globo para busquedas en tiempo real.</div></div></div>
+    </div>
+    <div class="highlight cyan">
+      <div class="highlight-label">Checklist de setup completo</div>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-top:0.5rem;">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:0.87rem;"><input type="checkbox" style="accent-color:var(--acento2);"> Cuenta en Claude.ai creada</label>
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:0.87rem;"><input type="checkbox" style="accent-color:var(--acento2);"> Cuenta en ChatGPT creada</label>
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:0.87rem;"><input type="checkbox" style="accent-color:var(--acento2);"> Acceso a Gemini con Google</label>
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:0.87rem;"><input type="checkbox" style="accent-color:var(--acento2);"> Primera busqueda en Perplexity</label>
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:0.87rem;"><input type="checkbox" style="accent-color:var(--acento2);"> Enviado primer mensaje a Claude</label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- M2: QUE ES LA IA -->
+<div class="page" id="page-mod1">
+  <div class="page-header">
+    <div class="page-header-top"><button class="page-back" onclick="showPage('home')">&#8592; Volver</button></div>
+    <div class="page-tag">Modulo 2 - 30 min - 10:15-10:45</div>
+    <div class="page-title">Que es la IA y Como Funciona</div>
+    <div class="page-subtitle">Entiende los modelos de lenguaje, sus capacidades y limites. Sin tecnicismos.</div>
+  </div>
+  <div class="page-body">
+    <div class="highlight">
+      <div class="highlight-label">Concepto central</div>
+      <div class="highlight-text">Un LLM NO piensa. Predice el siguiente token basandose en patrones de billones de textos. No tiene conciencia, no sabe si algo es verdad.</div>
+    </div>
+    <div class="sect-title">Visualizador de Tokens</div>
+    <div class="token-demo" style="margin-bottom:1.5rem;">
+      <input class="token-input-el" id="iaTokenInput" value="convenio colectivo sindical" oninput="tokenizerDemo('iaTokenInput','iaTokenOutput','iaTokCount','iaTokCost')" placeholder="Escribe texto...">
+      <div class="token-output" id="iaTokenOutput"></div>
+      <div class="token-stats"><span>Tokens: <b id="iaTokCount">0</b></span><span>Coste est.: <b id="iaTokCost">$0.000</b></span></div>
+    </div>
+    <div class="sect-title">Los modelos mas importantes en 2026</div>
+    <div class="gridAuto" style="margin-bottom:1.5rem;">
+      <div class="card"><div class="card-title">Claude (Anthropic)</div><div class="card-text">Sonnet 4.6 / Opus 4.6. Especialista en textos largos y escritura juridica. Recomendado para convenios.</div></div>
+      <div class="card"><div class="card-title">ChatGPT (OpenAI)</div><div class="card-text">GPT-4o y o3. Muy versatil. Multimodal completo (texto, imagen, voz, PDF).</div></div>
+      <div class="card"><div class="card-title">Gemini (Google)</div><div class="card-text">Gemini 2.0. Integracion nativa con Google Workspace. 1M tokens de contexto.</div></div>
+      <div class="card"><div class="card-title">Llama (Meta)</div><div class="card-text">Open-source. Privacidad total: corre en tu ordenador sin enviar datos.</div></div>
+    </div>
+    <div class="divider"></div>
+    <div class="sect-title">Alucinaciones y Privacidad</div>
+    <div class="grid2" style="margin-bottom:1.5rem;">
+      <div>
+        <div class="bad-box" style="margin-bottom:0.8rem;">
+          <span class="box-label">Ejemplo de alucinacion</span>
+          <div class="box-text">"El ET fue modificado el 14/03/2024 en su art. 37.5..." &rarr; FALSO. El modelo lo invento.</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Como detectarlas</div>
+          <ul class="check-list">
+            <li>Verifica con fuente oficial (BOE, convenio)</li>
+            <li>Desconfia de fechas y articulos muy especificos</li>
+            <li>Pide al modelo que cite su fuente</li>
+            <li>Usa Perplexity para informacion actualizada</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Privacidad: que NUNCA enviar</div>
+        <ul class="check-list">
+          <li><strong>Datos de afiliados:</strong> nombre, DNI, num. afiliacion</li>
+          <li><strong>Info interna:</strong> estrategias confidenciales</li>
+          <li><strong>Datos sensibles:</strong> condicion sindical = RGPD Art.9</li>
+          <li><strong>Contrasenas</strong> o credenciales</li>
+        </ul>
+        <div class="highlight" style="margin:0.8rem 0 0 0;">
+          <div class="highlight-label">Alternativa segura</div>
+          <div class="highlight-text" style="font-size:0.82rem;">Anonimiza: usa "Trabajador X" en lugar de nombres reales.</div>
+        </div>
+      </div>
+    </div>
+    <div class="exercise-box">
+      <div class="exercise-title">Demo de prompts por herramienta</div>
+      <div style="display:flex;gap:0.7rem;flex-wrap:wrap;margin-bottom:0.8rem;">
+        <button class="btn btn-sm" onclick="demoModels('convenio')">Sobre convenio</button>
+        <button class="btn btn-sm btn-outline" onclick="demoModels('negociacion')">Negociacion</button>
+        <button class="btn btn-sm btn-outline" onclick="demoModels('circular')">Circular</button>
+      </div>
+      <div class="output-box loading" id="demoOutput">Haz clic en un boton para ver el prompt recomendado...</div>
+    </div>
+  </div>
+</div>
+
+<!-- M3: PROMPTING -->
+<div class="page" id="page-mod2">
+  <div class="page-header">
+    <div class="page-header-top"><button class="page-back" onclick="showPage('home')">&#8592; Volver</button></div>
+    <div class="page-tag">Modulo 3 - 40 min - 10:50-11:30</div>
+    <div class="page-title">El Arte del Prompting Efectivo</div>
+    <div class="page-subtitle">Aprende a comunicarte con la IA como un profesional.</div>
+  </div>
+  <div class="page-body">
+    <div class="sect-title">La Formula: ROL + CONTEXTO + TAREA + FORMATO</div>
+    <div class="grid2" style="margin-bottom:1.5rem;">
+      <div>
+        <div class="highlight yellow" style="margin-bottom:0.8rem;">
+          <div class="highlight-label">Clave</div>
+          <div class="highlight-text">Cuanto mas contexto das, mas util es la respuesta.</div>
+        </div>
+        <div class="bad-box" style="margin-bottom:0.6rem;">
+          <span class="box-label">Prompt pobre</span>
+          <div class="box-text">"Escribeme algo sobre el convenio colectivo."</div>
+        </div>
+        <div class="good-box">
+          <span class="box-label">Prompt con formula</span>
+          <div class="box-text">"Actua como asesor legal laboral [ROL]. Soy delegado sindical en empresa retail de 200 personas [CONTEXTO]. Redacta 5 argumentos para +4% salarial [TAREA]. En formato numerado con referencia legal [FORMATO]."</div>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:0.8rem;"><div class="card-title">ROL</div><div class="card-text">"Actua como abogado laboralista", "Eres experto en negociacion colectiva"...</div></div>
+        <div class="card" style="margin-bottom:0.8rem;"><div class="card-title">CONTEXTO</div><div class="card-text">Sector, tamano empresa, convenio aplicable, historial...</div></div>
+        <div class="card" style="margin-bottom:0.8rem;"><div class="card-title">TAREA</div><div class="card-text">No "ayudame", sino "Redacta / Analiza / Resume / Compara..."</div></div>
+        <div class="card"><div class="card-title">FORMATO</div><div class="card-text">Numero de puntos, longitud, tono, estructura...</div></div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="sect-title">Constructor Interactivo de Prompts</div>
+    <div class="prompt-builder" style="margin-bottom:1.5rem;">
+      <div class="grid2">
+        <div>
+          <div class="prompt-part">
+            <label>ROL</label>
+            <select id="pb-rol" oninput="buildPrompt()">
+              <option value="Actua como asesor legal laboral especialista en derecho sindical espanol">Asesor legal laboral</option>
+              <option value="Eres un experto en negociacion colectiva del sector servicios">Experto negociacion colectiva</option>
+              <option value="Actua como redactor profesional de comunicaciones sindicales">Redactor comunicaciones sindicales</option>
+              <option value="Eres un economista especialista en analisis salarial sectorial">Economista salarial</option>
+            </select>
+          </div>
+          <div class="prompt-part">
+            <label>CONTEXTO</label>
+            <textarea id="pb-ctx" oninput="buildPrompt()">Soy delegado sindical en empresa de 200 trabajadores del sector retail. Estamos negociando el convenio colectivo de empresa 2026.</textarea>
+          </div>
+        </div>
+        <div>
+          <div class="prompt-part">
+            <label>TAREA</label>
+            <select id="pb-task" oninput="buildPrompt()">
+              <option value="Redacta 5 argumentos solidos para defender un incremento salarial del 4% anual vinculado al IPC real">Argumentos para subida salarial</option>
+              <option value="Analiza las posibles consecuencias legales y laborales de esta situacion">Analisis consecuencias legales</option>
+              <option value="Redacta una circular informativa clara para los afiliados">Redactar circular afiliados</option>
+              <option value="Prepara un guion de puntos para la reunion de negociacion">Guion reunion negociacion</option>
+            </select>
+          </div>
+          <div class="prompt-part">
+            <label>FORMATO</label>
+            <select id="pb-fmt" oninput="buildPrompt()">
+              <option value="Formato numerado. Cada punto con titulo, 3 lineas de desarrollo y referencia legal.">Numerado con referencias legales</option>
+              <option value="Formato de carta formal con saludo, cuerpo y cierre profesional. Tono firme pero constructivo.">Carta formal</option>
+              <option value="Bullet points cortos, lenguaje B1, comprensible para trabajadores sin formacion juridica.">Bullet points simples</option>
+              <option value="Tabla comparativa con columnas: Punto, Posicion empresa, Posicion sindicato, Propuesta acuerdo.">Tabla comparativa</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:0.8rem;">
+        <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem;">Tu prompt generado</div>
+        <div class="prompt-preview" id="promptPreview">Ajusta los campos arriba...</div>
+        <div style="margin-top:0.8rem;display:flex;gap:0.7rem;flex-wrap:wrap;">
+          <button class="btn btn-sm" onclick="copyPrompt()">Copiar Prompt</button>
+          <a class="btn btn-sm btn-outline" href="https://claude.ai" target="_blank">Claude</a>
+          <a class="btn btn-sm btn-outline" href="https://chat.openai.com" target="_blank">ChatGPT</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- M4: IA SINDICAL -->
+<div class="page" id="page-mod3">
+  <div class="page-header">
+    <div class="page-header-top"><button class="page-back" onclick="showPage('home')">&#8592; Volver</button></div>
+    <div class="page-tag">Modulo 4 - 50 min - 11:30-12:20</div>
+    <div class="page-title">IA para el Trabajo Sindical</div>
+    <div class="page-subtitle">Casos practicos reales con plantillas listas para usar</div>
+  </div>
+  <div class="page-body">
+    <div class="case-tabs">
+      <button class="case-tab active" onclick="switchCase('convenio',this)">Convenio</button>
+      <button class="case-tab" onclick="switchCase('escrito',this)">Escrito</button>
+      <button class="case-tab" onclick="switchCase('negociacion',this)">Negociacion</button>
+      <button class="case-tab" onclick="switchCase('investigar',this)">Legislacion</button>
+      <button class="case-tab" onclick="switchCase('circular',this)">Circular</button>
+      <button class="case-tab" onclick="switchCase('analisis',this)">Documentos</button>
+    </div>
+    <div class="case-panel active" id="case-convenio">
+      <div class="highlight cyan"><div class="highlight-label">Caso de uso</div><div class="highlight-text">Sube el PDF del convenio a Claude y formula preguntas especificas.</div></div>
+      <div class="grid2">
+        <div>
+          <div class="sect-title" style="margin-top:0;">Pasos para analizar un convenio</div>
+          <div style="display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1rem;">
+            <div class="step-card"><div class="step-num">1</div><div class="step-body"><div class="step-title">Abre Claude.ai y sube el PDF</div><div class="step-desc">Icono clip - sube el convenio. Claude lee hasta 200 paginas.</div></div></div>
+            <div class="step-card"><div class="step-num">2</div><div class="step-body"><div class="step-title">Usa el prompt de analisis</div><div class="step-desc">Copia el prompt de la derecha y pegalo tras subir el documento.</div></div></div>
+            <div class="step-card"><div class="step-num">3</div><div class="step-body"><div class="step-title">Haz preguntas de seguimiento</div><div class="step-desc">"Que dice el articulo 23?", "Hay clausulas sobre horas extra?"</div></div></div>
+          </div>
+        </div>
+        <div>
+          <div class="good-box" style="margin-bottom:0.8rem;">
+            <span class="box-label">Prompt de analisis</span>
+            <div class="box-text">Actua como abogado laboralista. Analiza el convenio subido: 1) Resume los puntos clave en 10 bullets, 2) Identifica 3 ambiguedades, 3) Derechos sobre jornada laboral, 4) Clausulas sobre horas extra, 5) Permisos retribuidos. Usa lenguaje claro.</div>
+          </div>
+          <button class="btn btn-sm" onclick="copyText('Actua como abogado laboralista especializado en derecho sindical espanol. Analiza el convenio colectivo subido: 1) Resume puntos clave en 10 bullets, 2) Identifica 3 ambiguedades, 3) Derechos sobre jornada, 4) Horas extra, 5) Permisos retribuidos. Usa lenguaje claro.')">Copiar prompt</button>
+        </div>
+      </div>
+    </div>
+    <div class="case-panel" id="case-escrito">
+      <div class="highlight cyan"><div class="highlight-label">Caso de uso</div><div class="highlight-text">Genera escritos formales en minutos: demandas, recursos, quejas, cartas.</div></div>
+      <div class="grid2">
+        <div>
+          <div class="bad-box" style="margin-bottom:0.8rem;"><span class="box-label">Sin IA (2-3 horas)</span><div class="box-text">Buscar modelo... Adaptar... Revisar referencias...</div></div>
+          <div class="good-box"><span class="box-label">Con IA (15-20 min)</span><div class="box-text">Copiar prompt - Claude - Revisar - Firmar</div></div>
+        </div>
+        <div>
+          <div class="good-box" style="margin-bottom:0.8rem;">
+            <span class="box-label">Prompt escrito formal</span>
+            <div class="box-text">Actua como abogado laboralista. Redacta un escrito formal dirigido a la Direccion de [EMPRESA] sobre: [PROBLEMA]. Incluye referencia al ET Art. X, solicitud concreta, plazo 5 dias habiles. Tono firme y constructivo. Formato carta formal.</div>
+          </div>
+          <button class="btn btn-sm" onclick="openModal('escritoModal')">Generador de Escritos</button>
+        </div>
+      </div>
+    </div>
+    <div class="case-panel" id="case-negociacion">
+      <div class="highlight"><div class="highlight-label">Caso de uso</div><div class="highlight-text">Preparate para cualquier mesa de negociacion en 30 minutos.</div></div>
+      <div class="grid2">
+        <div>
+          <div class="good-box" style="margin-bottom:0.8rem;">
+            <span class="box-label">Preparacion negociacion</span>
+            <div class="box-text">Preparame para negociar sobre [TEMA]. Dame: 1) 3 argumentos que usara la empresa, 2) Mis 3 contraargumentos mas solidos, 3) Articulos del ET y convenio que me protegen, 4) Posibles acuerdos aceptables, 5) Mis lineas rojas. Sector: [SECTOR], convenio: [NOMBRE].</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Role-play de negociacion</div>
+          <div class="card-text" style="margin-bottom:0.8rem;">Pide a la IA que simule ser la empresa para practicar tus respuestas.</div>
+          <div class="good-box">
+            <span class="box-label">Prompt role-play</span>
+            <div class="box-text">"Adopta el papel de la direccion de la empresa. Defiende la modificacion con todos los argumentos posibles. Yo respondere como delegado sindical."</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="case-panel" id="case-investigar">
+      <div class="highlight cyan"><div class="highlight-label">Caso de uso</div><div class="highlight-text">Usa Perplexity para jurisprudencia actualizada con fuentes verificables.</div></div>
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">Busquedas en Perplexity</div>
+          <ul class="check-list">
+            <li>"Jurisprudencia 2025-2026 sobre [TEMA] en Espana"</li>
+            <li>"Ultimos cambios Estatuto Trabajadores 2026"</li>
+            <li>"Convenio colectivo sector [SECTOR] 2025"</li>
+            <li>"BOE normativa laboral [TEMA] 2026"</li>
+          </ul>
+        </div>
+        <div class="good-box">
+          <span class="box-label">Flujo investigacion legal</span>
+          <div class="box-text">1. Perplexity &rarr; legislacion actualizada con fuentes
+2. Claude &rarr; explica en lenguaje claro
+3. Perplexity &rarr; jurisprudencia del tema
+4. Claude &rarr; aplica al caso concreto
+5. Tu &rarr; validas con asesor juridico</div>
+        </div>
+      </div>
+    </div>
+    <div class="case-panel" id="case-circular">
+      <div class="highlight yellow"><div class="highlight-label">Caso de uso</div><div class="highlight-text">Circulares y comunicados para afiliados en tono claro y cercano.</div></div>
+      <div class="grid2">
+        <div>
+          <div class="good-box" style="margin-bottom:0.8rem;">
+            <span class="box-label">Prompt circular</span>
+            <div class="box-text">Actua como redactor sindical. Escribe una circular sobre [TEMA]. Tono cercano, sin tecnicismos. 200 palabras. Estructura: apertura "Companeras y companeros", desarrollo, que significa para ellos, proximos pasos, cierre.</div>
+          </div>
+          <button class="btn btn-sm" onclick="copyText('Actua como redactor de comunicaciones sindicales. Escribe una circular informando a los afiliados sobre [TEMA]. Tono cercano, sin tecnicismos, 200 palabras. Estructura: apertura, desarrollo, que significa para ellos, proximos pasos.')">Copiar</button>
+        </div>
+        <div class="card">
+          <div class="card-title">Ejemplo de output</div>
+          <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:1rem;font-size:0.82rem;line-height:1.75;color:rgba(245,240,235,0.8);">
+            <strong>Companeras y companeros,</strong><br><br>Os informamos de que en la reunion del comite del pasado martes se llego a un acuerdo...<br><br><em>El Comite de Empresa</em>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="case-panel" id="case-analisis">
+      <div class="highlight"><div class="highlight-label">Caso de uso</div><div class="highlight-text">Analiza memorias economicas, EREs o documentos de restructuracion.</div></div>
+      <div class="grid2">
+        <div>
+          <div class="good-box" style="margin-bottom:0.8rem;">
+            <span class="box-label">Prompt analisis economico</span>
+            <div class="box-text">Actua como economista especialista en analisis financiero laboral. Analiza la memoria economica subida: 1) Son consistentes los datos?, 2) Hay indicadores contradictorios?, 3) Que alternativas a los despidos?, 4) Que preguntas clave hacer en la mesa?</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Validacion humana obligatoria</div>
+          <ul class="check-list">
+            <li>La IA da el analisis inicial - <strong>valida con asesor economico</strong></li>
+            <li>No uses cifras de la IA sin verificarlas</li>
+            <li>Usala para prepararte, no para decidir</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- M5: HERRAMIENTAS AVANZADAS -->
+<div class="page" id="page-mod4">
+  <div class="page-header">
+    <div class="page-header-top"><button class="page-back" onclick="showPage('home')">&#8592; Volver</button></div>
+    <div class="page-tag">Modulo 5 - 35 min - 12:30-13:05</div>
+    <div class="page-title">Herramientas Avanzadas</div>
+    <div class="page-subtitle">PDFs, multimodal, automatizaciones y flujos de trabajo</div>
+  </div>
+  <div class="page-body">
+    <div class="sect-title">IA con Documentos PDF</div>
+    <div class="grid2" style="margin-bottom:1.5rem;">
+      <div class="card">
+        <div class="card-title">Claude - El mejor para PDFs largos</div>
+        <ul class="check-list">
+          <li>Sube hasta <strong>5 PDFs</strong> simultaneamente</li>
+          <li>Lee convenios de <strong>200 paginas</strong> sin problema</li>
+          <li>Haz preguntas sobre articulos especificos</li>
+          <li>Compara varios documentos entre si</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Gemini + Google Drive</div>
+        <ul class="check-list">
+          <li>Conecta directamente con <strong>Google Drive</strong></li>
+          <li><strong>NotebookLM:</strong> crea resumenes de convenios</li>
+          <li>Comparte analisis con todo el equipo</li>
+        </ul>
+      </div>
+    </div>
+    <div class="sect-title">IA Multimodal</div>
+    <div class="gridAuto" style="margin-bottom:1.5rem;">
+      <div class="card"><div class="card-title">Foto de nomina</div><div class="card-text">Sube la foto - "Hay irregularidades en este calculo de horas extra?"</div></div>
+      <div class="card"><div class="card-title">Audio de asamblea</div><div class="card-text">Transcribe con Whisper o Gemini - Genera acta automatica</div></div>
+      <div class="card"><div class="card-title">Graficas y datos</div><div class="card-text">Sube imagen de grafica - "Explica que muestra para nuestra negociacion"</div></div>
+    </div>
+    <div class="exercise-box">
+      <div class="exercise-title">Practica guiada</div>
+      <div class="exercise-desc">Sube un convenio real a Claude. Prueba estas preguntas:</div>
+      <div style="display:flex;flex-direction:column;gap:5px;margin:0.8rem 0;">
+        <div style="background:var(--gris);border-radius:6px;padding:8px 12px;font-size:0.82rem;font-family:'JetBrains Mono',monospace;">"Cuantos dias de vacaciones tiene un trabajador?"</div>
+        <div style="background:var(--gris);border-radius:6px;padding:8px 12px;font-size:0.82rem;font-family:'JetBrains Mono',monospace;">"Hay clausula sobre teletrabajo?"</div>
+        <div style="background:var(--gris);border-radius:6px;padding:8px 12px;font-size:0.82rem;font-family:'JetBrains Mono',monospace;">"Causas de despido disciplinario?"</div>
+      </div>
+      <a class="btn" href="https://claude.ai" target="_blank">Abrir Claude</a>
+    </div>
+  </div>
+</div>
+
+<!-- M6: PLAN DE ACCION -->
+<div class="page" id="page-mod5">
+  <div class="page-header">
+    <div class="page-header-top"><button class="page-back" onclick="showPage('home')">&#8592; Volver</button></div>
+    <div class="page-tag">Modulo 6 - 25 min - 13:05-13:30</div>
+    <div class="page-title">Plan de Accion Personal</div>
+    <div class="page-subtitle">Crea tu hoja de ruta para implementar la IA esta semana</div>
+  </div>
+  <div class="page-body">
+    <div class="highlight yellow">
+      <div class="highlight-label">Tu objetivo</div>
+      <div class="highlight-text">Salir del curso con 3 acciones concretas para ESTA SEMANA.</div>
+    </div>
+    <div class="sect-title">Mis 3 primeros usos de IA esta semana</div>
+    <div style="display:flex;flex-direction:column;gap:1rem;margin-bottom:2rem;">
+      <div class="action-item">
+        <div class="action-head"><div class="action-num">1</div><div class="action-title">Primer uso: <span contenteditable="true" style="border-bottom:1px dashed var(--muted);outline:none;min-width:120px;">Haz clic para escribir...</span></div></div>
+        <div class="action-checklist">
+          <label class="action-check"><input type="checkbox" onchange="markAction(this)"> Tengo cuenta creada</label>
+          <label class="action-check"><input type="checkbox" onchange="markAction(this)"> Tengo el documento concreto</label>
+          <label class="action-check"><input type="checkbox" onchange="markAction(this)"> Tengo el prompt preparado</label>
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-head"><div class="action-num">2</div><div class="action-title">Segundo uso: <span contenteditable="true" style="border-bottom:1px dashed var(--muted);outline:none;min-width:120px;">Haz clic para escribir...</span></div></div>
+        <div class="action-checklist">
+          <label class="action-check"><input type="checkbox" onchange="markAction(this)"> En mi agenda de esta semana</label>
+          <label class="action-check"><input type="checkbox" onchange="markAction(this)"> Se que herramienta usar</label>
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-head"><div class="action-num">3</div><div class="action-title">Tercer uso: <span contenteditable="true" style="border-bottom:1px dashed var(--muted);outline:none;min-width:120px;">Haz clic para escribir...</span></div></div>
+        <div class="action-checklist">
+          <label class="action-check"><input type="checkbox" onchange="markAction(this)"> Fecha concreta: <input type="date" style="background:var(--gris);border:1px solid var(--borde);border-radius:4px;padding:2px 6px;color:var(--blanco);font-size:0.8rem;outline:none;"></label>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="sect-title">Las 5 Reglas de Oro</div>
+    <div style="display:flex;flex-direction:column;gap:0.7rem;margin-bottom:1.5rem;">
+      <div style="display:flex;gap:10px;align-items:flex-start;background:var(--gris2);border-radius:8px;padding:0.9rem;"><div style="width:28px;height:28px;border-radius:50%;background:var(--rojo);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.78rem;flex-shrink:0;">1</div><div><strong>VERIFICA SIEMPRE</strong> - Especialmente fechas, articulos y cifras.</div></div>
+      <div style="display:flex;gap:10px;align-items:flex-start;background:var(--gris2);border-radius:8px;padding:0.9rem;"><div style="width:28px;height:28px;border-radius:50%;background:var(--rojo);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.78rem;flex-shrink:0;">2</div><div><strong>PROTEGE LA PRIVACIDAD</strong> - Nunca datos de afiliados.</div></div>
+      <div style="display:flex;gap:10px;align-items:flex-start;background:var(--gris2);border-radius:8px;padding:0.9rem;"><div style="width:28px;height:28px;border-radius:50%;background:var(--rojo);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.78rem;flex-shrink:0;">3</div><div><strong>USA CONTEXTO ABUNDANTE</strong> - Cuanto mas especifico, mejor respuesta.</div></div>
+      <div style="display:flex;gap:10px;align-items:flex-start;background:var(--gris2);border-radius:8px;padding:0.9rem;"><div style="width:28px;height:28px;border-radius:50%;background:var(--rojo);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.78rem;flex-shrink:0;">4</div><div><strong>ITERA Y REFINA</strong> - La primera respuesta es un borrador.</div></div>
+      <div style="display:flex;gap:10px;align-items:flex-start;background:var(--gris2);border-radius:8px;padding:0.9rem;"><div style="width:28px;height:28px;border-radius:50%;background:var(--rojo);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.78rem;flex-shrink:0;">5</div><div><strong>TU DECIDES, IA ASISTE</strong> - Tu criterio sindical es irremplazable.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- RECURSOS -->
+<div class="page" id="page-recursos">
+  <div class="page-header">
+    <div class="page-header-top"><button class="page-back" onclick="showPage('home')">&#8592; Volver</button></div>
+    <div class="page-tag">Recursos</div>
+    <div class="page-title">Recursos y URLs de Formacion</div>
+    <div class="page-subtitle">Todo lo que necesitas para seguir aprendiendo.</div>
+  </div>
+  <div class="page-body">
+    <div class="resource-list" id="resourcesList">
+      <div class="resource-item"><div class="resource-icon">&#128992;</div><div><div class="resource-title">Claude - Documentacion Oficial</div><div class="resource-desc">Guias completas de Claude, modelos y mejores practicas.</div><a class="resource-link" href="https://docs.anthropic.com" target="_blank">docs.anthropic.com</a></div></div>
+      <div class="resource-item"><div class="resource-icon">&#128214;</div><div><div class="resource-title">Guia de Prompt Engineering</div><div class="resource-desc">La guia definitiva de ingenieria de prompts.</div><a class="resource-link" href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview" target="_blank">Prompt Engineering Guide</a></div></div>
+      <div class="resource-item"><div class="resource-icon">&#9878;&#65039;</div><div><div class="resource-title">BOE - Estatuto de los Trabajadores</div><div class="resource-desc">Texto completo y actualizado del ET.</div><a class="resource-link" href="https://www.boe.es/buscar/act.php?id=BOE-A-2015-11430" target="_blank">ET en el BOE</a></div></div>
+      <div class="resource-item"><div class="resource-icon">&#9878;&#65039;</div><div><div class="resource-title">LOLS - Ley Organica Libertad Sindical</div><div class="resource-desc">Ley Organica 11/1985 de Libertad Sindical.</div><a class="resource-link" href="https://www.boe.es/buscar/act.php?id=BOE-A-2015-11724" target="_blank">LOLS en el BOE</a></div></div>
+      <div class="resource-item"><div class="resource-icon">&#128203;</div><div><div class="resource-title">Convenio Comercio - Malaga 2023-2028</div><div class="resource-desc">Convenio Colectivo del Comercio en General para Malaga y Provincia. Vigente 2023-2028.</div><a class="resource-link" href="https://www.bopmalaga.es" target="_blank">BOP Malaga num 200 (Oct 2024)</a></div></div>
+      <div class="resource-item"><div class="resource-icon">&#127869;&#65039;</div><div><div class="resource-title">Convenio Hosteleria - Malaga (hasta 2027)</div><div class="resource-desc">Convenio Colectivo de Hosteleria de la Provincia de Malaga. Vigente hasta 31/12/2027.</div><a class="resource-link" href="https://www.bopmalaga.es" target="_blank">BOP Malaga (ampliacion 2024)</a></div></div>
+      <div class="resource-item"><div class="resource-icon">&#127981;</div><div><div class="resource-title">CCOO - Recursos Sindicales</div><div class="resource-desc">Base de datos de convenios, guias juridicas y formacion sindical.</div><a class="resource-link" href="https://www.ccoo.es" target="_blank">ccoo.es</a></div></div>
+      <div class="resource-item"><div class="resource-icon">&#128316;</div><div><div class="resource-title">Perplexity AI Hub</div><div class="resource-desc">Investigacion legal con fuentes verificadas en tiempo real.</div><a class="resource-link" href="https://perplexity.ai/hub" target="_blank">perplexity.ai/hub</a></div></div>
+      <div class="resource-item"><div class="resource-icon">&#129422;</div><div><div class="resource-title">Ollama - IA Local Gratuita</div><div class="resource-desc">Modelos de IA en tu ordenador sin enviar datos a nadie.</div><a class="resource-link" href="https://ollama.ai" target="_blank">ollama.ai</a></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div class="page" id="page-quiz">
+  <div class="page-header">
+    <div class="page-header-top"><button class="page-back" onclick="showPage('home')">&#8592; Volver</button></div>
+    <div class="page-tag">Quiz Interactivo</div>
+    <div class="page-title">Pon a Prueba lo Aprendido</div>
+    <div class="page-subtitle">10 preguntas sobre IA y su aplicacion sindical</div>
+  </div>
+  <div class="page-body" style="max-width:700px;">
+    <div id="quizBox">
+      <div style="background:var(--gris2);border:1px solid var(--borde);border-radius:12px;padding:2rem;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;flex-wrap:wrap;gap:.5rem;">
+          <span style="font-size:0.78rem;color:var(--muted);" id="qProgress">Pregunta 1 de 10</span>
+          <span style="font-size:0.78rem;color:var(--muted);">Puntuacion: <strong id="qScore" style="color:var(--acento2);">0</strong></span>
+        </div>
+        <div class="quiz-progress-bar"><div class="quiz-progress-bar-fill" id="qBar" style="width:10%;"></div></div>
+        <div class="quiz-q" id="qQuestion"></div>
+        <div class="quiz-opts" id="qOpts"></div>
+        <div class="quiz-feedback" id="qFeedback"></div>
+        <button class="btn" id="qNext" onclick="nextQuestion()" style="display:none;">Siguiente</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SHORTCUTS -->
+<div class="page" id="page-shortcuts">
+  <div class="page-header">
+    <div class="page-header-top"><button class="page-back" onclick="showPage('home')">&#8592; Volver</button></div>
+    <div class="page-tag">Referencia Rapida</div>
+    <div class="page-title">Atajos y Accesos Rapidos</div>
+    <div class="page-subtitle">Las 6 herramientas con sus atajos - Abril 2026</div>
+  </div>
+  <div class="page-body">
+    <div class="shortcut-grid">
+      <div class="shortcut-card"><div class="shortcut-header"><span style="font-size:1.3rem;">&#128992;</span><div><div class="sh-name">Claude</div><div style="font-size:0.72rem;color:var(--muted);">claude.ai</div></div></div><div class="shortcut-item"><span class="sh-action">Nueva conversacion</span><span class="shortcut-key">Ctrl+Shift+O</span></div><div class="shortcut-item"><span class="sh-action">Enviar mensaje</span><span class="shortcut-key">Enter</span></div><div class="shortcut-item"><span class="sh-action">Nueva linea</span><span class="shortcut-key">Shift+Enter</span></div><div class="shortcut-item"><span class="sh-action">Subir PDF</span><span class="shortcut-key">Clip</span></div></div>
+      <div class="shortcut-card"><div class="shortcut-header"><span style="font-size:1.3rem;">&#128994;</span><div><div class="sh-name">ChatGPT</div><div style="font-size:0.72rem;color:var(--muted);">chat.openai.com</div></div></div><div class="shortcut-item"><span class="sh-action">Nueva conversacion</span><span class="shortcut-key">Ctrl+Shift+O</span></div><div class="shortcut-item"><span class="sh-action">Buscar web</span><span class="shortcut-key">Toggle web</span></div><div class="shortcut-item"><span class="sh-action">Modo voz</span><span class="shortcut-key">Microfono</span></div></div>
+      <div class="shortcut-card"><div class="shortcut-header"><span style="font-size:1.3rem;">&#128997;</span><div><div class="sh-name">Gemini</div><div style="font-size:0.72rem;color:var(--muted);">gemini.google.com</div></div></div><div class="shortcut-item"><span class="sh-action">Nueva busqueda</span><span class="shortcut-key">Ctrl+K</span></div><div class="shortcut-item"><span class="sh-action">En Google Docs</span><span class="shortcut-key">Gemini btn</span></div></div>
+      <div class="shortcut-card"><div class="shortcut-header"><span style="font-size:1.3rem;">&#128316;</span><div><div class="sh-name">Perplexity</div><div style="font-size:0.72rem;color:var(--muted);">perplexity.ai</div></div></div><div class="shortcut-item"><span class="sh-action">Nueva busqueda</span><span class="shortcut-key">Ctrl+K</span></div><div class="shortcut-item"><span class="sh-action">Solo webs verificadas</span><span class="shortcut-key">Focus: Web</span></div></div>
+      <div class="shortcut-card"><div class="shortcut-header"><span style="font-size:1.3rem;">&#129695;</span><div><div class="sh-name">Copilot</div><div style="font-size:0.72rem;color:var(--muted);">Microsoft 365</div></div></div><div class="shortcut-item"><span class="sh-action">Abrir en Office</span><span class="shortcut-key">Alt + /</span></div><div class="shortcut-item"><span class="sh-action">Draft en Word</span><span class="shortcut-key">Draft btn</span></div></div>
+      <div class="shortcut-card"><div class="shortcut-header"><span style="font-size:1.3rem;">&#129422;</span><div><div class="sh-name">Meta AI / Llama</div><div style="font-size:0.72rem;color:var(--muted);">ollama.ai</div></div></div><div class="shortcut-item"><span class="sh-action">Meta AI web</span><span class="shortcut-key" style="color:var(--acento2);">meta.ai</span></div><div class="shortcut-item"><span class="sh-action">En WhatsApp</span><span class="shortcut-key">@ Meta AI</span></div></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+</div><!-- /layout -->
+
+<!-- FOOTER -->
+<footer class="app-footer" id="appFooter">
+  <div class="footer-author">&#169; 2025&#8211;2026 &nbsp;<strong>Esther Izquierdo</strong> &nbsp;·&nbsp; CCOO Servicios Málaga</div>
+  <div class="footer-right">
+    <span class="footer-cc">Todos los derechos reservados &nbsp;·&nbsp; Plataforma IA Sindical</span>
+  </div>
+</footer>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="addCursoModal">
+  <div class="modal-box">
+    <div class="modal-head"><h3>Anadir Modulo</h3><button class="modal-close" onclick="closeModal('addCursoModal')">X</button></div>
+    <div class="form-group"><label class="form-label">Titulo</label><input class="form-input" id="newModTitle" placeholder="Ej: IA para RRHH"></div>
+    <div class="form-group"><label class="form-label">Descripcion</label><textarea class="form-textarea" id="newModDesc"></textarea></div>
+    <div class="form-group"><label class="form-label">Tiempo estimado</label><input class="form-input" id="newModTime" placeholder="30 min"></div>
+    <div class="form-group"><label class="form-label">Contenido HTML (opcional)</label><textarea class="form-textarea" id="newModContent" style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;"></textarea></div>
+    <div style="display:flex;gap:0.7rem;justify-content:flex-end;flex-wrap:wrap;">
+      <button class="btn btn-outline btn-sm" onclick="closeModal('addCursoModal')">Cancelar</button>
+      <button class="btn btn-sm btn-cyan" onclick="addModule()">Anadir</button>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="addRecursoModal">
+  <div class="modal-box">
+    <div class="modal-head"><h3>Anadir Recurso</h3><button class="modal-close" onclick="closeModal('addRecursoModal')">X</button></div>
+    <div class="form-group"><label class="form-label">Icono (emoji)</label><input class="form-input" id="newResIcon" placeholder="&#128218;" maxlength="4"></div>
+    <div class="form-group"><label class="form-label">Titulo</label><input class="form-input" id="newResTitle" placeholder="Nombre del recurso"></div>
+    <div class="form-group"><label class="form-label">Descripcion</label><textarea class="form-textarea" id="newResDesc"></textarea></div>
+    <div class="form-group"><label class="form-label">URL</label><input class="form-input" id="newResUrl" placeholder="https://..."></div>
+    <div style="display:flex;gap:0.7rem;justify-content:flex-end;flex-wrap:wrap;">
+      <button class="btn btn-outline btn-sm" onclick="closeModal('addRecursoModal')">Cancelar</button>
+      <button class="btn btn-sm btn-cyan" onclick="addResource()">Anadir</button>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="escritoModal">
+  <div class="modal-box">
+    <div class="modal-head"><h3>Generador de Escritos</h3><button class="modal-close" onclick="closeModal('escritoModal')">X</button></div>
+    <div class="form-group"><label class="form-label">Tipo de escrito</label>
+      <select class="form-input" id="escritoTipo">
+        <option>Respuesta a carta de la empresa</option>
+        <option>Denuncia ante Inspeccion de Trabajo</option>
+        <option>Solicitud de informacion al Comite</option>
+        <option>Recurso contra sancion disciplinaria</option>
+        <option>Comunicado de huelga</option>
+      </select>
+    </div>
+    <div class="form-group"><label class="form-label">Empresa destinataria</label><input class="form-input" id="escritoEmpresa" placeholder="Nombre de la empresa"></div>
+    <div class="form-group"><label class="form-label">Tema principal</label><textarea class="form-textarea" id="escritoTema" placeholder="Describe la situacion..."></textarea></div>
+    <div class="form-group"><label class="form-label">Articulo legal (opcional)</label><input class="form-input" id="escritoArt" placeholder="Ej: Art. 64 ET..."></div>
+    <button class="btn" style="width:100%;" onclick="generateEscrito()">Generar Prompt</button>
+    <div class="output-box" id="escritoOutput" style="display:none;margin-top:1rem;"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<style>
+#coco-btn{position:fixed;bottom:1.5rem;right:1.5rem;z-index:9000;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#D62828,#9B1B1B);border:none;cursor:pointer;box-shadow:0 4px 20px rgba(214,40,40,0.45);display:flex;align-items:center;justify-content:center;font-size:1.6rem;transition:transform .2s,box-shadow .2s;animation:coco-pulse 3s ease-in-out infinite;}
+#coco-btn:hover{transform:scale(1.08);box-shadow:0 6px 28px rgba(214,40,40,0.65);}
+@keyframes coco-pulse{0%,100%{box-shadow:0 4px 20px rgba(214,40,40,0.45);}50%{box-shadow:0 4px 32px rgba(214,40,40,0.8);}}
+#coco-badge{position:absolute;top:-4px;right:-4px;background:#F7B731;color:#1A1A1A;font-size:0.55rem;font-weight:800;letter-spacing:0.06em;padding:2px 5px;border-radius:8px;white-space:nowrap;}
+#coco-panel{position:fixed;bottom:5.5rem;right:1.5rem;z-index:9000;width:360px;max-height:580px;background:#0D0D0D;border:1px solid rgba(245,240,235,0.12);border-radius:16px;display:none;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,0.75);font-family:'DM Sans',sans-serif;overflow:hidden;}
+#coco-panel.open{display:flex;}
+#coco-header{background:#1A1A1A;padding:.9rem 1rem;border-bottom:1px solid rgba(245,240,235,0.08);display:flex;align-items:center;gap:.7rem;flex-shrink:0;}
+#coco-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#D62828,#F7B731);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+#coco-info{flex:1;}
+#coco-name{font-weight:700;font-size:.88rem;color:#F5F0EB;}
+#coco-status{font-size:.7rem;color:#00C6AE;}
+#coco-close{background:none;border:none;color:#888;cursor:pointer;font-size:1.1rem;padding:4px;border-radius:6px;transition:.2s;}
+#coco-close:hover{color:#F5F0EB;background:rgba(245,240,235,0.08);}
+#coco-messages{flex:1;overflow-y:auto;padding:.8rem 1rem;display:flex;flex-direction:column;gap:.6rem;max-height:320px;}
+#coco-messages::-webkit-scrollbar{width:3px;}
+#coco-messages::-webkit-scrollbar-thumb{background:#333;border-radius:2px;}
+.coco-msg{max-width:88%;padding:.65rem .9rem;border-radius:12px;font-size:.82rem;line-height:1.6;}
+.coco-msg.coco{background:#1A1A1A;color:#F5F0EB;align-self:flex-start;border-radius:4px 12px 12px 12px;}
+.coco-msg.user{background:#D62828;color:#fff;align-self:flex-end;border-radius:12px 4px 12px 12px;}
+.coco-msg.system{background:rgba(247,183,49,0.1);color:#F7B731;font-size:.73rem;text-align:center;border-radius:8px;max-width:100%;border:1px solid rgba(247,183,49,0.2);}
+.coco-typing{display:flex;gap:4px;align-items:center;padding:.65rem .9rem;background:#1A1A1A;border-radius:4px 12px 12px 12px;align-self:flex-start;}
+.coco-typing span{width:7px;height:7px;border-radius:50%;background:#888;animation:typing .9s ease-in-out infinite;}
+.coco-typing span:nth-child(2){animation-delay:.15s;}
+.coco-typing span:nth-child(3){animation-delay:.3s;}
+@keyframes typing{0%,80%,100%{opacity:.3;transform:scale(0.8);}40%{opacity:1;transform:scale(1);}}
+#coco-quick{padding:.5rem 1rem;display:flex;gap:.4rem;flex-wrap:wrap;border-top:1px solid rgba(245,240,235,0.06);flex-shrink:0;}
+.coco-quick-btn{background:rgba(245,240,235,0.07);border:1px solid rgba(245,240,235,0.12);color:#F5F0EB;font-size:.7rem;padding:4px 9px;border-radius:20px;cursor:pointer;transition:.15s;font-family:'DM Sans',sans-serif;white-space:nowrap;}
+.coco-quick-btn:hover{background:rgba(214,40,40,0.2);border-color:rgba(214,40,40,0.4);}
+#coco-input-area{padding:.7rem 1rem;display:flex;gap:.5rem;align-items:flex-end;border-top:1px solid rgba(245,240,235,0.08);flex-shrink:0;}
+#coco-input{flex:1;background:#1A1A1A;border:1px solid rgba(245,240,235,0.12);border-radius:10px;color:#F5F0EB;font-family:'DM Sans',sans-serif;font-size:.83rem;padding:.5rem .75rem;outline:none;resize:none;min-height:36px;max-height:80px;transition:.2s;}
+#coco-input:focus{border-color:rgba(214,40,40,0.5);}
+#coco-send{background:#D62828;border:none;color:#fff;border-radius:8px;width:36px;height:36px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s;}
+#coco-send:hover{background:#9B1B1B;}
+#coco-powered{padding:.35rem 1rem .5rem;text-align:center;font-size:.63rem;color:#3a3a3a;}
+@media(max-width:480px){
+  #coco-panel{width:calc(100vw - 2rem);right:1rem;bottom:5rem;}
+  #coco-btn{bottom:1rem;right:1rem;width:52px;height:52px;font-size:1.3rem;}
+}
+</style>
+
+
+<!-- ═══════════════ ECOSISTEMA GOOGLE ═══════════════ -->
+<div class="page" id="page-plat-google">
+  <div class="page-header">
+    <div class="page-header-top"><button class="page-back" onclick="showPage('home')">&#8592; Volver</button></div>
+    <div class="page-tag">Plataformas · Ecosistema Google</div>
+    <div class="page-title">Ecosistema Google con IA</div>
+    <div class="page-subtitle">Gemini, Gems, NotebookLM, Gmail, Docs y Drive &mdash; todo conectado</div>
+  </div>
+  <div class="page-body">
+    <!-- TABS -->
+    <div class="case-tabs" style="margin-bottom:1.5rem;">
+      <button class="case-tab active" onclick="switchCase('g-overview',this)">&#127760; Vision General</button>
+      <button class="case-tab" onclick="switchCase('g-gemini',this)">&#128316; Gemini</button>
+      <button class="case-tab" onclick="switchCase('g-gems',this)">&#128142; Gemini Gems</button>
+      <button class="case-tab" onclick="switchCase('g-notebooklm',this)">&#128218; NotebookLM</button>
+      <button class="case-tab" onclick="switchCase('g-workspace',this)">&#128196; Google Workspace</button>
+    </div>
+
+    <!-- OVERVIEW -->
+    <div class="case-panel active" id="case-g-overview">
+      <div class="highlight cyan"><div class="highlight-label">Ventaja clave</div><div class="highlight-text">Google integra toda su suite ofimatica con IA. Si ya usas Gmail y Docs, la curva de aprendizaje es minima.</div></div>
+      <div class="grid2" style="margin-bottom:1.2rem;">
+        <div class="card"><div class="card-title">&#128994; Gemini (gemini.google.com)</div><div class="card-text">El asistente IA general de Google. Busca en tiempo real, lee PDFs, genera imagenes. Integrado en todo Google Workspace.</div></div>
+        <div class="card"><div class="card-title">&#128142; Gemini Gems</div><div class="card-text">Asistentes personalizados con instrucciones permanentes. Como tener un experto sindical configurado de antemano.</div></div>
+        <div class="card"><div class="card-title">&#128218; NotebookLM</div><div class="card-text">Analizador de documentos con citas exactas. Cero alucinaciones: solo responde desde tus documentos cargados.</div></div>
+        <div class="card"><div class="card-title">&#128196; Google Workspace</div><div class="card-text">Gmail, Docs, Sheets, Slides y Drive con el boton &#10024; Gemini integrado. Redacta, resume y analiza sin salir de tus documentos.</div></div>
+      </div>
+      <div class="highlight yellow">
+        <div class="highlight-label">Estrategia CCOO recomendada</div>
+        <div class="highlight-text">Usa <strong>NotebookLM</strong> para analizar documentos masivos (convenio + memoria + cuentas) con citas exactas. Usa <strong>Gemini Gems</strong> para tener un asesor sindical permanente configurado. Usa <strong>Gmail</strong> con Gemini para redactar comunicados directamente desde tu correo.</div>
+      </div>
+    </div>
+
+    <!-- GEMINI -->
+    <div class="case-panel" id="case-g-gemini">
+      <div class="grid2" style="margin-bottom:1.2rem;">
+        <div>
+          <div class="sect-title" style="margin-top:0;">Que es Gemini</div>
+          <p style="font-size:0.88rem;color:var(--muted);line-height:1.65;margin-bottom:1rem;">Gemini es el modelo de IA de Google. Accesible en <strong>gemini.google.com</strong>. Es gratuito con cuenta Google. Tiene busqueda web en tiempo real (sabe lo de hoy) y se integra con toda la suite de Google.</p>
+          <div class="highlight cyan" style="margin-bottom:0.8rem;">
+            <div class="highlight-label">Ventana de contexto colosal</div>
+            <div class="highlight-text"><strong>1.000.000 tokens</strong> = puedes subir un convenio de 300 paginas completo sin dividirlo.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Diferencia: Conversacion vs Gem</div>
+            <table style="width:100%;border-collapse:collapse;font-size:0.82rem;margin-top:0.5rem;">
+              <tr style="border-bottom:1px solid var(--borde);"><th style="padding:6px;text-align:left;color:var(--muted);">Conversacion</th><th style="padding:6px;text-align:left;color:var(--muted);">Gem</th></tr>
+              <tr style="border-bottom:1px solid var(--borde);"><td style="padding:6px;">Empieza de cero cada vez</td><td style="padding:6px;">Instrucciones permanentes guardadas</td></tr>
+              <tr style="border-bottom:1px solid var(--borde);"><td style="padding:6px;">Sin contexto previo</td><td style="padding:6px;">Sabe que eres delegado sindical</td></tr>
+              <tr><td style="padding:6px;">Para uso general</td><td style="padding:6px;">Para tareas especificas repetidas</td></tr>
+            </table>
+          </div>
+        </div>
+        <div>
+          <div class="sect-title" style="margin-top:0;">Casos de uso para CCOO</div>
+          <ul class="check-list" style="margin-bottom:1rem;">
+            <li>Sube un PDF de convenio y pregunta articulos especificos</li>
+            <li>Busqueda de jurisprudencia actualizada con fechas reales</li>
+            <li>Redactar documentos directamente en Google Docs con IA</li>
+            <li>Resumir emails largos de la empresa</li>
+            <li>Generar presentaciones en Google Slides automaticamente</li>
+          </ul>
+          <div class="exercise-box">
+            <div class="exercise-title">Prueba ahora en Gemini</div>
+            <div class="exercise-desc">Copia este prompt y pegalo en Gemini:</div>
+            <div style="background:rgba(0,0,0,0.4);border:1px solid rgba(0,198,174,0.3);border-radius:8px;padding:0.8rem;font-family:'JetBrains Mono',monospace;font-size:0.78rem;line-height:1.65;color:rgba(245,240,235,0.85);margin-bottom:0.7rem;">"Actua como asesor laboral. Busca en internet los ultimos cambios del Estatuto de los Trabajadores en 2025 y 2026. Resume los mas importantes para representantes sindicales."</div>
+            <div style="display:flex;gap:0.6rem;flex-wrap:wrap;">
+              <button class="btn btn-sm" onclick="navigator.clipboard.writeText('Actua como asesor laboral. Busca en internet los ultimos cambios del Estatuto de los Trabajadores en 2025 y 2026. Resume los mas importantes para representantes sindicales.')">Copiar</button>
+              <a class="btn btn-sm btn-outline" href="https://gemini.google.com" target="_blank">Abrir Gemini</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GEMS -->
+    <div class="case-panel" id="case-g-gems">
+      <div class="highlight"><div class="highlight-label">Que es un Gem</div><div class="highlight-text">Un Gem es un asistente Gemini con <strong>instrucciones permanentes</strong>. A diferencia de una conversacion normal (donde empiezas de cero cada vez), un Gem recuerda siempre que eres delegado sindical, conoce tu sector y tiene el convenio cargado como referencia.</div></div>
+      <div class="grid2" style="margin-bottom:1.2rem;">
+        <div>
+          <div class="sect-title" style="margin-top:0;">Como crear tu Gem Sindical</div>
+          <div style="display:flex;flex-direction:column;gap:0.6rem;">
+            <div class="step-card"><div class="step-num">1</div><div class="step-body"><div class="step-title">Ve a gemini.google.com</div><div class="step-desc">Panel lateral: "Explorar Gems" &rarr; "Crear Gem". O accede directo a <a href="https://gemini.google.com/gems" target="_blank" class="step-link">gemini.google.com/gems</a></div></div></div>
+            <div class="step-card"><div class="step-num">2</div><div class="step-body"><div class="step-title">Pon nombre y descripcion</div><div class="step-desc">"Asesor Sindical CCOO" &mdash; describe brevemente para que lo usaras.</div></div></div>
+            <div class="step-card"><div class="step-num">3</div><div class="step-body"><div class="step-title">Escribe las instrucciones permanentes</div><div class="step-desc">Aqui defines el comportamiento del Gem. Copia el prompt de la derecha.</div></div></div>
+            <div class="step-card"><div class="step-num">4</div><div class="step-body"><div class="step-title">Sube documentos de referencia</div><div class="step-desc">Convenio sectorial, ET resumido. El Gem los usara en todas las conversaciones.</div></div></div>
+          </div>
+        </div>
+        <div>
+          <div class="good-box" style="margin-bottom:0.7rem;">
+            <span class="box-label">Prompt de configuracion del Gem</span>
+            <div class="box-text" id="gemPromptText">Eres "Asesor Sindical CCOO", experto en relaciones laborales y derecho sindical espanol con 25 anos en CCOO.
+
+COMPORTAMIENTO:
+- Respondes desde la perspectiva de los derechos de los trabajadores
+- Citas articulos del ET, LPRL y convenios con precision
+- Si el usuario sube un PDF, lo analizas antes de responder
+- Siempre ofreces "proximos pasos" accionables al final
+
+CUANDO ANALICES UN DOCUMENTO:
+1. Resume en 3 puntos clave
+2. Identifica riesgos y oportunidades
+3. Propón preguntas para la empresa
+4. Sugiere acciones concretas</div>
+          </div>
+          <button class="btn btn-sm" onclick="navigator.clipboard.writeText(document.getElementById('gemPromptText').textContent).then(function(){showToast('Prompt copiado','success');})">Copiar prompt del Gem</button>
+          <div style="margin-top:0.8rem;" class="highlight yellow">
+            <div class="highlight-label">Ventaja vs Conversacion normal</div>
+            <div class="highlight-text" style="font-size:0.82rem;">Con el Gem NO necesitas explicar cada vez que eres delegado sindical. Simplemente preguntas y el Gem ya sabe el contexto completo.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTEBOOKLM -->
+    <div class="case-panel" id="case-g-notebooklm">
+      <div class="highlight cyan"><div class="highlight-label">La herramienta antilucinaciones</div><div class="highlight-text">NotebookLM <strong>NO inventa nada</strong>. Solo responde desde los documentos que tu has cargado, citando la pagina exacta. Perfecto para analizar ERTEs, convenios y memorias con prueba documental.</div></div>
+      <div class="grid2" style="margin-bottom:1.2rem;">
+        <div>
+          <div class="sect-title" style="margin-top:0;">Como funciona (RAG)</div>
+          <div style="background:var(--gris2);border:1px solid var(--borde);border-radius:8px;padding:1rem;margin-bottom:0.8rem;">
+            <div style="font-size:0.82rem;line-height:1.75;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><span style="background:var(--rojo);color:#fff;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:800;flex-shrink:0;">1</span> Subes hasta <strong>50 documentos</strong> (PDFs, Google Docs, URLs, YouTube)</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><span style="background:var(--rojo);color:#fff;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:800;flex-shrink:0;">2</span> Haces tu pregunta en el chat</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><span style="background:var(--acento2);color:#000;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:800;flex-shrink:0;">3</span> NotebookLM <strong>busca en tus documentos</strong> (RAG = Retrieval Augmented Generation)</div>
+              <div style="display:flex;align-items:center;gap:8px;"><span style="background:var(--acento2);color:#000;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:800;flex-shrink:0;">4</span> Responde con <strong>cita exacta</strong> (pagina y parrafo del documento)</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Funcionalidades extra</div>
+            <ul class="check-list">
+              <li><strong>Audio Overview:</strong> genera un podcast de 10 min con el resumen de todos tus documentos. Escuchalo de camino a la reunion.</li>
+              <li><strong>FAQ automatica:</strong> genera preguntas y respuestas desde el convenio</li>
+              <li><strong>Guia de estudio:</strong> resumen estructurado de documentos complejos</li>
+              <li><strong>Compartir notebook:</strong> toda la comision accede al mismo corpus documental</li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <div class="sect-title" style="margin-top:0;">Caso practico: Analisis de ERTE</div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1rem;">
+            <div style="background:var(--gris3);border-radius:7px;padding:0.7rem;font-size:0.82rem;"><strong style="color:var(--acento);">Documentos a cargar:</strong><br>- Memoria del ERTE<br>- Plan Social<br>- Cuentas 2023 y 2024<br>- RD 1483/2012</div>
+            <div style="background:var(--gris3);border-radius:7px;padding:0.7rem;font-size:0.82rem;font-family:'JetBrains Mono',monospace;color:rgba(245,240,235,0.8);">"Las causas economicas del ERTE estan respaldadas por las cuentas anuales? Cita las paginas exactas."</div>
+            <div style="background:var(--gris3);border-radius:7px;padding:0.7rem;font-size:0.82rem;font-family:'JetBrains Mono',monospace;color:rgba(245,240,235,0.8);">"La documentacion cumple el art. 17 del RD 1483/2012? Lista los requisitos que faltan."</div>
+            <div style="background:var(--gris3);border-radius:7px;padding:0.7rem;font-size:0.82rem;font-family:'JetBrains Mono',monospace;color:rgba(245,240,235,0.8);">"Compara la situacion financiera de 2023 con 2024. Justifica un ERTE?"</div>
+          </div>
+          <div class="highlight" style="margin-bottom:0.7rem;">
+            <div class="highlight-label">Por que NO alucina</div>
+            <div class="highlight-text" style="font-size:0.82rem;">NotebookLM usa RAG (Generacion Aumentada por Recuperacion). La IA <strong>no inventa</strong>; solo lee los documentos de tu boveda. Si no esta en tus documentos, te lo dice.</div>
+          </div>
+          <a class="btn btn-sm" href="https://notebooklm.google.com" target="_blank">Abrir NotebookLM</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- WORKSPACE -->
+    <div class="case-panel" id="case-g-workspace">
+      <div class="grid2" style="margin-bottom:1.2rem;">
+        <div>
+          <div class="sect-title" style="margin-top:0;">Gemini en Gmail</div>
+          <ul class="check-list" style="margin-bottom:1rem;">
+            <li>Boton &#10024; en cada email: <strong>resume el hilo completo</strong></li>
+            <li>"Responder" con IA: genera borrador de respuesta</li>
+            <li>Redactar desde cero con instrucciones naturales</li>
+            <li>"Escribe un comunicado formal sobre [TEMA] para enviar al departamento de RRHH"</li>
+          </ul>
+          <div class="sect-title">Gemini en Google Docs</div>
+          <ul class="check-list">
+            <li>&#10024; Preguntar a Gemini en cualquier documento</li>
+            <li>Mejorar la redaccion de parrafos seleccionados</li>
+            <li>Resumir documentos largos en el margen lateral</li>
+            <li>Generar borradores de escritos formales</li>
+            <li>Traducir al catalan, euskera o gallego en un clic</li>
+          </ul>
+        </div>
+        <div>
+          <div class="sect-title" style="margin-top:0;">Flujo de trabajo sindical completo</div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div style="background:var(--gris3);border-radius:7px;padding:0.7rem;font-size:0.82rem;border-left:3px solid var(--acento2);"><strong>1. NotebookLM</strong> &rarr; analiza el convenio completo con citas</div>
+            <div style="color:var(--muted);font-size:0.75rem;text-align:center;">&#8595;</div>
+            <div style="background:var(--gris3);border-radius:7px;padding:0.7rem;font-size:0.82rem;border-left:3px solid var(--acento2);"><strong>2. Gem Sindical</strong> &rarr; prepara estrategia de negociacion</div>
+            <div style="color:var(--muted);font-size:0.75rem;text-align:center;">&#8595;</div>
+            <div style="background:var(--gris3);border-radius:7px;padding:0.7rem;font-size:0.82rem;border-left:3px solid var(--acento);"><strong>3. Google Docs</strong> &rarr; redacta el escrito formal</div>
+            <div style="color:var(--muted);font-size:0.75rem;text-align:center;">&#8595;</div>
+            <div style="background:var(--gris3);border-radius:7px;padding:0.7rem;font-size:0.82rem;border-left:3px solid var(--acento);"><strong>4. Gmail + Gemini</strong> &rarr; envia el comunicado</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════ CHATGPT & CUSTOM GPTs ═══════════════ -->
+<div class="page" id="page-plat-chatgpt">
+  <div class="page-header">
+    <div class="page-header-top"><button class="page-back" onclick="showPage('home')">&#8592; Volver</button></div>
+    <div class="page-tag">Plataformas · OpenAI</div>
+    <div class="page-title">ChatGPT &amp; Custom GPTs</div>
+    <div class="page-subtitle">El mas versatil &mdash; Chats, Proyectos, Custom GPTs y Code Interpreter</div>
+  </div>
+  <div class="page-body">
+    <div class="case-tabs" style="margin-bottom:1.5rem;">
+      <button class="case-tab active" onclick="switchCase('cgpt-chats',this)">&#128172; Chats</button>
+      <button class="case-tab" onclick="switchCase('cgpt-projects',this)">&#128193; Proyectos</button>
+      <button class="case-tab" onclick="switchCase('cgpt-customgpts',this)">&#129302; Custom GPTs</button>
+      <button class="case-tab" onclick="switchCase('cgpt-code',this)">&#128202; Code Interpreter</button>
+    </div>
+
+    <div class="case-panel active" id="case-cgpt-chats">
+      <div class="grid2" style="margin-bottom:1.2rem;">
+        <div>
+          <div class="highlight yellow"><div class="highlight-label">Que es un Chat en ChatGPT</div><div class="highlight-text">Cada conversacion en ChatGPT es un "chat" independiente. ChatGPT recuerda todo lo que se ha dicho dentro del mismo chat, pero <strong>empieza de cero en uno nuevo</strong>. Los chats se guardan en el panel izquierdo.</div></div>
+          <div class="sect-title">Tipos de cuenta</div>
+          <div class="gridAuto" style="margin-bottom:0.8rem;">
+            <div class="card"><div class="card-title">Gratis</div><div class="card-text">GPT-4o mini. Busqueda web limitada. Subir imagenes. Sin PDFs extensos.</div></div>
+            <div class="card"><div class="card-title">Plus (20€/mes)</div><div class="card-text">GPT-4o completo. PDFs. Code Interpreter. Custom GPTs. Acceso prioritario.</div></div>
+          </div>
+          <div class="card">
+            <div class="card-title">Estructura del Prompt R.I.C.E.</div>
+            <ul class="check-list">
+              <li><strong>R</strong>ol: "Actua como abogado laboralista..."</li>
+              <li><strong>I</strong>nstruccion: "Analiza el articulo 45 y redacta 5 argumentos..."</li>
+              <li><strong>C</strong>ontexto: "Soy delegado en empresa retail de 200 trabajadores..."</li>
+              <li><strong>E</strong>jemplo/Formato: "Formato tabla markdown con referencia legal"</li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <div class="sect-title" style="margin-top:0;">Prompts listos para copiar</div>
+          <div style="display:flex;flex-direction:column;gap:0.6rem;">
+            <div class="good-box">
+              <span class="box-label">Comparar convenios</span>
+              <div class="box-text" style="font-size:0.75rem;">Actua como experto en RRLL con 20 anos en CCOO. Voy a pegarte dos convenios. Genera tabla comparativa: Materia | Conv.A | Conv.B | Quien gana. Destaca en negrita los 5 aspectos mas desfavorables del Conv.A. Propón 3 reivindicaciones concretas.</div>
+            </div>
+            <div class="good-box">
+              <span class="box-label">Analizar ERTE</span>
+              <div class="box-text" style="font-size:0.75rem;">Actua como abogado laboralista experto en ERTEs segun el RD 1483/2012. Comprueba si la documentacion cumple los requisitos. Identifica defectos formales impugnables. Prepara 10 preguntas para el periodo de consultas.</div>
+            </div>
+            <div class="good-box">
+              <span class="box-label">Simulacion de negociacion</span>
+              <div class="box-text" style="font-size:0.75rem;">"Haz de Director de RRHH. Tu objetivo es minimizar el incremento salarial. Yo soy CCOO. Empecemos la negociacion del convenio. Al terminar, dime mis 3 puntos mas debiles."</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="case-panel" id="case-cgpt-projects">
+      <div class="highlight cyan"><div class="highlight-label">Que son los Proyectos de ChatGPT</div><div class="highlight-text">Los Proyectos son espacios permanentes donde puedes subir documentos de referencia y escribir instrucciones que se aplican a <strong>todas las conversaciones dentro del proyecto</strong>. Perfecto para crear un "Proyecto Negociacion 2026" con el convenio subido.</div></div>
+      <div class="grid2" style="margin-bottom:1.2rem;">
+        <div>
+          <div class="sect-title" style="margin-top:0;">Chat vs Proyecto</div>
+          <table style="width:100%;border-collapse:collapse;font-size:0.82rem;">
+            <tr style="border-bottom:1px solid var(--borde);"><th style="padding:7px;text-align:left;color:var(--muted);">Chat normal</th><th style="padding:7px;text-align:left;color:var(--muted);">Proyecto</th></tr>
+            <tr style="border-bottom:1px solid var(--borde);"><td style="padding:7px;">Empieza de cero</td><td style="padding:7px;">Instrucciones permanentes</td></tr>
+            <tr style="border-bottom:1px solid var(--borde);"><td style="padding:7px;">Sin documentos de referencia</td><td style="padding:7px;">Documentos siempre disponibles</td></tr>
+            <tr style="border-bottom:1px solid var(--borde);"><td style="padding:7px;">Hay que reexplicar el contexto</td><td style="padding:7px;">Ya sabe quien eres y que necesitas</td></tr>
+            <tr><td style="padding:7px;">Conversaciones separadas</td><td style="padding:7px;">Todas comparten el mismo contexto</td></tr>
+          </table>
+          <div style="margin-top:1rem;" class="highlight yellow">
+            <div class="highlight-label">Consejo practico</div>
+            <div class="highlight-text" style="font-size:0.82rem;">Crea un proyecto por cada convenio o empresa con la que trabajes. Sube el convenio completo + cuentas + memoria y tendras tu "base de datos sindical" siempre disponible.</div>
+          </div>
+        </div>
+        <div>
+          <div class="sect-title" style="margin-top:0;">Como crear un Proyecto Sindical</div>
+          <div style="display:flex;flex-direction:column;gap:0.6rem;">
+            <div class="step-card"><div class="step-num">1</div><div class="step-body"><div class="step-title">chatgpt.com &rarr; Proyectos &rarr; Nuevo</div><div class="step-desc">Panel lateral izquierdo. Nombre: "Comite de Empresa [EMPRESA]"</div></div></div>
+            <div class="step-card"><div class="step-num">2</div><div class="step-body"><div class="step-title">Sube documentos de referencia</div><div class="step-desc">Convenio colectivo, cuentas anuales, memoria, guias CCOO.</div></div></div>
+            <div class="step-card"><div class="step-num">3</div><div class="step-body"><div class="step-title">Escribe las instrucciones del proyecto</div><div class="step-desc">Copia el prompt de configuracion de abajo y personalizalo.</div></div></div>
+            <div class="step-card"><div class="step-num">4</div><div class="step-body"><div class="step-title">Crea conversaciones especificas</div><div class="step-desc">"Analisis ERTE 2026", "Negociacion junio", "Escrito a RRHH"...</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="case-panel" id="case-cgpt-customgpts">
+      <div class="highlight"><div class="highlight-label">Que es un Custom GPT</div><div class="highlight-text">Un Custom GPT es una version personalizada de ChatGPT con instrucciones, base de conocimiento propia y herramientas activadas (busqueda web, Code Interpreter, DALL-E). Requiere ChatGPT Plus (20€/mes).</div></div>
+      <div class="grid2" style="margin-bottom:1.2rem;">
+        <div>
+          <div class="sect-title" style="margin-top:0;">GPTs publicos recomendados</div>
+          <ul class="check-list" style="margin-bottom:1rem;">
+            <li>Busca en <strong>chatgpt.com &rarr; Explorar GPTs</strong></li>
+            <li>"Labor Law Spain" &mdash; derecho laboral espanol</li>
+            <li>"Financial Analyst" &mdash; analisis de cuentas empresariales</li>
+            <li>"PDF Analyzer" &mdash; extraccion de informacion de PDFs</li>
+            <li>"Legal Document Writer" &mdash; redaccion de escritos formales</li>
+          </ul>
+          <div class="card">
+            <div class="card-title">Custom GPT vs Proyecto vs Chat</div>
+            <ul class="check-list">
+              <li><strong>Chat:</strong> conversacion rapida, sin contexto previo</li>
+              <li><strong>Proyecto:</strong> documentos + instrucciones para tu equipo</li>
+              <li><strong>Custom GPT:</strong> herramienta especializada con comportamiento fijo, compartible con otros</li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <div class="good-box" style="margin-bottom:0.7rem;">
+            <span class="box-label">Prompt de configuracion: Delegado CCOO IA</span>
+            <div class="box-text" style="font-size:0.75rem;">Eres "Delegado CCOO IA", especializado en accion sindical, derecho laboral espanol y negociacion colectiva.
+
+BASE DE CONOCIMIENTO: ET, LPRL, Ley Jurisdiccion Social y jurisprudencia TS laboral.
+
+CAPACIDADES:
+- Usa el interprete de codigo para analizar Excel de cuentas
+- Busca en la web jurisprudencia reciente
+- Genera tablas comparativas de convenios
+- Redacta documentos formales listos para imprimir
+
+REGLAS:
+1. Cita siempre la fuente legal (articulo, sentencia, convenio)
+2. Al final: RESUMEN EN 3 PUNTOS y PROXIMOS PASOS
+3. Para consecuencias legales: recomienda asesoria CCOO</div>
+          </div>
+          <a class="btn btn-sm" href="https://chat.openai.com/gpts/editor" target="_blank">Crear mi Custom GPT</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="case-panel" id="case-cgpt-code">
+      <div class="highlight cyan"><div class="highlight-label">Code Interpreter: La joya de ChatGPT Plus</div><div class="highlight-text">El Code Interpreter puede abrir un Excel de cuentas anuales, calcular ratios automaticamente y generar graficos. Sube el Excel de la empresa a la reunion y ChatGPT lo analiza en directo.</div></div>
+      <div class="grid2" style="margin-bottom:1.2rem;">
+        <div class="card">
+          <div class="card-title">Que puede hacer</div>
+          <ul class="check-list">
+            <li>Abrir y leer archivos Excel (.xlsx)</li>
+            <li>Calcular ratios financieros (EBITDA, deuda/capital, margen neto)</li>
+            <li>Generar graficos de tendencias comparando anos</li>
+            <li>Detectar dividendos y operaciones vinculadas</li>
+            <li>Generar argumentario financiero para la mesa de negociacion</li>
+          </ul>
+        </div>
+        <div>
+          <div class="good-box" style="margin-bottom:0.8rem;">
+            <span class="box-label">Prompt para analisis financiero</span>
+            <div class="box-text" style="font-size:0.78rem;">Eres analista financiero con experiencia en asesoria a sindicatos. Analiza estas cuentas de resultados:
+1. Tiene capacidad economica para subir salarios un 4%? Justificalo.
+2. Cual es el margen EBITDA y como compara con el sector?
+3. Estan los beneficios siendo trasladados a dividendos?
+4. Hay indicios de ingenieria contable para ocultar beneficios?
+5. Genera argumentario solido para la mesa de negociacion.</div>
+          </div>
+          <div class="highlight">
+            <div class="highlight-label">Donde conseguir los datos</div>
+            <div class="highlight-text" style="font-size:0.82rem;">Registro Mercantil (registradores.es), SABI (en bibliotecas publicas) o directamente del comite segun ET Art. 64.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ CLAUDE PROJECTS ═══════════════ -->
+<div class="page" id="page-plat-claude">
+  <div class="page-header">
+    <div class="page-header-top"><button class="page-back" onclick="showPage('home')">&#8592; Volver</button></div>
+    <div class="page-tag">Plataformas · Anthropic</div>
+    <div class="page-title">Claude: Proyectos, Chats y Artefactos</div>
+    <div class="page-subtitle">200.000 tokens de contexto &mdash; El mejor para textos juridicos largos</div>
+  </div>
+  <div class="page-body">
+    <div class="case-tabs" style="margin-bottom:1.5rem;">
+      <button class="case-tab active" onclick="switchCase('cl-overview',this)">&#128161; Por que Claude</button>
+      <button class="case-tab" onclick="switchCase('cl-chats',this)">&#128172; Chats</button>
+      <button class="case-tab" onclick="switchCase('cl-projects',this)">&#128193; Proyectos</button>
+      <button class="case-tab" onclick="switchCase('cl-artifacts',this)">&#9997;&#65039; Artefactos</button>
+    </div>
+
+    <div class="case-panel active" id="case-cl-overview">
+      <div class="highlight">
+        <div class="highlight-label">Por que Claude para trabajo sindical</div>
+        <div class="highlight-text"><strong>200.000 tokens</strong> = puedes subir un convenio colectivo completo de 300 paginas, las tres ultimas memorias anuales y las cuentas, TODO a la vez. Claude los recuerda en todas las conversaciones del proyecto.</div>
+      </div>
+      <div class="gridAuto" style="margin-bottom:1.2rem;">
+        <div class="card"><div class="card-title">&#129504; Analisis juridico</div><div class="card-text">Especialista en textos legales largos. Lee convenios completos sin "cortar" el documento por partes.</div></div>
+        <div class="card"><div class="card-title">&#9997;&#65039; Redaccion calibrada</div><div class="card-text">Calibra el tono exacto: firme pero no agresivo, tecnico o llano segun el destinatario.</div></div>
+        <div class="card"><div class="card-title">&#128272; Proyectos permanentes</div><div class="card-text">Contexto entre conversaciones. Documentos siempre disponibles. Memoria del historial.</div></div>
+        <div class="card"><div class="card-title">&#127912; Artefactos</div><div class="card-text">Genera documentos, tablas, presentaciones y herramientas interactivas directamente en el chat.</div></div>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">Modelos actuales (Abril 2026)</div>
+          <ul class="check-list">
+            <li><strong>Claude Opus 4.6:</strong> el mas potente, para analisis complejos</li>
+            <li><strong>Claude Sonnet 4.6:</strong> equilibrio perfecto velocidad/calidad (recomendado para uso diario)</li>
+            <li><strong>Claude Haiku 4.5:</strong> el mas rapido, para tareas simples</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">Plan gratuito vs Pro</div>
+          <ul class="check-list">
+            <li><strong>Gratis:</strong> chats, PDFs, hasta 5 mensajes por hora</li>
+            <li><strong>Pro (20€/mes):</strong> uso ilimitado, acceso prioritario, todos los modelos</li>
+            <li>Para trabajo sindical intensivo: Pro merece la pena</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="case-panel" id="case-cl-chats">
+      <div class="highlight yellow"><div class="highlight-label">Como funciona un chat en Claude</div><div class="highlight-text">Cada chat mantiene el contexto completo de la conversacion (hasta 200K tokens). Puedes subir PDFs, imagenes, documentos Word. Claude "recuerda" todo lo que hay en ese chat. Los chats se listan en el panel lateral.</div></div>
+      <div class="grid2" style="margin-bottom:1.2rem;">
+        <div>
+          <div class="sect-title" style="margin-top:0;">Lo que puedes subir</div>
+          <ul class="check-list" style="margin-bottom:1rem;">
+            <li>PDFs de convenios (hasta 200 paginas)</li>
+            <li>Documentos Word y texto</li>
+            <li>Imagenes (fotos de nominas, formularios escaneados)</li>
+            <li>Hasta 5 archivos simultaneamente en plan gratuito</li>
+          </ul>
+          <div class="exercise-box">
+            <div class="exercise-title">Ejercicio: Analizar tu convenio</div>
+            <div class="exercise-desc">Sube el PDF de tu convenio y usa este prompt:</div>
+            <div style="background:rgba(0,0,0,0.4);border:1px solid rgba(0,198,174,0.3);border-radius:7px;padding:0.7rem;font-family:'JetBrains Mono',monospace;font-size:0.75rem;line-height:1.6;margin-bottom:0.6rem;">"Resume los 10 puntos clave. Identifica 3 clausulas ambiguas. Lista todos los articulos sobre jornada y vacaciones. Señala cualquier aspecto desfavorable para los trabajadores."</div>
+            <a class="btn btn-sm" href="https://claude.ai" target="_blank">Abrir Claude</a>
+          </div>
+        </div>
+        <div>
+          <div class="sect-title" style="margin-top:0;">Tecnicas de prompting avanzadas</div>
+          <div style="display:flex;flex-direction:column;gap:0.6rem;">
+            <div class="card"><div class="card-title">[COT] Chain of Thought</div><div class="card-text">"Piensa paso a paso." Multiplica la precision en razonamientos legales complejos.</div></div>
+            <div class="card"><div class="card-title">[ELI5] Explain Like I'm 5</div><div class="card-text">"Explicalo como si se lo dijeras a un trabajador sin formacion juridica." Ideal para asambleas.</div></div>
+            <div class="card"><div class="card-title">[L99] Limite de extension</div><div class="card-text">"En maximo 3 lineas." Perfecto para comunicados de WhatsApp o tablones de anuncios.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="case-panel" id="case-cl-projects">
+      <div class="highlight cyan"><div class="highlight-label">Proyectos Claude: tu archivo sindical permanente</div><div class="highlight-text">Los Proyectos mantienen el contexto entre conversaciones y permiten subir documentos de referencia permanentes. Crea un proyecto por empresa o por convenio que estes negociando.</div></div>
+      <div class="grid2" style="margin-bottom:1.2rem;">
+        <div>
+          <div class="sect-title" style="margin-top:0;">Como crear tu Proyecto Sindical</div>
+          <div style="display:flex;flex-direction:column;gap:0.6rem;margin-bottom:0.8rem;">
+            <div class="step-card"><div class="step-num">1</div><div class="step-body"><div class="step-title">claude.ai &rarr; Proyectos &rarr; Nuevo</div><div class="step-desc">Nombre: "Comite de Empresa [EMPRESA] - CCOO"</div></div></div>
+            <div class="step-card"><div class="step-num">2</div><div class="step-body"><div class="step-title">Sube los documentos</div><div class="step-desc">Convenio completo, cuentas 2022-2024, memoria anual, actas del comite.</div></div></div>
+            <div class="step-card"><div class="step-num">3</div><div class="step-body"><div class="step-title">Escribe las instrucciones</div><div class="step-desc">Se aplican a TODAS las conversaciones del proyecto (ver prompt abajo).</div></div></div>
+            <div class="step-card"><div class="step-num">4</div><div class="step-body"><div class="step-title">Crea conversaciones especificas</div><div class="step-desc">"Analisis ERTE 2026", "Estrategia negociacion", "Escritos formales"...</div></div></div>
+          </div>
+        </div>
+        <div>
+          <div class="good-box" style="margin-bottom:0.7rem;">
+            <span class="box-label">Instrucciones del Proyecto</span>
+            <div class="box-text" style="font-size:0.75rem;">PROYECTO: Comite de Empresa [NOMBRE] - CCOO
+
+DOCUMENTOS CARGADOS:
+- Convenio colectivo vigente
+- Cuentas anuales 2022, 2023, 2024
+- Memoria anual 2024
+- Estatuto de los Trabajadores actualizado
+
+TU ROL: Asistente juridico-sindical del comite. Busca primero en los documentos cargados.
+
+FORMATO DE RESPUESTA:
+&#9632; RESPUESTA DIRECTA: [concisa]
+&#9632; BASE LEGAL: [cita con pagina/articulo]
+&#9632; ACCION RECOMENDADA: [que hacer ahora]
+&#9632; PREGUNTAS A LA EMPRESA: [que preguntar]</div>
+          </div>
+          <button class="btn btn-sm" onclick="showToast('Prompt copiado','success');navigator.clipboard.writeText('PROYECTO: Comite de Empresa [NOMBRE] - CCOO\n\nDOCUMENTOS CARGADOS:\n- Convenio colectivo vigente\n- Cuentas anuales 2022, 2023, 2024\n- Memoria anual 2024\n\nTU ROL: Asistente juridico-sindical del comite. Busca primero en los documentos cargados.\n\nFORMATO DE RESPUESTA:\n- RESPUESTA DIRECTA:\n- BASE LEGAL: [cita con pagina/articulo]\n- ACCION RECOMENDADA:\n- PREGUNTAS A LA EMPRESA:')">Copiar instrucciones</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="case-panel" id="case-cl-artifacts">
+      <div class="highlight yellow"><div class="highlight-label">Que son los Artefactos</div><div class="highlight-text">Los Artefactos son documentos que Claude genera directamente en el chat en un panel lateral. Pueden ser paginas web interactivas, documentos de texto, tablas comparativas, graficos, o herramientas funcionales &mdash; como esta misma plataforma.</div></div>
+      <div class="grid2" style="margin-bottom:1.2rem;">
+        <div>
+          <div class="sect-title" style="margin-top:0;">Tipos de Artefactos</div>
+          <ul class="check-list" style="margin-bottom:1rem;">
+            <li><strong>Documentos de texto:</strong> escritos formales, circulares, actas</li>
+            <li><strong>Codigo HTML/React:</strong> herramientas interactivas, calculadoras</li>
+            <li><strong>Diagramas:</strong> organigramas, flujos de proceso</li>
+            <li><strong>Tablas comparativas:</strong> convenios, condiciones, propuestas</li>
+            <li><strong>Presentaciones:</strong> estructura de slides para asambleas</li>
+          </ul>
+          <div class="highlight">
+            <div class="highlight-label">Ejemplo practico</div>
+            <div class="highlight-text" style="font-size:0.82rem;">"Crea una tabla comparativa interactiva entre el convenio sectorial y el de nuestra empresa, con columnas para Materia, Convenio Sectorial, Convenio Empresa, Diferencia y Impacto."</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Como activar y usar Artefactos</div>
+          <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:0.8rem;">
+            <div style="background:var(--gris3);border-radius:7px;padding:0.7rem;font-size:0.83rem;border-left:3px solid var(--acento);">1. En claude.ai, busca el icono &#9881;&#65039; de configuracion</div>
+            <div style="background:var(--gris3);border-radius:7px;padding:0.7rem;font-size:0.83rem;border-left:3px solid var(--acento);">2. Activa "Artefactos" en las funciones</div>
+            <div style="background:var(--gris3);border-radius:7px;padding:0.7rem;font-size:0.83rem;border-left:3px solid var(--acento2);">3. Ahora Claude generara contenido en un panel lateral</div>
+            <div style="background:var(--gris3);border-radius:7px;padding:0.7rem;font-size:0.83rem;border-left:3px solid var(--acento2);">4. Puedes descargar, copiar o editar el artefacto</div>
+          </div>
+          <div class="highlight cyan" style="margin-bottom:0;">
+            <div class="highlight-label">Dato</div>
+            <div class="highlight-text" style="font-size:0.82rem;">Esta plataforma de formacion (el index.html que estas leyendo ahora) fue creada como un Artefacto en Claude.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ PERPLEXITY ═══════════════ -->
+<div class="page" id="page-plat-perplexity">
+  <div class="page-header">
+    <div class="page-header-top"><button class="page-back" onclick="showPage('home')">&#8592; Volver</button></div>
+    <div class="page-tag">Plataformas · Perplexity AI</div>
+    <div class="page-title">Perplexity, Computadora y Espacios</div>
+    <div class="page-subtitle">El buscador con IA que siempre cita sus fuentes &mdash; Zero alucinaciones en busquedas</div>
+  </div>
+  <div class="page-body">
+    <div class="case-tabs" style="margin-bottom:1.5rem;">
+      <button class="case-tab active" onclick="switchCase('pp-search',this)">&#128269; Busquedas</button>
+      <button class="case-tab" onclick="switchCase('pp-computer',this)">&#128187; Computadora IA</button>
+      <button class="case-tab" onclick="switchCase('pp-spaces',this)">&#127760; Espacios</button>
+      <button class="case-tab" onclick="switchCase('pp-tips',this)">&#128161; Tecnicas</button>
+    </div>
+
+    <div class="case-panel active" id="case-pp-search">
+      <div class="highlight cyan"><div class="highlight-label">Por que Perplexity para legislacion laboral</div><div class="highlight-text">Perplexity busca en tiempo real en internet y muestra <strong>exactamente de donde viene cada dato</strong>. Perfecto para jurisprudencia actualizada, cambios recientes en el ET o convenios sectoriales nuevos.</div></div>
+      <div class="grid2" style="margin-bottom:1.2rem;">
+        <div>
+          <div class="sect-title" style="margin-top:0;">Google vs Perplexity vs Claude</div>
+          <table style="width:100%;border-collapse:collapse;font-size:0.82rem;">
+            <tr style="border-bottom:1px solid var(--borde);"><th style="padding:6px;color:var(--muted);text-align:left;">Herramienta</th><th style="padding:6px;color:var(--muted);text-align:left;">Resultado</th><th style="padding:6px;color:var(--muted);text-align:left;">Fuentes</th></tr>
+            <tr style="border-bottom:1px solid var(--borde);"><td style="padding:6px;">Google</td><td style="padding:6px;">Lista de enlaces</td><td style="padding:6px;">Tu las lees</td></tr>
+            <tr style="border-bottom:1px solid var(--borde);"><td style="padding:6px;">Claude</td><td style="padding:6px;">Respuesta elaborada</td><td style="padding:6px;">Hasta fecha corte</td></tr>
+            <tr><td style="padding:6px;color:var(--acento2);font-weight:700;">Perplexity</td><td style="padding:6px;color:var(--acento2);">Respuesta + citas</td><td style="padding:6px;color:var(--acento2);">Tiempo real</td></tr>
+          </table>
+          <div style="margin-top:1rem;" class="card">
+            <div class="card-title">Busquedas sindicales recomendadas</div>
+            <ul class="check-list">
+              <li>"Jurisprudencia 2025-2026 sobre [TEMA] Espana"</li>
+              <li>"Ultimas modificaciones ET 2026 trabajadores"</li>
+              <li>"Convenio colectivo sector [SECTOR] 2026 BOE"</li>
+              <li>"Sentencias TS huelga servicios esenciales 2025"</li>
+              <li>"ERTE por fuerza mayor requisitos 2026"</li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <div class="sect-title" style="margin-top:0;">Flujo investigacion legal ideal</div>
+          <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:1rem;">
+            <div style="background:var(--gris3);border-radius:7px;padding:0.7rem;font-size:0.82rem;border-left:3px solid var(--acento2);">1. <strong>Perplexity</strong> &rarr; legislacion actualizada con fuentes</div>
+            <div style="background:var(--gris3);border-radius:7px;padding:0.7rem;font-size:0.82rem;border-left:3px solid var(--muted);">2. <strong>Claude</strong> &rarr; explica en lenguaje claro para afiliados</div>
+            <div style="background:var(--gris3);border-radius:7px;padding:0.7rem;font-size:0.82rem;border-left:3px solid var(--acento2);">3. <strong>Perplexity</strong> &rarr; jurisprudencia reciente del tema</div>
+            <div style="background:var(--gris3);border-radius:7px;padding:0.7rem;font-size:0.82rem;border-left:3px solid var(--muted);">4. <strong>Claude</strong> &rarr; aplica al caso concreto con argumentario</div>
+            <div style="background:var(--gris3);border-radius:7px;padding:0.7rem;font-size:0.82rem;border-left:3px solid var(--acento);">5. <strong>Tu</strong> &rarr; validas con asesor juridico CCOO</div>
+          </div>
+          <a class="btn btn-sm" href="https://perplexity.ai" target="_blank">Abrir Perplexity</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="case-panel" id="case-pp-computer">
+      <div class="highlight"><div class="highlight-label">Computadora IA (Perplexity Assistant)</div><div class="highlight-text">La funcion "Computadora" de Perplexity permite al asistente <strong>navegar por la web de forma autonoma</strong> para completar tareas multistep: buscar, leer paginas, extraer datos y presentarte el resultado organizado.</div></div>
+      <div class="grid2" style="margin-bottom:1.2rem;">
+        <div class="card">
+          <div class="card-title">Que puede hacer</div>
+          <ul class="check-list">
+            <li>Buscar y leer multiples paginas web automaticamente</li>
+            <li>Extraer datos del Registro Mercantil</li>
+            <li>Buscar sentencias en CENDOJ automaticamente</li>
+            <li>Monitorizar cambios en el BOE</li>
+            <li>Comparar datos de varias fuentes en un informe</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">Casos de uso sindical</div>
+          <ul class="check-list">
+            <li>"Busca todas las sentencias del TSJ de Andalucia sobre ERTE en 2025"</li>
+            <li>"Descarga la memoria anual de [EMPRESA] del Registro Mercantil"</li>
+            <li>"Busca convenios sectoriales de hosteleria firmados en 2025 en el BOE"</li>
+            <li>"Monitoriza semanalmente cambios en boe.es relacionados con derecho laboral"</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="case-panel" id="case-pp-spaces">
+      <div class="highlight yellow"><div class="highlight-label">Que son los Espacios de Perplexity</div><div class="highlight-text">Los Espacios son entornos colaborativos donde puedes cargar tus documentos y crear un asistente personalizado con acceso tanto a tus archivos como a busquedas web en tiempo real. La combinacion perfecta de RAG + busqueda.</div></div>
+      <div class="grid2" style="margin-bottom:1.2rem;">
+        <div>
+          <div class="sect-title" style="margin-top:0;">NotebookLM vs Espacios Perplexity</div>
+          <table style="width:100%;border-collapse:collapse;font-size:0.82rem;">
+            <tr style="border-bottom:1px solid var(--borde);"><th style="padding:6px;color:var(--muted);text-align:left;">NotebookLM</th><th style="padding:6px;color:var(--muted);text-align:left;">Espacios Perplexity</th></tr>
+            <tr style="border-bottom:1px solid var(--borde);"><td style="padding:6px;">Solo tus documentos</td><td style="padding:6px;">Tus documentos + web</td></tr>
+            <tr style="border-bottom:1px solid var(--borde);"><td style="padding:6px;">Citas exactas de pagina</td><td style="padding:6px;">Citas de documento y web</td></tr>
+            <tr><td style="padding:6px;">Hasta 50 documentos</td><td style="padding:6px;">Documentos + internet en tiempo real</td></tr>
+          </table>
+          <div style="margin-top:1rem;" class="highlight">
+            <div class="highlight-label">Consejo</div>
+            <div class="highlight-text" style="font-size:0.82rem;">Para analisis donde los documentos son suficientes (ERTEs, convenios), usa <strong>NotebookLM</strong>. Para cuando necesitas combinar tus archivos con informacion actualizada de internet, usa <strong>Espacios de Perplexity</strong>.</div>
+          </div>
+        </div>
+        <div>
+          <div class="sect-title" style="margin-top:0;">Como crear un Espacio Sindical</div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem;">
+            <div class="step-card"><div class="step-num">1</div><div class="step-body"><div class="step-title">perplexity.ai &rarr; Espacios &rarr; Crear</div><div class="step-desc">Nombre: "Negociacion Convenio [EMPRESA] 2026"</div></div></div>
+            <div class="step-card"><div class="step-num">2</div><div class="step-body"><div class="step-title">Sube documentos</div><div class="step-desc">Convenio, memoria, cuentas. Perplexity los combina con busqueda web.</div></div></div>
+            <div class="step-card"><div class="step-num">3</div><div class="step-body"><div class="step-title">Configura el asistente</div><div class="step-desc">Define el comportamiento y tono del asistente del Espacio.</div></div></div>
+            <div class="step-card"><div class="step-num">4</div><div class="step-body"><div class="step-title">Invita al equipo</div><div class="step-desc">Comparte el Espacio con toda la comision negociadora.</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="case-panel" id="case-pp-tips">
+      <div class="grid2">
+        <div>
+          <div class="sect-title" style="margin-top:0;">Modos de busqueda</div>
+          <ul class="check-list" style="margin-bottom:1rem;">
+            <li><strong>Web:</strong> busqueda general en internet</li>
+            <li><strong>Academico:</strong> articulos y papers cientificos</li>
+            <li><strong>YouTube:</strong> busca dentro de videos</li>
+            <li><strong>Social:</strong> noticias y redes sociales</li>
+          </ul>
+          <div class="card">
+            <div class="card-title">Filtros utiles</div>
+            <ul class="check-list">
+              <li>Filtra por fecha: "ultimos 30 dias" para jurisprudencia reciente</li>
+              <li>Filtra por fuente: "boe.es" o "poderjudicial.es"</li>
+              <li>Busca en modo "Focus" para reducir ruido</li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <div class="sect-title" style="margin-top:0;">Prompts de busqueda avanzados</div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem;">
+            <div style="background:var(--gris3);border-radius:7px;padding:0.7rem;font-size:0.78rem;font-family:'JetBrains Mono',monospace;">"Ultimas sentencias TS sobre ultraactividad convenios colectivos 2025-2026"</div>
+            <div style="background:var(--gris3);border-radius:7px;padding:0.7rem;font-size:0.78rem;font-family:'JetBrains Mono',monospace;">"Reforma laboral 2025 Espana cambios ET ultima hora"</div>
+            <div style="background:var(--gris3);border-radius:7px;padding:0.7rem;font-size:0.78rem;font-family:'JetBrains Mono',monospace;">"Convenio hosteleria nacional 2026 incremento salarial"</div>
+            <div style="background:var(--gris3);border-radius:7px;padding:0.7rem;font-size:0.78rem;font-family:'JetBrains Mono',monospace;">"ITSS sanciones incumplimiento jornada 2025 cantidad"</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ OLLAMA & GEMMA 4 ═══════════════ -->
+<div class="page" id="page-plat-ollama">
+  <div class="page-header">
+    <div class="page-header-top"><button class="page-back" onclick="showPage('home')">&#8592; Volver</button></div>
+    <div class="page-tag">Plataformas · IA Local</div>
+    <div class="page-title">Ollama &amp; Gemma 4</div>
+    <div class="page-subtitle">IA 100% local en tu ordenador &mdash; Sin enviar datos a nadie &mdash; Gratis</div>
+  </div>
+  <div class="page-body">
+    <div class="case-tabs" style="margin-bottom:1.5rem;">
+      <button class="case-tab active" onclick="switchCase('ol-what',this)">&#129422; Que es Ollama</button>
+      <button class="case-tab" onclick="switchCase('ol-gemma',this)">&#128142; Gemma 4</button>
+      <button class="case-tab" onclick="switchCase('ol-install',this)">&#9881;&#65039; Instalacion</button>
+      <button class="case-tab" onclick="switchCase('ol-use',this)">&#9889; Casos de uso</button>
+    </div>
+
+    <div class="case-panel active" id="case-ol-what">
+      <div class="highlight cyan"><div class="highlight-label">La IA que nadie puede espiarte</div><div class="highlight-text">Ollama ejecuta modelos de IA directamente en tu ordenador. Los datos <strong>nunca salen de tu equipo</strong>. No hay servidor externo, no hay empresa que almacene tus conversaciones. Perfecto para informacion sindical sensible.</div></div>
+      <div class="grid2" style="margin-bottom:1.2rem;">
+        <div>
+          <div class="sect-title" style="margin-top:0;">IA en la nube vs IA local</div>
+          <table style="width:100%;border-collapse:collapse;font-size:0.82rem;">
+            <tr style="border-bottom:1px solid var(--borde);"><th style="padding:6px;color:var(--muted);text-align:left;">IA en la nube</th><th style="padding:6px;color:var(--muted);text-align:left;">IA local (Ollama)</th></tr>
+            <tr style="border-bottom:1px solid var(--borde);"><td style="padding:6px;">Datos en servidores externos</td><td style="padding:6px;color:var(--acento2);">Datos en tu ordenador</td></tr>
+            <tr style="border-bottom:1px solid var(--borde);"><td style="padding:6px;">Puede entrenar con tus datos</td><td style="padding:6px;color:var(--acento2);">Cero acceso a tus datos</td></tr>
+            <tr style="border-bottom:1px solid var(--borde);"><td style="padding:6px;">Requiere internet</td><td style="padding:6px;color:var(--acento2);">Funciona sin internet</td></tr>
+            <tr style="border-bottom:1px solid var(--borde);"><td style="padding:6px;">Mas potente (GPT-4o, Claude)</td><td style="padding:6px;">Mas limitado (pero mejorando)</td></tr>
+            <tr><td style="padding:6px;">A veces de pago</td><td style="padding:6px;color:var(--acento2);">100% gratuito</td></tr>
+          </table>
+        </div>
+        <div>
+          <div class="sect-title" style="margin-top:0;">Cuando usar Ollama</div>
+          <ul class="check-list" style="margin-bottom:1rem;">
+            <li>Cuando tienes <strong>informacion muy sensible</strong> (estrategias confidenciales de negociacion)</li>
+            <li>Para procesar datos de afiliados que no puedes enviar a la nube</li>
+            <li>Cuando no tienes conexion a internet en el centro de trabajo</li>
+            <li>Para tareas repetitivas sin coste: resumen de textos, reformulaciones</li>
+            <li>Como alternativa de emergencia si los servicios en la nube fallan</li>
+          </ul>
+          <div class="highlight yellow">
+            <div class="highlight-label">Advertencia</div>
+            <div class="highlight-text" style="font-size:0.82rem;">Los modelos locales son menos potentes que Claude o ChatGPT. Usalo para tareas sencillas o cuando la privacidad es critica. Para analisis complejos, sigue usando Claude/ChatGPT con datos anonimizados.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="case-panel" id="case-ol-gemma">
+      <div class="highlight"><div class="highlight-label">Que es Gemma 4</div><div class="highlight-text">Gemma 4 es el modelo de IA open-source de Google, publicado en 2025. Es uno de los mejores modelos locales disponibles: puede correr en un ordenador normal y es comparable a GPT-3.5 en muchas tareas. <strong>100% gratuito y de codigo abierto.</strong></div></div>
+      <div class="grid2" style="margin-bottom:1.2rem;">
+        <div class="card">
+          <div class="card-title">Modelos locales recomendados (Abril 2026)</div>
+          <table style="width:100%;border-collapse:collapse;font-size:0.82rem;margin-top:0.5rem;">
+            <tr style="border-bottom:1px solid var(--borde);"><th style="padding:6px;color:var(--muted);text-align:left;">Modelo</th><th style="padding:6px;color:var(--muted);text-align:left;">RAM</th><th style="padding:6px;color:var(--muted);text-align:left;">Calidad</th></tr>
+            <tr style="border-bottom:1px solid var(--borde);"><td style="padding:6px;color:var(--acento2);font-weight:700;">Gemma 4 4B</td><td style="padding:6px;">8 GB</td><td style="padding:6px;">&#9733;&#9733;&#9733;&#9733;</td></tr>
+            <tr style="border-bottom:1px solid var(--borde);"><td style="padding:6px;">Llama 3.2 3B</td><td style="padding:6px;">4 GB</td><td style="padding:6px;">&#9733;&#9733;&#9733;</td></tr>
+            <tr style="border-bottom:1px solid var(--borde);"><td style="padding:6px;">Mistral 7B</td><td style="padding:6px;">8 GB</td><td style="padding:6px;">&#9733;&#9733;&#9733;&#9733;</td></tr>
+            <tr><td style="padding:6px;">Phi-4 Mini</td><td style="padding:6px;">4 GB</td><td style="padding:6px;">&#9733;&#9733;&#9733;</td></tr>
+          </table>
+        </div>
+        <div class="card">
+          <div class="card-title">Gemma 4: puntos clave</div>
+          <ul class="check-list">
+            <li>Creado por Google, basado en la misma tecnologia que Gemini</li>
+            <li>Publicado bajo licencia open-source (uso libre)</li>
+            <li>Version 4B: 4 mil millones de parametros, corre en ordenadores normales</li>
+            <li>Version 12B: mas potente, requiere GPU dedicada</li>
+            <li>Multilingue: buen nivel de espanol</li>
+            <li>Actualizado en 2025 con mejoras en razonamiento</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="case-panel" id="case-ol-install">
+      <div class="grid2" style="margin-bottom:1.2rem;">
+        <div>
+          <div class="sect-title" style="margin-top:0;">Instalar Ollama (Windows/Mac/Linux)</div>
+          <div style="display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1rem;">
+            <div class="step-card"><div class="step-num">1</div><div class="step-body"><div class="step-title">Descarga Ollama</div><div class="step-desc">Ve a ollama.ai y descarga el instalador para tu sistema operativo.</div><a class="step-link" href="https://ollama.ai" target="_blank">ollama.ai &rarr;</a></div></div>
+            <div class="step-card"><div class="step-num">2</div><div class="step-body"><div class="step-title">Instala como cualquier programa</div><div class="step-desc">Doble clic en el instalador. En Mac, arrastra a la carpeta Aplicaciones.</div></div></div>
+            <div class="step-card"><div class="step-num">3</div><div class="step-body"><div class="step-title">Descarga Gemma 4</div><div class="step-desc">Abre el terminal y escribe: <code style="background:rgba(0,0,0,0.4);padding:2px 6px;border-radius:4px;font-size:0.85em;">ollama run gemma3:4b</code></div></div></div>
+            <div class="step-card"><div class="step-num">4</div><div class="step-body"><div class="step-title">Empieza a usarlo</div><div class="step-desc">Ya puedes escribir en el terminal. O instala Open WebUI para tener interfaz grafica como ChatGPT.</div><a class="step-link" href="https://openwebui.com" target="_blank">Open WebUI (interfaz grafica) &rarr;</a></div></div>
+          </div>
+        </div>
+        <div>
+          <div class="sect-title" style="margin-top:0;">Comandos basicos</div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1rem;">
+            <div style="background:rgba(0,0,0,0.5);border:1px solid var(--borde);border-radius:7px;padding:0.8rem;font-family:'JetBrains Mono',monospace;font-size:0.82rem;">
+              <div style="color:var(--muted);font-size:0.7rem;margin-bottom:0.4rem;">Terminal &mdash; descargar y ejecutar modelo</div>
+              <div style="color:var(--acento2);">ollama run gemma3:4b</div>
+            </div>
+            <div style="background:rgba(0,0,0,0.5);border:1px solid var(--borde);border-radius:7px;padding:0.8rem;font-family:'JetBrains Mono',monospace;font-size:0.82rem;">
+              <div style="color:var(--muted);font-size:0.7rem;margin-bottom:0.4rem;">Ver modelos instalados</div>
+              <div style="color:var(--acento2);">ollama list</div>
+            </div>
+            <div style="background:rgba(0,0,0,0.5);border:1px solid var(--borde);border-radius:7px;padding:0.8rem;font-family:'JetBrains Mono',monospace;font-size:0.82rem;">
+              <div style="color:var(--muted);font-size:0.7rem;margin-bottom:0.4rem;">Probar otro modelo (Llama)</div>
+              <div style="color:var(--acento2);">ollama run llama3.2</div>
+            </div>
+          </div>
+          <div class="highlight cyan">
+            <div class="highlight-label">Requisitos minimos</div>
+            <div class="highlight-text" style="font-size:0.82rem;">8 GB de RAM y 10 GB de disco libre para Gemma 4B. Funciona sin GPU dedicada (aunque con GPU es mas rapido).</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="case-panel" id="case-ol-use">
+      <div class="grid2">
+        <div>
+          <div class="sect-title" style="margin-top:0;">Casos de uso con privacidad critica</div>
+          <ul class="check-list" style="margin-bottom:1rem;">
+            <li>Resumir actas de reunion con datos de afiliados</li>
+            <li>Analizar estrategias de negociacion confidenciales</li>
+            <li>Revisar comunicaciones internas del comite</li>
+            <li>Procesar documentacion de trabajadores especificos (con nombre)</li>
+            <li>Transcribir grabaciones de reuniones con datos sensibles</li>
+          </ul>
+          <div class="exercise-box">
+            <div class="exercise-title">Prompt de prueba para Ollama</div>
+            <div class="exercise-desc">Una vez instalado, prueba este prompt:</div>
+            <div style="background:rgba(0,0,0,0.4);border:1px solid rgba(0,198,174,0.3);border-radius:7px;padding:0.7rem;font-family:'JetBrains Mono',monospace;font-size:0.76rem;line-height:1.6;">"Eres un asistente sindical. Resume en 3 puntos los derechos basicos de un delegado sindical en Espana segun el Estatuto de los Trabajadores."</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Meta AI (via WhatsApp y web)</div>
+          <div style="font-size:0.85rem;color:var(--muted);line-height:1.65;margin-bottom:0.8rem;">Meta AI (de Facebook/Meta) usa el modelo Llama y es accesible de forma gratuita:</div>
+          <ul class="check-list" style="margin-bottom:1rem;">
+            <li><strong>En WhatsApp:</strong> escribe <code style="background:rgba(245,240,235,0.07);padding:1px 5px;border-radius:3px;">@Meta AI</code> en cualquier chat</li>
+            <li><strong>En web:</strong> meta.ai, con cuenta de Facebook</li>
+            <li>Busqueda web en tiempo real incluida</li>
+            <li>Gratuito sin limites visibles</li>
+          </ul>
+          <div class="highlight" style="margin-bottom:0;">
+            <div class="highlight-label">Advertencia de privacidad</div>
+            <div class="highlight-text" style="font-size:0.82rem;">Meta AI SI envia datos a los servidores de Meta. No uses para informacion sindical sensible. Solo para tareas generales.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ BIBLIOTECA DE FORMACIÓN ═══════════════ -->
+<div class="page" id="page-biblioteca">
+  <div class="page-header">
+    <div class="page-header-top"><button class="page-back" onclick="showPage('home')">&#8592; Volver</button></div>
+    <div class="page-tag">Extra · Multimedia</div>
+    <div class="page-title">Biblioteca de Formacion</div>
+    <div class="page-subtitle">Videos, presentaciones y materiales de los cursos CCOO Servicios Malaga</div>
+  </div>
+  <div class="page-body">
+    <!-- VIDEO SECTION -->
+    <div class="sect-title" style="margin-top:0;">&#127902;&#65039; Videos de Formacion</div>
+    <div class="sect-sub">Materiales audiovisuales de los cursos de IA Sindical</div>
+    <div class="grid2" style="margin-bottom:2rem;">
+      <div class="card">
+        <div style="background:var(--gris3);border-radius:8px;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;margin-bottom:0.8rem;position:relative;overflow:hidden;border:1px solid var(--borde);">
+          <video id="vid1" controls style="width:100%;height:100%;border-radius:8px;display:none;" preload="none"></video>
+          <div id="vid1-placeholder" style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;cursor:pointer;" onclick="playLocalVideo('vid1','IA_para_la_Accio_n_Sindical.mp4')">
+            <div style="width:56px;height:56px;border-radius:50%;background:var(--rojo);display:flex;align-items:center;justify-content:center;font-size:1.4rem;">&#9654;</div>
+            <div style="font-size:0.78rem;color:var(--muted);">Haz clic para reproducir</div>
+          </div>
+        </div>
+        <div class="resource-title">IA para la Accion Sindical</div>
+        <div class="resource-desc">Introduccion completa al uso de IA en el trabajo sindical. Conceptos, herramientas y casos practicos.</div>
+        <div style="margin-top:0.6rem;font-size:0.75rem;color:var(--muted);">Formato: MP4 &middot; CCOO Servicios Malaga</div>
+      </div>
+      <div class="card">
+        <div style="background:var(--gris3);border-radius:8px;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;margin-bottom:0.8rem;position:relative;overflow:hidden;border:1px solid var(--borde);">
+          <video id="vid2" controls style="width:100%;height:100%;border-radius:8px;display:none;" preload="none"></video>
+          <div id="vid2-placeholder" style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;cursor:pointer;" onclick="playLocalVideo('vid2','Manual_de_IA_para_la_Accio_n_Sindical.mp4')">
+            <div style="width:56px;height:56px;border-radius:50%;background:var(--rojo);display:flex;align-items:center;justify-content:center;font-size:1.4rem;">&#9654;</div>
+            <div style="font-size:0.78rem;color:var(--muted);">Haz clic para reproducir</div>
+          </div>
+        </div>
+        <div class="resource-title">Manual de IA para la Accion Sindical</div>
+        <div class="resource-desc">Manual completo en video. Guia paso a paso para delegados y delegadas con ejemplos reales.</div>
+        <div style="margin-top:0.6rem;font-size:0.75rem;color:var(--muted);">Formato: MP4 &middot; CCOO Servicios Malaga</div>
+      </div>
+    </div>
+
+    <!-- DOCUMENTOS Y PRESENTACIONES -->
+    <div class="divider"></div>
+    <div class="sect-title">&#128214; Presentaciones y Documentos</div>
+    <div class="sect-sub">Materiales de los cursos en formato PDF y presentacion</div>
+    <div class="resource-list" style="margin-bottom:2rem;">
+      <div class="resource-item">
+        <div class="resource-icon">&#128202;</div>
+        <div>
+          <div class="resource-title">Curso 5 Plataformas IA &mdash; CCOO (PDF + HTML)</div>
+          <div class="resource-desc">Gemini Gems, ChatGPT Custom GPTs, Claude Projects, Abacus.ai y NotebookLM. 50 herramientas sindicales en 5 plataformas.</div>
+          <div style="display:flex;gap:0.5rem;margin-top:0.5rem;flex-wrap:wrap;">
+            <a class="btn btn-sm btn-outline" href="curso_5plataformas_ccoo.pdf" target="_blank" style="font-size:0.72rem;padding:4px 10px;">&#128196; Ver PDF</a>
+            <a class="btn btn-sm btn-outline" href="curso_5plataformas_ccoo.html" target="_blank" style="font-size:0.72rem;padding:4px 10px;">&#127760; Ver HTML</a>
+          </div>
+        </div>
+      </div>
+      <div class="resource-item">
+        <div class="resource-icon">&#128201;</div>
+        <div>
+          <div class="resource-title">Curso ChatGPT para CCOO (PDF)</div>
+          <div class="resource-desc">10 herramientas de ChatGPT para la accion sindical: convenios, ERTE, comunicados, negociacion y formacion de delegados.</div>
+          <div style="margin-top:0.5rem;">
+            <a class="btn btn-sm btn-outline" href="curso_chatgpt_ccoo.pdf" target="_blank" style="font-size:0.72rem;padding:4px 10px;">&#128196; Ver PDF</a>
+          </div>
+        </div>
+      </div>
+      <div class="resource-item">
+        <div class="resource-icon">&#128202;</div>
+        <div>
+          <div class="resource-title">Curso Claude &mdash; CCOO (PowerPoint)</div>
+          <div class="resource-desc">Guia completa de Claude Projects para representantes sindicales. Analisis de documentos largos y redaccion juridica.</div>
+          <div style="margin-top:0.5rem;">
+            <a class="btn btn-sm btn-outline" href="Curso_Claude_CCOO__2_.pptx" target="_blank" style="font-size:0.72rem;padding:4px 10px;">&#128202; Descargar PPTX</a>
+          </div>
+        </div>
+      </div>
+      <div class="resource-item">
+        <div class="resource-icon">&#128202;</div>
+        <div>
+          <div class="resource-title">IA Sindical CCOO (PowerPoint)</div>
+          <div class="resource-desc">Presentacion principal de IA para la accion sindical. Conceptos fundamentales y casos de uso para CCOO.</div>
+          <div style="margin-top:0.5rem;">
+            <a class="btn btn-sm btn-outline" href="IA_SINDICAL_CCOO.ppt" target="_blank" style="font-size:0.72rem;padding:4px 10px;">&#128202; Descargar PPT</a>
+          </div>
+        </div>
+      </div>
+      <div class="resource-item">
+        <div class="resource-icon">&#127912;</div>
+        <div>
+          <div class="resource-title">Manual Tactico del Delegado Digital (PDF ilustrado)</div>
+          <div class="resource-desc">5 Plataformas, 10 Tacticas, 0 Excusas. Manual visual con diagramas, matrices y flujos de trabajo sindicales.</div>
+          <div style="margin-top:0.5rem;">
+            <a class="btn btn-sm btn-outline" href="IA_Ta_ctica_Sindical.pdf" target="_blank" style="font-size:0.72rem;padding:4px 10px;">&#128196; Ver PDF</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTA TECNICA -->
+    <div class="highlight yellow">
+      <div class="highlight-label">Nota sobre los videos</div>
+      <div class="highlight-text" style="font-size:0.85rem;">Los videos se reproducen directamente en la pagina si los archivos MP4 estan en la misma carpeta que este index.html. Si no se ven, asegurate de que los archivos <strong>IA_para_la_Accio_n_Sindical.mp4</strong> y <strong>Manual_de_IA_para_la_Accio_n_Sindical.mp4</strong> estan en la misma carpeta al subirlos a GitHub.</div>
+    </div>
+  </div>
+</div>
+
+<button id="coco-btn" onclick="cocoToggle()" title="COCO - Asistente Sindical IA">
+  &#129302;
+  <span id="coco-badge">COCO</span>
+</button>
+<div id="coco-panel">
+  <div id="coco-header">
+    <div id="coco-avatar">&#129302;</div>
+    <div id="coco-info">
+      <div id="coco-name">COCO &mdash; Asistente Sindical IA</div>
+      <div id="coco-status">&#9679; En linea &middot; CCOO Servicios Malaga</div>
+    </div>
+    <button id="coco-close" onclick="cocoToggle()">&#10005;</button>
+  </div>
+  <div id="coco-messages">
+    <div class="coco-msg coco">Hola! Soy <strong>COCO</strong>, tu asistente sindical. Conozco el ET, la LOLS y los convenios de Comercio y Hosteleria de Malaga. En que te ayudo?</div>
+  </div>
+  <div id="coco-quick">
+    <button class="coco-quick-btn" onclick="cocoQuick('vacaciones')">Vacaciones</button>
+    <button class="coco-quick-btn" onclick="cocoQuick('jornada')">Jornada</button>
+    <button class="coco-quick-btn" onclick="cocoQuick('permisos')">Permisos</button>
+    <button class="coco-quick-btn" onclick="cocoQuick('huelga')">Huelga</button>
+    <button class="coco-quick-btn" onclick="cocoQuick('delegado')">Delegado</button>
+    <button class="coco-quick-btn" onclick="cocoQuick('salario')">Salario</button>
+  </div>
+  <div id="coco-input-area">
+    <textarea id="coco-input" placeholder="Pregunta sobre ET, LOLS o convenios de Malaga..." rows="1"
+      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();cocoEnviar();}"
+      oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,80)+'px'"></textarea>
+    <button id="coco-send" onclick="cocoEnviar()">&#8250;</button>
+  </div>
+  <div id="coco-powered">ET &middot; LOLS &middot; Conv. Comercio Malaga &middot; Conv. Hosteleria Malaga &middot; $0</div>
+</div>
+
+<script>
+// ── NAVEGACION Y SIDEBAR RESPONSIVO ──────────────────────────────
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item').forEach(s=>s.classList.remove('active'));
+  var page=document.getElementById('page-'+id);
+  if(page) page.classList.add('active');
+  document.querySelectorAll('.sidebar-item').forEach(function(s){
+    var oc=s.getAttribute('onclick')||'';
+    if(oc.indexOf("'"+id+"'")>-1) s.classList.add('active');
+  });
+  if(id==='conceptos20') loadConceptosFrame();
+  window.scrollTo(0,0);
+}
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('open');
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+}
+function updateFooterMargin(){
+  var footer = document.getElementById('appFooter');
+  if(!footer) return;
+  footer.style.marginLeft = window.innerWidth > 900 ? 'var(--sw)' : '0';
+}
+window.addEventListener('resize', updateFooterMargin);
+window.addEventListener('resize',function(){
+  if(window.innerWidth>900) closeSidebar();
+});
+function loadConceptosFrame(){
+  var frame=document.getElementById('conceptosFrame');
+  if(frame.getAttribute('data-loaded')) return;
+  frame.setAttribute('data-loaded','1');
+  fetch('conceptos_ia.html').then(function(r){return r.text();}).then(function(html){
+    frame.srcdoc=html;
+  }).catch(function(){
+    frame.srcdoc='<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><style>body{font-family:sans-serif;background:#0a0a0f;color:#e2e8f0;padding:3rem 2rem;text-align:center;}h1{color:#7c3aed;}a{color:#06b6d4;}</style></head><body><h1>20 Conceptos de IA</h1><p>Asegurate de que el archivo <strong>conceptos_ia.html</strong> esta en la misma carpeta que index.html.</p><a href="conceptos_ia.html" target="_blank">Abrir directamente</a></body></html>';
+  });
+}
+
+// ── ADMIN ─────────────────────────────────────────────────────────
+var adminMode=false;
+function toggleAdmin(){
+  adminMode=!adminMode;
+  var btn=document.getElementById('adminToggle');
+  var bar=document.getElementById('adminBar');
+  btn.classList.toggle('active',adminMode);
+  bar.classList.toggle('show',adminMode);
+  btn.textContent=adminMode?'X Cerrar Admin':'Admin';
+}
+function toggleEditable(){
+  document.querySelectorAll('.page-title,.page-subtitle,.card-title,.card-text,.highlight-text,.sect-title').forEach(function(el){
+    el.contentEditable=el.contentEditable==='true'?'false':'true';
+  });
+  showToast('Modo edicion '+(document.querySelector('.page-title').contentEditable==='true'?'activado':'desactivado'),'success');
+}
+function saveChanges(){showToast('Cambios guardados en esta sesion','success');}
+function resetAll(){if(confirm('Resetear todos los cambios?')) location.reload();}
+function addModule(){
+  var title=document.getElementById('newModTitle').value.trim();
+  if(!title){showToast('Escribe un titulo','error');return;}
+  var id='extra_'+Date.now();
+  var section=document.getElementById('extraModulesSection');
+  section.style.display='block';
+  var item=document.createElement('div');
+  item.className='sidebar-item';
+  item.setAttribute('onclick',"showPage('"+id+"');closeSidebar()");
+  item.innerHTML='<span class="mod-num">+</span> '+title;
+  document.getElementById('extraModulesList').appendChild(item);
+  var page=document.createElement('div');
+  page.className='page';page.id='page-'+id;
+  var content=document.getElementById('newModContent').value||'<div class="highlight"><div class="highlight-label">Contenido</div><div class="highlight-text">Anade contenido en modo edicion.</div></div>';
+  page.innerHTML='<div class="page-header"><div class="page-header-top"><button class="page-back" onclick="showPage(\'home\')">Volver</button></div><div class="page-tag">Modulo Adicional</div><div class="page-title">'+title+'</div></div><div class="page-body">'+content+'</div>';
+  document.getElementById('mainContent').appendChild(page);
+  closeModal('addCursoModal');
+  showToast('Modulo anadido: '+title,'success');
+}
+function addResource(){
+  var icon=document.getElementById('newResIcon').value||'📎';
+  var title=document.getElementById('newResTitle').value.trim();
+  var desc=document.getElementById('newResDesc').value.trim();
+  var url=document.getElementById('newResUrl').value.trim();
+  if(!title){showToast('Escribe un titulo','error');return;}
+  var item=document.createElement('div');
+  item.className='resource-item';
+  item.innerHTML='<div class="resource-icon">'+icon+'</div><div><div class="resource-title">'+title+'</div><div class="resource-desc">'+desc+'</div>'+(url?'<a class="resource-link" href="'+url+'" target="_blank">'+url+'</a>':'')+'</div>';
+  document.getElementById('resourcesList').appendChild(item);
+  closeModal('addRecursoModal');
+  showToast('Recurso anadido','success');
+}
+
+// ── MODALS ────────────────────────────────────────────────────────
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-overlay').forEach(function(m){
+  m.addEventListener('click',function(e){if(e.target===m) m.classList.remove('open');});
+});
+
+// ── TOAST ─────────────────────────────────────────────────────────
+function showToast(msg,type){
+  var t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='toast show '+(type||'');
+  setTimeout(function(){t.classList.remove('show');},3000);
+}
+
+// ── TOKENIZER ─────────────────────────────────────────────────────
+var TOKEN_COLORS=['rgba(214,40,40,0.7)','rgba(247,183,49,0.7)','rgba(0,198,174,0.7)','rgba(124,58,237,0.7)','rgba(6,182,212,0.7)','rgba(16,185,129,0.7)'];
+function tokenizerDemo(inputId,outputId,countId,costId){
+  var text=(document.getElementById(inputId)||{}).value||'';
+  var outEl=document.getElementById(outputId);
+  var countEl=document.getElementById(countId);
+  var costEl=document.getElementById(costId);
+  if(!text.trim()){if(outEl)outEl.innerHTML='';if(countEl)countEl.textContent='0';if(costEl)costEl.textContent='$0.000';return;}
+  var words=text.match(/\S+|\s+/g)||[];
+  var tokens=[];
+  words.forEach(function(w){
+    if(!w.trim()) return;
+    if(w.length<=3){tokens.push(w);}
+    else{var i=0;while(i<w.length){var l=Math.ceil(Math.random()*3)+1;tokens.push(w.substring(i,i+l));i+=l;}}
+  });
+  if(outEl) outEl.innerHTML=tokens.map(function(t,i){
+    return '<span class="token-chip" style="background:'+TOKEN_COLORS[i%TOKEN_COLORS.length]+';border-color:'+TOKEN_COLORS[i%TOKEN_COLORS.length]+';color:#000;">'+t.replace(/</g,'&lt;')+'</span>';
+  }).join('');
+  if(countEl) countEl.textContent=tokens.length;
+  if(costEl) costEl.textContent='$'+(tokens.length/1000000*3).toFixed(6);
+}
+
+// ── PROMPT BUILDER ────────────────────────────────────────────────
+function buildPrompt(){
+  var rol=(document.getElementById('pb-rol')||{}).value||'';
+  var ctx=(document.getElementById('pb-ctx')||{}).value||'';
+  var task=(document.getElementById('pb-task')||{}).value||'';
+  var fmt=(document.getElementById('pb-fmt')||{}).value||'';
+  var prompt='[ROL] '+rol+'\n\n[CONTEXTO] '+ctx+'\n\n[TAREA] '+task+'\n\n[FORMATO] '+fmt;
+  var preview=document.getElementById('promptPreview');
+  if(preview){
+    preview.innerHTML='<span class="part-rol">[ROL] '+escHtml(rol)+'</span>\n\n<span class="part-ctx">[CONTEXTO] '+escHtml(ctx)+'</span>\n\n<span class="part-task">[TAREA] '+escHtml(task)+'</span>\n\n<span class="part-fmt">[FORMATO] '+escHtml(fmt)+'</span>';
+  }
+  window._currentPrompt=prompt;
+}
+function escHtml(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function copyPrompt(){
+  if(window._currentPrompt) navigator.clipboard.writeText(window._currentPrompt).then(function(){showToast('Prompt copiado','success');});
+}
+function copyText(text){
+  navigator.clipboard.writeText(text).then(function(){showToast('Copiado','success');});
+}
+
+// ── CASE TABS ─────────────────────────────────────────────────────
+function switchCase(id,btn){
+  document.querySelectorAll('.case-panel').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.case-tab').forEach(function(b){b.classList.remove('active');});
+  var panel=document.getElementById('case-'+id);
+  if(panel) panel.classList.add('active');
+  if(btn) btn.classList.add('active');
+}
+
+// ── DEMO MODELS ───────────────────────────────────────────────────
+var demoData={
+  convenio:{prompt:'Actua como abogado laboralista. Analiza el articulo X del convenio subido: 1) Explicalo en lenguaje sencillo, 2) Ambiguedades, 3) Articulos del ET relacionados.\n\nPegalo en Claude tras subir el PDF.', herramienta:'Claude (mejor para PDFs)'},
+  negociacion:{prompt:'Preparame para negociar sobre [TEMA]. Dame: 3 argumentos de la empresa, mis 3 contraargumentos con refs. ET, y 2 propuestas de acuerdo alternativas.\n\nPegalo en Claude o ChatGPT.',herramienta:'Claude o ChatGPT'},
+  circular:{prompt:'Actua como redactor sindical. Escribe una circular sobre [ACUERDO CONSEGUIDO]. Tono cercano, 200 palabras, sin tecnicismos.\n\nSirve en cualquier modelo.',herramienta:'Claude, ChatGPT o Gemini'}
+};
+function demoModels(type){
+  var d=demoData[type];
+  var el=document.getElementById('demoOutput');
+  if(el){el.textContent='PROMPT (herramienta: '+d.herramienta+'):\n\n'+d.prompt;el.classList.remove('loading');}
+}
+
+// ── QUIZ ──────────────────────────────────────────────────────────
+var questions=[
+  {q:'Que significa "alucinacion" en IA?',opts:['Cuando la IA tarda mucho','Cuando la IA genera informacion falsa con confianza','Cuando no entiende el idioma','Cuando se desconecta'],correct:1,explain:'Las alucinaciones son cuando la IA inventa datos con total confianza. Verifica informacion legal en el BOE.'},
+  {q:'Que herramienta es mejor para buscar legislacion actualizada con fuentes verificadas?',opts:['ChatGPT sin internet','Claude por defecto','Perplexity AI','Microsoft Word'],correct:2,explain:'Perplexity busca en internet en tiempo real y muestra las fuentes de cada dato.'},
+  {q:'En la formula ROL + CONTEXTO + TAREA + FORMATO, que mejora principalmente?',opts:['La velocidad de respuesta','La calidad y relevancia de la respuesta','El coste de la IA','La privacidad'],correct:1,explain:'Dar estructura al prompt hace que la IA comprenda mejor que necesitas y genere respuestas mas utiles.'},
+  {q:'Que tipo de datos NUNCA debes enviar a una IA publica?',opts:['Nombre del convenio','DNI de afiliados o datos personales','Texto del BOE','Argumentos de negociacion genericos'],correct:1,explain:'Los datos de afiliados son categoria especial segun el RGPD Art. 9. Nunca enviarlos.'},
+  {q:'Cual es la ventaja principal de Claude para trabajo sindical?',opts:['Crear videos','Analizar documentos largos y escritura juridica','Jugar videojuegos','Hacer llamadas'],correct:1,explain:'Claude destaca en comprension de textos largos y redaccion juridica. Permite subir PDFs de convenios completos.'},
+  {q:'Cuantos dias de vacaciones establece el Convenio de Comercio de Malaga?',opts:['20 dias naturales','25 dias laborables','30 dias naturales','22 dias laborables'],correct:2,explain:'El Art. 14 del Convenio de Comercio de Malaga (2023-2028) establece 30 dias naturales de vacaciones retribuidas al ano.'},
+  {q:'Segun el ET, que articulo regula los permisos y licencias retribuidas?',opts:['Art. 12','Art. 37','Art. 64','Art. 28'],correct:1,explain:'El Art. 37 del ET regula los permisos retribuidos: matrimonio, fallecimiento de familiar, etc.'},
+  {q:'Que es la LOLS?',opts:['Ley de Ordenacion Laboral Superior','Ley Organica de Libertad Sindical','Ley de Obligaciones Laborales Sindicales','Ley Organica Laboral del Sistema'],correct:1,explain:'La LOLS (Ley Organica 11/1985) regula el derecho fundamental de libertad sindical.'},
+  {q:'Puedes subir un PDF de convenio a la IA?',opts:['No, solo texto en el chat','Si, Claude y ChatGPT permiten analizar PDFs directamente','Solo si tiene menos de 1 pagina','Solo PDFs del BOE'],correct:1,explain:'Claude, ChatGPT y Gemini permiten subir documentos PDF. Puedes subir un convenio completo.'},
+  {q:'Hasta cuando esta vigente el Convenio de Hosteleria de Malaga?',opts:['31/12/2025','31/12/2026','31/12/2027','31/12/2028'],correct:2,explain:'El Convenio de Hosteleria de Malaga fue ampliado en febrero de 2024 hasta el 31 de diciembre de 2027.'}
+];
+var qCurrent=0,qScore=0,qAnswered=false;
+function renderQuestion(){
+  var q=questions[qCurrent];
+  document.getElementById('qQuestion').textContent=q.q;
+  document.getElementById('qProgress').textContent='Pregunta '+(qCurrent+1)+' de '+questions.length;
+  document.getElementById('qBar').style.width=((qCurrent+1)/questions.length*100)+'%';
+  var letters=['A','B','C','D'];
+  document.getElementById('qOpts').innerHTML=q.opts.map(function(o,i){
+    return '<div class="quiz-opt" onclick="answerQ('+i+')"><span class="quiz-letter">'+letters[i]+'</span>'+o+'</div>';
+  }).join('');
+  document.getElementById('qFeedback').className='quiz-feedback';
+  document.getElementById('qFeedback').textContent='';
+  document.getElementById('qNext').style.display='none';
+  qAnswered=false;
+}
+function answerQ(i){
+  if(qAnswered) return;
+  qAnswered=true;
+  var q=questions[qCurrent];
+  document.querySelectorAll('.quiz-opt')[i].classList.add(i===q.correct?'correct':'wrong');
+  document.querySelectorAll('.quiz-opt')[q.correct].classList.add('correct');
+  if(i===q.correct){qScore++;document.getElementById('qScore').textContent=qScore;}
+  var fb=document.getElementById('qFeedback');
+  fb.className='quiz-feedback show '+(i===q.correct?'ok':'fail');
+  fb.textContent=(i===q.correct?'Correcto! ':'Incorrecto. ')+q.explain;
+  document.getElementById('qNext').style.display='inline-flex';
+}
+function nextQuestion(){
+  qCurrent++;
+  if(qCurrent>=questions.length){
+    var emoji=qScore>=8?'Excelente':qScore>=5?'Buen resultado':'Sigue practicando';
+    document.getElementById('quizBox').innerHTML='<div style="background:var(--gris2);border:1px solid var(--borde);border-radius:12px;padding:3rem;text-align:center;"><div style="font-size:3rem;margin-bottom:1rem;">&#127941;</div><div style="font-family:\'Syne\',sans-serif;font-size:2rem;font-weight:800;margin-bottom:0.5rem;">'+qScore+'/10</div><div style="color:var(--muted);margin-bottom:2rem;">'+emoji+'</div><button class="btn" onclick="restartQuiz()">Repetir</button></div>';
+    return;
+  }
+  renderQuestion();
+}
+function restartQuiz(){
+  qCurrent=0;qScore=0;
+  document.getElementById('quizBox').innerHTML='<div style="background:var(--gris2);border:1px solid var(--borde);border-radius:12px;padding:2rem;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;flex-wrap:wrap;gap:.5rem;"><span style="font-size:0.78rem;color:var(--muted);" id="qProgress"></span><span style="font-size:0.78rem;color:var(--muted);">Puntuacion: <strong id="qScore" style="color:var(--acento2);">0</strong></span></div><div class="quiz-progress-bar"><div class="quiz-progress-bar-fill" id="qBar" style="width:10%;"></div></div><div class="quiz-q" id="qQuestion"></div><div class="quiz-opts" id="qOpts"></div><div class="quiz-feedback" id="qFeedback"></div><button class="btn" id="qNext" onclick="nextQuestion()" style="display:none;">Siguiente</button></div>';
+  renderQuestion();
+}
+
+// ── GENERADOR ESCRITOS ────────────────────────────────────────────
+function generateEscrito(){
+  var tipo=document.getElementById('escritoTipo').value;
+  var empresa=document.getElementById('escritoEmpresa').value||'[EMPRESA]';
+  var tema=document.getElementById('escritoTema').value||'[DESCRIBE EL PROBLEMA]';
+  var art=document.getElementById('escritoArt').value;
+  var artRef=art?'Referencia legal principal: '+art+'. ':'';
+  var prompt='Actua como abogado laboralista especializado en derecho sindical espanol.\n\nRedacta un escrito de tipo "'+tipo+'" dirigido a la Direccion de '+empresa+', en nombre del Comite de Empresa.\n\nSituacion: '+tema+'\n\n'+artRef+'Instrucciones:\n- Carta formal: lugar/fecha, destinatario, cuerpo en 3 parrafos, solicitud concreta con plazo 5 dias habiles\n- Tono firme pero constructivo\n- Referencias legales relevantes (ET, convenio)\n- Espacio para firma del Presidente/a del Comite\n\nGenera solo el texto del escrito, listo para usar.';
+  var out=document.getElementById('escritoOutput');
+  out.textContent=prompt;out.style.display='block';
+  if(!document.getElementById('copyEscritoBtn')){
+    var btn=document.createElement('button');
+    btn.id='copyEscritoBtn';btn.className='btn btn-sm';btn.style.marginTop='0.7rem';
+    btn.textContent='Copiar';
+    btn.onclick=function(){navigator.clipboard.writeText(prompt).then(function(){showToast('Copiado','success');});};
+    out.parentNode.insertBefore(btn,out.nextSibling);
+  }
+}
+
+// ── ACTION CHECKLIST ──────────────────────────────────────────────
+function markAction(el){
+  el.closest('.action-check').classList.toggle('checked',el.checked);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// COCO — Asistente Sindical con base de conocimiento embebida
+// ET (BOE-A-2015-11430) + LOLS (BOE-A-2015-11724)
+// Convenio Comercio Malaga 2023-2028
+// Convenio Hosteleria Malaga (hasta 31/12/2027)
+// Para consultas complejas: abre claude.ai?q= con prompt experto
+// Coste para el usuario: $0 siempre
+// ═══════════════════════════════════════════════════════════════
+
+var COCO_KB={
+  vacaciones:{
+    keywords:['vacacion','vacaciones','descanso anual','dias libres'],
+    respuesta:'<strong>Vacaciones segun la normativa:</strong><br><br><strong>ET (Art. 38):</strong><br>→ Minimo <strong>30 dias naturales</strong> al ano<br>→ No sustituibles por compensacion economica (salvo extincion)<br>→ Deben comunicarse con <strong>2 meses</strong> de antelacion<br><br><strong>Convenio Comercio Malaga 2023-2028 (Art. 14):</strong><br>→ <strong>30 dias naturales</strong> retribuidos<br>→ Si coinciden con IT embarazo/parto: se disfrutan en fecha distinta<br>→ Si coinciden con IT por otras causas: se recuperan en <strong>18 meses</strong><br>→ Calendario con 2 meses de antelacion minimo<br><br><strong>Convenio Hosteleria Malaga:</strong><br>→ Minimo 30 dias naturales conforme al ET<br><br>⚠️ Verifica siempre en el convenio de tu empresa.'
+  },
+  jornada:{
+    keywords:['jornada','horas','horario','turno','semana','diaria'],
+    respuesta:'<strong>Jornada laboral:</strong><br><br><strong>ET (Art. 34):</strong><br>→ Maximo <strong>40 horas semanales</strong> de promedio anual<br>→ Maximo 9 horas diarias<br>→ Descanso minimo entre jornadas: <strong>12 horas</strong><br>→ Descanso semanal: <strong>dia y medio</strong><br><br><strong>Convenio Comercio Malaga (Art. 10-11):</strong><br>→ 40 horas semanales, max 8 horas diarias<br>→ Jornada partida: interrupcion min <strong>2 horas</strong>, max 4 horas<br>→ Jornada minima diaria: 4 horas<br>→ Calendario laboral trimestral obligatorio<br><br><strong>Domingos y festivos:</strong><br>→ Prestacion <strong>voluntaria</strong> — compensacion min del <strong>130%</strong><br><br>⚠️ Consulta el convenio especifico de tu sector.'
+  },
+  permisos:{
+    keywords:['permiso','licencia','dias','ausencia','matrimonio','fallecimiento','traslado','mudanza'],
+    respuesta:'<strong>Permisos retribuidos (ET Art. 37 + Conv. Comercio Art. 15):</strong><br><br><strong>Por fallecimiento:</strong><br>→ <strong>5 dias laborables</strong> si es padre/madre, conyugue, hijo/a, hermano/a, abuelo/a, nieto/a o pareja estable<br><br><strong>Por hospitalizacion o enfermedad grave:</strong><br>→ <strong>5 dias laborables</strong> para familiares hasta 2.o grado<br><br><strong>Por matrimonio o pareja de hecho:</strong><br>→ <strong>15 dias naturales</strong> (Conv. Comercio Art. 15.3)<br>→ Se reconoce a parejas de hecho inscritas<br><br><strong>Por mudanza:</strong><br>→ <strong>2 dias laborables</strong> por cambio de domicilio habitual<br><br><strong>Por asuntos propios:</strong><br>→ <strong>3 dias laborables</strong> al ano (previo aviso 72h)<br><br><strong>Por atencion medica:</strong><br>→ Tiempo necesario con justificante del facultativo<br>→ 8 horas anuales para acompanar a menores o mayores 65 anos<br><br>⚠️ El convenio de tu empresa puede mejorar estos minimos.'
+  },
+  huelga:{
+    keywords:['huelga','convocatoria','preaviso','servicios minimos','derecho','huelgar'],
+    respuesta:'<strong>Derecho de huelga — LOLS y normativa vigente:</strong><br><br><strong>Constitucion Espanola (Art. 28.2):</strong><br>→ El derecho de huelga es un <strong>derecho fundamental</strong><br><br><strong>Regulacion (RDL 17/1977):</strong><br>→ <strong>Preaviso de 5 dias</strong> antes del inicio<br>→ 10 dias en servicios esenciales<br>→ El preaviso debe comunicarse a la empresa y a la Autoridad Laboral<br>→ Debe constituirse un <strong>comite de huelga</strong> (max 12 personas)<br>→ El comite garantiza los servicios minimos pactados<br><br><strong>Efectos sobre el contrato:</strong><br>→ La huelga <strong>suspende</strong> el contrato (no lo extingue)<br>→ El trabajador no percibe salario durante la huelga<br>→ El empleador NO puede contratar esquiroles (Art. 6.5 RDL 17/1977)<br>→ NO puede sancionar por ejercer el derecho de huelga<br><br>Para preparar el preaviso, dime el sector y te ayudo.'
+  },
+  delegado:{
+    keywords:['delegado','comite','representante','garantias','horas sindicales','credito horario'],
+    respuesta:'<strong>Derechos de los representantes sindicales:</strong><br><br><strong>Credito de horas (ET Art. 68):</strong><br>→ 10-30 trabajadores: <strong>15 horas/mes</strong><br>→ 31-49: <strong>20 horas/mes</strong><br>→ 50-100: <strong>25 horas/mes</strong><br>→ 101-250: <strong>30 horas/mes</strong><br>→ Mas de 250: <strong>35 horas/mes</strong><br>→ Las horas son acumulables entre miembros (Conv. Comercio Art. 35.B)<br><br><strong>Conv. Comercio Malaga (Art. 35):</strong><br>→ Delegado de personal: <strong>20 horas/mes</strong><br>→ Preaviso minimo de 24 horas para actividad sindical<br><br><strong>Garantias (ET Art. 68):</strong><br>→ No pueden ser despedidos ni sancionados por funciones sindicales<br>→ Prioridad de permanencia en EREs<br>→ Acceso a informacion economica de la empresa<br><br><strong>LOLS:</strong><br>→ Derecho a tablon de anuncios en el centro<br>→ Local sindical en empresas de mas de 250 trabajadores'
+  },
+  salario:{
+    keywords:['salario','sueldo','nomina','plus','complemento','smi','pagas','extra','antiguedad'],
+    respuesta:'<strong>Salario y complementos:</strong><br><br><strong>ET (Art. 26-31):</strong><br>→ El salario debe pagarse puntualmente (normalmente mensual)<br>→ El recibo debe detallar todos los conceptos<br>→ Minimo <strong>2 pagas extraordinarias</strong> al ano<br><br><strong>Conv. Comercio Malaga — Pagas extras (Art. 21):</strong><br>→ <strong>3 pagas extraordinarias:</strong> marzo, julio y Navidad (antes del dia 15)<br>→ Cada paga: 1 mensualidad de salario base + antiguedad<br><br><strong>Incrementos salariales:</strong><br>→ 2024: +2,5%<br>→ 2025: +2%<br>→ 2026: +1,75% (revision +0,25% si IPC supera el 2%)<br><br><strong>Plus nocturnidad (Art. 43):</strong><br>→ Horas entre 22:00 y 06:00: <strong>+25%</strong> sobre salario base<br><br><strong>Complemento antiguedad (Art. 45):</strong><br>→ A los 4, 8 y 12 anos de permanencia<br><br>⚠️ Las tablas exactas dependen del sector (I al VI). Consulta el Anexo del convenio.'
+  }
+};
+
+var COCO_FAQS={
+  'art 37':'El <strong>Art. 37 del ET</strong> regula los permisos retribuidos: matrimonio (15 dias en Conv. Comercio Malaga), fallecimiento familiar (hasta 5 dias laborables), hospitalizacion grave, mudanza, atencion medica, examenes, etc.',
+  'articulo 37':'El <strong>Art. 37 del ET</strong> regula los permisos retribuidos: matrimonio (15 dias en Conv. Comercio Malaga), fallecimiento familiar (hasta 5 dias laborables), hospitalizacion grave, mudanza, atencion medica, examenes, etc.',
+  'art 64':'El <strong>Art. 64 del ET</strong> regula el derecho de informacion del comite de empresa: copia basica de contratos, plantilla, datos economicos, EREs, etc.',
+  'art 41':'El <strong>Art. 41 ET</strong> regula las modificaciones sustanciales. Requiere preaviso de 15 dias (individual) o proceso de consultas de 15 dias (colectivas). El trabajador puede rescindir con indemnizacion de 20 dias/ano.',
+  'art 51':'El <strong>Art. 51 ET</strong> regula el ERE (despido colectivo): 10+ trabajadores en 90 dias. Requiere periodo de consultas de 30 dias.',
+  'art 28':'El <strong>Art. 28 CE</strong> garantiza el derecho de libertad sindical y huelga como derechos fundamentales.',
+  'convenio hosteleria':'El <strong>Convenio de Hosteleria de Malaga</strong> fue ampliado en febrero de 2024 hasta el <strong>31/12/2027</strong>. Incluye incrementos salariales para 2023-2027.',
+  'convenio comercio':'El <strong>Convenio de Comercio de Malaga</strong> esta vigente del <strong>01/01/2023 al 31/12/2028</strong>. Incluye 6 sectores, 30 dias de vacaciones, 3 pagas extras y tablas salariales actualizadas.',
+  'lols':'La <strong>LOLS</strong> (Ley Organica 11/1985 de Libertad Sindical) regula: credito horario de delegados, derecho a tablon de anuncios, local sindical en empresas de mas de 250 trabajadores, negociacion colectiva.',
+  'estatuto trabajadores':'El <strong>Estatuto de los Trabajadores</strong> (RDL 2/2015) regula todos los derechos laborales basicos: jornada, vacaciones, permisos, salario, despido, modificaciones, etc.'
+};
+
+var cocoOpen=false;
+
+function cocoToggle(){
+  cocoOpen=!cocoOpen;
+  var panel=document.getElementById('coco-panel');
+  if(cocoOpen){
+    panel.classList.add('open');
+    document.getElementById('coco-input').focus();
+  } else {
+    panel.classList.remove('open');
+  }
+}
+
+function cocoAddMsg(texto,tipo,isHtml){
+  var msgs=document.getElementById('coco-messages');
+  var div=document.createElement('div');
+  div.className='coco-msg '+tipo;
+  if(isHtml){div.innerHTML=texto;}
+  else{div.textContent=texto;}
+  msgs.appendChild(div);
+  msgs.scrollTop=msgs.scrollHeight;
+  return div;
+}
+
+function cocoShowTyping(){
+  var msgs=document.getElementById('coco-messages');
+  var div=document.createElement('div');
+  div.className='coco-typing';
+  div.id='coco-typing-indicator';
+  div.innerHTML='<span></span><span></span><span></span>';
+  msgs.appendChild(div);
+  msgs.scrollTop=msgs.scrollHeight;
+}
+function cocoRemoveTyping(){
+  var el=document.getElementById('coco-typing-indicator');
+  if(el) el.remove();
+}
+
+function cocoQuick(tema){
+  var labels={vacaciones:'Cuantos dias de vacaciones me corresponden?',jornada:'Cuantas horas de jornada laboral tengo?',permisos:'Que permisos retribuidos tengo?',huelga:'Como se convoca una huelga?',delegado:'Que derechos tiene un delegado sindical?',salario:'Que complementos salariales me corresponden?'};
+  document.getElementById('coco-input').value=labels[tema];
+  cocoEnviar();
+}
+
+function cocoEnviar(){
+  var inputEl=document.getElementById('coco-input');
+  var userText=inputEl.value.trim();
+  if(!userText) return;
+  cocoAddMsg(userText,'user',false);
+  inputEl.value='';
+  inputEl.style.height='auto';
+  var respuesta=cocoBuscarRespuesta(userText.toLowerCase());
+  cocoShowTyping();
+  setTimeout(function(){
+    cocoRemoveTyping();
+    if(respuesta){
+      cocoAddMsg(respuesta,'coco',true);
+      setTimeout(function(){cocoAddMsgConBoton(userText);},400);
+    } else {
+      cocoRespuestaNoReconocida(userText);
+    }
+  },700+Math.random()*600);
+}
+
+function cocoBuscarRespuesta(texto){
+  for(var key in COCO_FAQS){
+    if(texto.indexOf(key)>-1) return '<strong>'+key.toUpperCase()+':</strong><br><br>'+COCO_FAQS[key];
+  }
+  for(var tema in COCO_KB){
+    var data=COCO_KB[tema];
+    for(var i=0;i<data.keywords.length;i++){
+      if(texto.indexOf(data.keywords[i])>-1) return data.respuesta;
+    }
+  }
+  return null;
+}
+
+function cocoAddMsgConBoton(consulta){
+  var msgs=document.getElementById('coco-messages');
+  var div=document.createElement('div');
+  div.className='coco-msg coco';
+  var promptCompleto=construirPromptClaude(consulta);
+  var encoded=encodeURIComponent(promptCompleto);
+  div.innerHTML='Necesitas mas detalle sobre tu caso concreto? Te abro Claude con la consulta lista:<br><br><button onclick="cocoAbrirClaude(\''+encoded+'\')" style="background:#D62828;border:none;color:#fff;padding:7px 14px;border-radius:7px;cursor:pointer;font-size:.78rem;font-weight:600;font-family:inherit;">Consultar a Claude &rarr;</button><span style="display:block;margin-top:5px;font-size:.67rem;color:#555;">Tu cuenta gratuita &middot; $0</span>';
+  msgs.appendChild(div);
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+function cocoRespuestaNoReconocida(consulta){
+  var msgs=document.getElementById('coco-messages');
+  var div=document.createElement('div');
+  div.className='coco-msg coco';
+  var promptCompleto=construirPromptClaude(consulta);
+  var encoded=encodeURIComponent(promptCompleto);
+  div.innerHTML='No tengo esa informacion en mi base de conocimiento local, pero puedo prepararte la consulta para Claude con contexto sindical completo:<br><br><button onclick="cocoAbrirClaude(\''+encoded+'\')" style="background:#D62828;border:none;color:#fff;padding:7px 14px;border-radius:7px;cursor:pointer;font-size:.78rem;font-weight:600;font-family:inherit;">Preguntar a Claude &rarr;</button><span style="display:block;margin-top:5px;font-size:.67rem;color:#555;">Tu cuenta gratuita &middot; Solo pulsa Intro &middot; $0</span>';
+  msgs.appendChild(div);
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+function cocoAbrirClaude(encoded){
+  var url='https://claude.ai/new?q='+encoded;
+  window.open(url,'_blank');
+  var msgs=document.getElementById('coco-messages');
+  var div=document.createElement('div');
+  div.className='coco-msg system';
+  div.textContent='Abierto en Claude. Solo pulsa Intro para obtener la respuesta. Tienes otra consulta?';
+  msgs.appendChild(div);
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+function construirPromptClaude(consulta){
+  return 'Actua como COCO, asistente especializado en derecho laboral espanol y trabajo sindical para CCOO Servicios Malaga.\n\nContexto normativo disponible:\n- Estatuto de los Trabajadores (RDL 2/2015, BOE-A-2015-11430)\n- Ley Organica de Libertad Sindical 11/1985 (BOE-A-2015-11724)\n- Convenio Colectivo de Comercio de Malaga y Provincia 2023-2028\n- Convenio Colectivo de Hosteleria de Malaga (vigente hasta 31/12/2027)\n\nConsulta de delegado/a sindical de CCOO:\n'+consulta+'\n\nPor favor:\n1. Cita articulos concretos del ET, LOLS o convenio\n2. Usa lenguaje claro, comprensible para trabajadores sin formacion juridica\n3. Indica diferencias entre el ET (minimo) y lo que mejora el convenio de Malaga\n4. Avisa si algo debe verificarse con asesoria juridica o en el BOE\n\nResponde de forma practica y directa.';
+}
+
+// Cerrar COCO al hacer clic fuera
+document.addEventListener('click',function(e){
+  var panel=document.getElementById('coco-panel');
+  var btn=document.getElementById('coco-btn');
+  if(cocoOpen && panel && !panel.contains(e.target) && btn && !btn.contains(e.target)){
+    cocoOpen=false;
+    panel.classList.remove('open');
+  }
+});
+
+// ── VIDEO LOCAL ───────────────────────────────────────────────────
+function playLocalVideo(videoId, filename) {
+  var vid = document.getElementById(videoId);
+  var placeholder = document.getElementById(videoId + '-placeholder');
+  if (!vid) return;
+  vid.src = filename;
+  vid.style.display = 'block';
+  if (placeholder) placeholder.style.display = 'none';
+  vid.play().catch(function(e) {
+    showToast('Para ver el video, sube el archivo MP4 a la misma carpeta que index.html', 'error');
+    vid.style.display = 'none';
+    if (placeholder) placeholder.style.display = 'flex';
+  });
+}
+
+// ── INIT ──────────────────────────────────────────────────────────
+window.addEventListener('load',function(){
+  tokenizerDemo('iaTokenInput','iaTokenOutput','iaTokCount','iaTokCost');
+  buildPrompt();
+  renderQuestion();
+});
+</script>
+</body>
+</html>
