@@ -1,0 +1,2181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>20 Conceptos Fundamentales de IA · CCOO Servicios Málaga</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface2: #1a1a28;
+    --border: #2a2a40;
+    --accent: #7c3aed;
+    --accent2: #06b6d4;
+    --accent3: #f59e0b;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --white: #ffffff;
+    --green: #10b981;
+    --red: #ef4444;
+    --pink: #ec4899;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(10,10,15,0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .nav-logo {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .nav-progress {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .progress-bar {
+    flex: 1;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+    transition: width 0.4s ease;
+    width: 5%;
+  }
+
+  .progress-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .nav-btns {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .nav-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.4rem 0.9rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  .nav-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  /* SLIDES */
+  .slides-container {
+    padding-top: 60px;
+  }
+
+  .slide {
+    display: none;
+    min-height: 100vh;
+    padding: 3rem 2rem 6rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    animation: fadeIn 0.5s ease;
+  }
+  .slide.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* SLIDE HEADER */
+  .slide-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .concept-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    white-space: nowrap;
+    margin-top: 0.5rem;
+  }
+
+  .slide-title-block { flex: 1; }
+
+  .slide-category {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .slide-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    margin-bottom: 0.75rem;
+  }
+
+  .slide-subtitle {
+    font-size: 1.05rem;
+    color: var(--muted);
+    font-weight: 400;
+    line-height: 1.6;
+  }
+
+  /* GRID LAYOUTS */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .grid-auto { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+
+  @media (max-width: 768px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: var(--accent); }
+
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .card-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .card-text {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* HIGHLIGHT BOX */
+  .highlight {
+    background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(6,182,212,0.08));
+    border: 1px solid rgba(124,58,237,0.4);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .highlight-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 0.5rem;
+  }
+
+  .highlight-text {
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+
+  /* STAT BOXES */
+  .stat-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 0.35rem;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  /* CODE BLOCK */
+  .code-block {
+    background: #0d1117;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    line-height: 1.7;
+    overflow-x: auto;
+    color: #c9d1d9;
+  }
+
+  .code-comment { color: #6e7681; }
+  .code-key { color: #ff7b72; }
+  .code-str { color: #a5d6ff; }
+  .code-num { color: #79c0ff; }
+
+  /* TOKEN VISUALIZER */
+  .token-demo {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .token-input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.6rem 0.9rem;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    outline: none;
+    margin-bottom: 0.75rem;
+  }
+  .token-input:focus { border-color: var(--accent); }
+
+  .token-output {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    min-height: 2.5rem;
+  }
+
+  .token-chip {
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    font-weight: 500;
+    border: 1px solid;
+    cursor: default;
+    transition: transform 0.15s;
+  }
+  .token-chip:hover { transform: scale(1.1); }
+
+  /* TEMP SLIDER */
+  .temp-slider-wrap {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  input[type=range] {
+    width: 100%;
+    -webkit-appearance: none;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    outline: none;
+    margin: 0.75rem 0;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+  }
+
+  .temp-output {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    min-height: 60px;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* BIG TABLE */
+  .table-wrap {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.78rem;
+    min-width: 900px;
+  }
+
+  thead { background: var(--surface2); }
+  thead th {
+    padding: 0.9rem 0.75rem;
+    text-align: left;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    border-bottom: 2px solid var(--accent);
+    white-space: nowrap;
+  }
+
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+  tbody tr:hover { background: rgba(124,58,237,0.07); }
+
+  tbody td {
+    padding: 0.75rem;
+    color: var(--muted);
+    line-height: 1.4;
+    vertical-align: top;
+  }
+
+  tbody td:first-child { color: var(--text); font-weight: 600; }
+
+  .tag {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 0.15rem 0.4rem;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0.1rem;
+  }
+  .tag-purple { background: rgba(124,58,237,0.2); color: #a78bfa; }
+  .tag-cyan { background: rgba(6,182,212,0.2); color: #67e8f9; }
+  .tag-amber { background: rgba(245,158,11,0.2); color: #fcd34d; }
+  .tag-green { background: rgba(16,185,129,0.2); color: #6ee7b7; }
+  .tag-red { background: rgba(239,68,68,0.2); color: #fca5a5; }
+  .tag-pink { background: rgba(236,72,153,0.2); color: #f9a8d4; }
+
+  /* COLOR ACCENTS PER CATEGORY */
+  .cat-foundation { color: var(--accent2); }
+  .cat-model { color: var(--accent); }
+  .cat-behavior { color: var(--accent3); }
+  .cat-advanced { color: var(--green); }
+
+  /* LIST STYLE */
+  .concept-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .concept-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  .concept-list li::before {
+    content: '▸';
+    color: var(--accent);
+    font-size: 0.8rem;
+    margin-top: 0.15rem;
+    flex-shrink: 0;
+  }
+  .concept-list li strong { color: var(--text); }
+
+  /* VISUAL DIAGRAM */
+  .diagram {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+
+  .flow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .flow-node {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-align: center;
+    transition: border-color 0.2s;
+    cursor: default;
+  }
+  .flow-node:hover { border-color: var(--accent); }
+
+  .flow-arrow {
+    color: var(--muted);
+    font-size: 1.2rem;
+  }
+
+  /* BOTTOM NAV */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(10,10,15,0.97);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border);
+    padding: 0.9rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    z-index: 100;
+  }
+
+  .btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.6rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    transition: all 0.2s;
+    letter-spacing: 0.05em;
+  }
+  .btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn-primary:hover { background: #6d28d9; }
+
+  /* INDEX */
+  .slide-index {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  /* MINI DOTS */
+  .dots {
+    display: flex;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 300px;
+  }
+
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .dot.active { background: var(--accent); transform: scale(1.3); }
+  .dot.visited { background: var(--accent2); opacity: 0.6; }
+
+  /* SPECIAL SLIDE 0: PORTADA */
+  .portada {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 60px);
+    text-align: center;
+    position: relative;
+  }
+
+  .portada-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    background: rgba(6,182,212,0.1);
+    border: 1px solid rgba(6,182,212,0.3);
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    margin-bottom: 2rem;
+  }
+
+  .portada h1 {
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    font-weight: 800;
+    line-height: 1.0;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, var(--white), var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .portada-desc {
+    font-size: 1.15rem;
+    color: var(--muted);
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+  }
+
+  .concept-grid-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    max-width: 700px;
+    margin-bottom: 2.5rem;
+  }
+
+  .concept-pill {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.3rem 0.7rem;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .concept-pill:hover {
+    border-color: var(--accent);
+    color: var(--text);
+    background: rgba(124,58,237,0.1);
+  }
+
+  /* RAG DIAGRAM */
+  .rag-flow {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .rag-box {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: center;
+    font-size: 0.82rem;
+    font-weight: 600;
+    transition: border-color 0.3s;
+  }
+
+  /* AGENT LOOP */
+  .agent-loop {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .agent-step {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.75rem 1.5rem;
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    width: 100%;
+    max-width: 400px;
+    position: relative;
+    transition: border-color 0.2s;
+    cursor: default;
+  }
+
+  .agent-step::after {
+    content: '↓';
+    position: absolute;
+    bottom: -1.2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--accent);
+    font-size: 1rem;
+  }
+  .agent-step:last-child::after { display: none; }
+
+  /* MODAL (TABLA) */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 200;
+    overflow-y: auto;
+    padding: 2rem;
+  }
+  .modal-overlay.open { display: flex; align-items: flex-start; justify-content: center; }
+
+  .modal-content {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 1200px;
+    width: 100%;
+    margin: auto;
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .modal-close {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .modal-close:hover { background: var(--red); border-color: var(--red); }
+
+  .open-table-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(124,58,237,0.15);
+    border: 1px solid rgba(124,58,237,0.4);
+    color: #a78bfa;
+    padding: 0.5rem 1.1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .open-table-btn:hover { background: rgba(124,58,237,0.3); }
+
+  /* MULTIMODAL GRID */
+  .modal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .modal-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.2rem;
+    text-align: center;
+    font-size: 0.82rem;
+    transition: border-color 0.2s;
+  }
+  .modal-item:hover { border-color: var(--accent2); }
+  .modal-item-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+
+  /* CONTEXT WINDOW VIZ */
+  .context-viz {
+    display: flex;
+    gap: 3px;
+    flex-wrap: wrap;
+    margin: 1rem 0;
+  }
+
+  .ctx-block {
+    height: 24px;
+    border-radius: 2px;
+    transition: opacity 0.2s;
+  }
+
+  /* HALLU */
+  .hallu-example {
+    background: var(--surface2);
+    border-radius: 10px;
+    padding: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .hallu-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="nav">
+  <div class="nav-logo">IA · 20 Conceptos</div>
+  <div class="nav-progress">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <span class="progress-label" id="progressLabel">1 / 21</span>
+  </div>
+  <div class="nav-btns">
+    <button class="nav-btn" onclick="goTo(0)">Inicio</button>
+    <button class="nav-btn" onclick="openModal('tableModal')">📊 Tabla</button>
+  </div>
+</nav>
+
+<!-- SLIDES CONTAINER -->
+<div class="slides-container">
+
+<!-- ═══════════════════════════════════════════════ SLIDE 0: PORTADA -->
+<div class="slide active" id="slide-0">
+  <div class="portada">
+    <div class="portada-badge">CCOO Servicios Málaga · 2025</div>
+    <h1>20 Conceptos<br>Fundamentales<br>de IA</h1>
+    <p class="portada-desc">Entiende cómo funcionan los modelos de Inteligencia Artificial desde los tokens hasta los agentes autónomos. Un recorrido completo y práctico.</p>
+    <div class="concept-grid-preview">
+      <span class="concept-pill" onclick="goTo(1)">Token</span>
+      <span class="concept-pill" onclick="goTo(2)">API</span>
+      <span class="concept-pill" onclick="goTo(3)">Modelo de IA</span>
+      <span class="concept-pill" onclick="goTo(4)">Parámetros</span>
+      <span class="concept-pill" onclick="goTo(5)">Ventana de Contexto</span>
+      <span class="concept-pill" onclick="goTo(6)">Prompt</span>
+      <span class="concept-pill" onclick="goTo(7)">Temperatura</span>
+      <span class="concept-pill" onclick="goTo(8)">Alucinaciones</span>
+      <span class="concept-pill" onclick="goTo(9)">Agentes de IA</span>
+      <span class="concept-pill" onclick="goTo(10)">Multimodalidad</span>
+      <span class="concept-pill" onclick="goTo(11)">RAG</span>
+      <span class="concept-pill" onclick="goTo(12)">Fine-tuning</span>
+      <span class="concept-pill" onclick="goTo(13)">Embeddings</span>
+      <span class="concept-pill" onclick="goTo(14)">Transformer</span>
+      <span class="concept-pill" onclick="goTo(15)">Inferencia</span>
+      <span class="concept-pill" onclick="goTo(16)">RLHF</span>
+      <span class="concept-pill" onclick="goTo(17)">Latencia</span>
+      <span class="concept-pill" onclick="goTo(18)">Benchmarks</span>
+      <span class="concept-pill" onclick="goTo(19)">Privacidad</span>
+      <span class="concept-pill" onclick="goTo(20)">IA Sindical</span>
+    </div>
+    <button class="btn btn-primary" onclick="goTo(1)">Comenzar el curso →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ SLIDE 1: TOKEN -->
+<div class="slide" id="slide-1">
+  <div class="slide-header">
+    <span class="concept-number">01 / 20</span>
+    <div class="slide-title-block">
+      <div class="slide-category cat-foundation">Fundamento Básico</div>
+      <h2 class="slide-title">Token</h2>
+      <p class="slide-subtitle">La unidad mínima que procesan los modelos de lenguaje. No es una letra ni una palabra: es un fragmento de texto.</p>
+    </div>
+  </div>
+
+  <div class="highlight">
+    <div class="highlight-label">Definición clave</div>
+    <div class="highlight-text">Un token ≈ ¾ de palabra en inglés · ≈ 1 sílaba en español. Los modelos leen y generan texto token a token, no carácter a carácter.</div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:1.5rem">
+    <div>
+      <div class="card" style="margin-bottom:1rem">
+        <div class="card-title">🔬 Prueba el tokenizador</div>
+        <div class="token-demo">
+          <input type="text" class="token-input" id="tokenInput" value="Inteligencia Artificial" oninput="tokenize()" placeholder="Escribe aquí...">
+          <div class="token-output" id="tokenOutput"></div>
+          <div style="margin-top:0.5rem;font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--muted)">
+            Tokens: <span id="tokenCount" style="color:var(--accent2)">0</span> · Coste estimado: <span id="tokenCost" style="color:var(--accent3)">$0.000</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="grid-2" style="margin-bottom:1rem">
+        <div class="stat-box"><div class="stat-value" style="color:var(--accent)">~4</div><div class="stat-label">chars/token (EN)</div></div>
+        <div class="stat-box"><div class="stat-value" style="color:var(--accent2)">~3</div><div class="stat-label">chars/token (ES)</div></div>
+        <div class="stat-box"><div class="stat-value" style="color:var(--accent3)">$0.003</div><div class="stat-label">/ 1K tokens (GPT-4)</div></div>
+        <div class="stat-box"><div class="stat-value" style="color:var(--green)">1M</div><div class="stat-label">≈ libro de 700 págs.</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">💡 ¿Por qué importa?</div>
+        <ul class="concept-list">
+          <li><strong>Coste:</strong> pagas por tokens consumidos y generados</li>
+          <li><strong>Límite:</strong> cada modelo tiene un máximo de tokens por sesión</li>
+          <li><strong>Idioma:</strong> el español consume más tokens que el inglés</li>
+          <li><strong>Conteo:</strong> "ChatGPT" = 1 token · "supercalifragilístico" = varios</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card" style="border-color:rgba(124,58,237,0.4)">
+      <div class="card-icon">🤖</div>
+      <div class="card-title">GPT-4o / ChatGPT</div>
+      <div class="card-text">Input: $5/M tokens · Output: $15/M tokens. Tokenizador tiktoken cl100k_base. Vocabulario de 100.000 tokens.</div>
+    </div>
+    <div class="card" style="border-color:rgba(6,182,212,0.4)">
+      <div class="card-icon">🌊</div>
+      <div class="card-title">Claude 3.7 Sonnet</div>
+      <div class="card-text">Input: $3/M tokens · Output: $15/M tokens. Tokenizador propio. Vocabulario ~100K tokens con soporte multilingüe superior.</div>
+    </div>
+    <div class="card" style="border-color:rgba(245,158,11,0.4)">
+      <div class="card-icon">💎</div>
+      <div class="card-title">Gemini 2.0 Flash</div>
+      <div class="card-text">Input: $0.075/M tokens · Output: $0.30/M tokens. El más barato de los grandes. 1M de tokens de contexto.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ SLIDE 2: API -->
+<div class="slide" id="slide-2">
+  <div class="slide-header">
+    <span class="concept-number">02 / 20</span>
+    <div class="slide-title-block">
+      <div class="slide-category cat-foundation">Fundamento Técnico</div>
+      <h2 class="slide-title">API</h2>
+      <p class="slide-subtitle">Application Programming Interface. La "puerta" que permite a aplicaciones hablar con modelos de IA sin saber cómo funcionan internamente.</p>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:1.5rem">
+    <div>
+      <div class="highlight">
+        <div class="highlight-label">Analogía</div>
+        <div class="highlight-text">La API es como el camarero de un restaurante: tú pides, él lleva la orden a la cocina (el modelo) y te trae la respuesta. No necesitas saber cómo cocina el chef.</div>
+      </div>
+      <div class="diagram">
+        <div class="flow">
+          <div class="flow-node" style="border-color:var(--accent)">Tu App</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node">HTTP Request<br><small>JSON + API Key</small></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node" style="border-color:var(--accent2)">Modelo IA</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node">Respuesta<br><small>JSON</small></div>
+        </div>
+      </div>
+    </div>
+    <div class="code-block">
+<span class="code-comment">// Llamada real a la API de Claude</span>
+<span class="code-key">const</span> response = <span class="code-key">await</span> fetch(
+  <span class="code-str">"https://api.anthropic.com/v1/messages"</span>,
+  {
+    method: <span class="code-str">"POST"</span>,
+    headers: {
+      <span class="code-str">"x-api-key"</span>: API_KEY,
+      <span class="code-str">"anthropic-version"</span>: <span class="code-str">"2023-06-01"</span>
+    },
+    body: JSON.stringify({
+      model: <span class="code-str">"claude-3-7-sonnet"</span>,
+      max_tokens: <span class="code-num">1024</span>,
+      messages: [{
+        role: <span class="code-str">"user"</span>,
+        content: <span class="code-str">"Explica qué es un token"</span>
+      }]
+    })
+  }
+);
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-icon">🔑</div>
+      <div class="card-title">API Key</div>
+      <div class="card-text">Contraseña única que identifica quién hace la petición. Nunca compartirla públicamente. Se puede revocar al instante.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">📊</div>
+      <div class="card-title">Rate Limits</div>
+      <div class="card-text">Límites por minuto/día. Claude: 4.000 req/min en Tier 4. OpenAI: depende del plan. Gemini: 1.500 req/día gratis.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">💰</div>
+      <div class="card-title">Modelos de pago</div>
+      <div class="card-text">Pay-per-use (pago por uso). Sin API: web chat (Claude.ai, ChatGPT.com). Con API: integración en apps propias.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ SLIDE 3: MODELO DE IA -->
+<div class="slide" id="slide-3">
+  <div class="slide-header">
+    <span class="concept-number">03 / 20</span>
+    <div class="slide-title-block">
+      <div class="slide-category cat-model">Arquitectura</div>
+      <h2 class="slide-title">Modelo de IA</h2>
+      <p class="slide-subtitle">Una red neuronal entrenada con billones de textos para predecir qué token viene después. El "cerebro" que da respuestas.</p>
+    </div>
+  </div>
+
+  <div class="highlight">
+    <div class="highlight-label">Panorama 2025</div>
+    <div class="highlight-text">Hay modelos de pago (GPT, Claude, Gemini) y modelos open-source (Gemma 4, DeepSeek, LLaMA). Los open-source pueden ejecutarse localmente sin enviar datos a terceros.</div>
+  </div>
+
+  <div class="grid-auto" style="margin-bottom:1.5rem">
+    <div class="card" style="border-color:rgba(16,185,129,0.5)">
+      <div class="card-icon">🟢</div>
+      <div class="card-title">Gemma 4 (Google)</div>
+      <div class="card-text"><strong style="color:var(--green)">Open-source</strong> · Disponible en Ollama, Hugging Face. Versiones: 4B y 12B params. Multimodal: texto + imagen. Sin coste de API. Privado: corre en tu máquina.</div>
+      <div style="margin-top:0.75rem"><span class="tag tag-green">Local</span> <span class="tag tag-cyan">Multimodal</span> <span class="tag tag-purple">Gratis</span></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🤖</div>
+      <div class="card-title">GPT-4o / ChatGPT</div>
+      <div class="card-text">OpenAI · 200B+ params estimados. Multimodal. Mejor en código y razonamiento. $20/mes (Plus) o API de pago.</div>
+      <div style="margin-top:0.75rem"><span class="tag tag-purple">Cerrado</span> <span class="tag tag-amber">Lider</span></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🌊</div>
+      <div class="card-title">Claude 3.7</div>
+      <div class="card-text">Anthropic · Sonnet/Opus/Haiku. Especializado en textos largos, análisis, ética. 200K contexto.</div>
+      <div style="margin-top:0.75rem"><span class="tag tag-purple">Cerrado</span> <span class="tag tag-cyan">Texto largo</span></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">💎</div>
+      <div class="card-title">Gemini 2.0</div>
+      <div class="card-text">Google · Flash/Pro/Ultra. Integrado en Google Workspace. 1M contexto. NotebookLM usa Gemini internamente.</div>
+      <div style="margin-top:0.75rem"><span class="tag tag-purple">Cerrado</span> <span class="tag tag-green">Google Suite</span></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🐋</div>
+      <div class="card-title">DeepSeek R2</div>
+      <div class="card-text">China · Open-source y API. R1 en razonamiento matemático iguala GPT-4 a 1/10 del coste. Controversial.</div>
+      <div style="margin-top:0.75rem"><span class="tag tag-green">Open</span> <span class="tag tag-amber">Económico</span></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">⚡</div>
+      <div class="card-title">Abacus.ai</div>
+      <div class="card-text">Plataforma que agrega múltiples modelos (GPT, Claude, Gemini). Enfocada en empresas y automatización de flujos de trabajo.</div>
+      <div style="margin-top:0.75rem"><span class="tag tag-cyan">Multi-modelo</span> <span class="tag tag-purple">Empresarial</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ SLIDE 4: PARÁMETROS -->
+<div class="slide" id="slide-4">
+  <div class="slide-header">
+    <span class="concept-number">04 / 20</span>
+    <div class="slide-title-block">
+      <div class="slide-category cat-model">Arquitectura</div>
+      <h2 class="slide-title">Parámetros</h2>
+      <p class="slide-subtitle">Los "pesos" numéricos ajustados durante el entrenamiento. Más parámetros ≠ siempre mejor, pero indica capacidad potencial.</p>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:1.5rem">
+    <div>
+      <div class="highlight">
+        <div class="highlight-label">Analogía</div>
+        <div class="highlight-text">Los parámetros son como los millones de conexiones neuronales del cerebro. Un bebé nace con pocas conexiones; el entrenamiento las refuerza y poda.</div>
+      </div>
+      <ul class="concept-list" style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.25rem">
+        <li><strong>1B params:</strong> modelo pequeño, corre en móvil (Gemma 2B)</li>
+        <li><strong>7-13B params:</strong> modelo mediano, PC con 16GB RAM (LLaMA 3.1)</li>
+        <li><strong>70B params:</strong> servidor GPU, muy capaz (DeepSeek R1)</li>
+        <li><strong>200B+ params:</strong> datacenters (GPT-4, Claude 3 Opus)</li>
+        <li><strong>Cuantización:</strong> comprimir parámetros de 32bits a 4bits para ejecutar localmente</li>
+      </ul>
+    </div>
+    <div>
+      <div style="margin-bottom:1rem">
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:1.25rem">
+          <div style="font-size:0.8rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem;color:var(--muted)">Escala de modelos</div>
+          <div id="paramBars"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">⚠️ Mito a romper</div>
+        <div class="card-text">GPT-3 tiene 175B parámetros y GPT-4 podría tener ~1.7T. Pero DeepSeek R1 con 67B supera a GPT-4 en matemáticas. La arquitectura y el entrenamiento importan más que el tamaño.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ SLIDE 5: VENTANA DE CONTEXTO -->
+<div class="slide" id="slide-5">
+  <div class="slide-header">
+    <span class="concept-number">05 / 20</span>
+    <div class="slide-title-block">
+      <div class="slide-category cat-foundation">Fundamento Básico</div>
+      <h2 class="slide-title">Ventana de Contexto</h2>
+      <p class="slide-subtitle">La "memoria de trabajo" del modelo: todo lo que puede leer y recordar en una sola conversación. Se mide en tokens.</p>
+    </div>
+  </div>
+
+  <div class="highlight">
+    <div class="highlight-label">Analogía</div>
+    <div class="highlight-text">La ventana de contexto es como el escritorio de trabajo: puedes tener muchos documentos abiertos pero llega un momento en que no caben más. Lo que queda fuera, el modelo lo "olvida".</div>
+  </div>
+
+  <div style="margin-bottom:1.5rem">
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:1.5rem">
+      <div style="font-size:0.8rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem;color:var(--muted)">Comparativa de contexto máximo (2025)</div>
+      <div id="contextBars"></div>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-icon">📄</div>
+      <div class="card-title">4K tokens</div>
+      <div class="card-text">≈ 3.000 palabras · Un artículo de periódico largo. GPT-3.5 base.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">📚</div>
+      <div class="card-title">200K tokens</div>
+      <div class="card-text">≈ 150.000 palabras · Toda la saga Harry Potter. Claude 3.7 Sonnet.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">📖</div>
+      <div class="card-title">1M tokens</div>
+      <div class="card-text">≈ 750.000 palabras · 11 horas de vídeo transcrito. Gemini 1.5 Pro.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ SLIDE 6: PROMPT -->
+<div class="slide" id="slide-6">
+  <div class="slide-header">
+    <span class="concept-number">06 / 20</span>
+    <div class="slide-title-block">
+      <div class="slide-category cat-behavior">Comportamiento</div>
+      <h2 class="slide-title">Prompt</h2>
+      <p class="slide-subtitle">La instrucción o pregunta que envías al modelo. La habilidad de escribir buenos prompts se llama <em>Prompt Engineering</em>.</p>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:1.5rem">
+    <div>
+      <div class="hallu-example" style="border-left:3px solid var(--red)">
+        <div class="hallu-label" style="color:var(--red)">❌ Prompt pobre</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:var(--muted)">"Escríbeme algo sobre IA"</div>
+        <div style="font-size:0.8rem;color:var(--muted);margin-top:0.5rem">Resultado: vago, genérico, inútil</div>
+      </div>
+      <div class="hallu-example" style="border-left:3px solid var(--green)">
+        <div class="hallu-label" style="color:var(--green)">✅ Prompt efectivo</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--muted)">"Eres un formador sindical. Escribe un párrafo de 100 palabras explicando qué es la IA generativa a trabajadores sin conocimientos técnicos. Usa analogías cotidianas."</div>
+        <div style="font-size:0.8rem;color:var(--muted);margin-top:0.5rem">Resultado: específico, útil, aplicable</div>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:1rem">
+        <div class="card-title">🧩 Anatomía de un prompt</div>
+        <ul class="concept-list">
+          <li><strong>Rol:</strong> "Eres un experto en derecho laboral..."</li>
+          <li><strong>Contexto:</strong> "Tenemos un convenio colectivo que..."</li>
+          <li><strong>Tarea:</strong> "Resume los puntos clave sobre jornada"</li>
+          <li><strong>Formato:</strong> "en 5 bullet points, lenguaje B1"</li>
+          <li><strong>Restricciones:</strong> "sin mencionar salarios específicos"</li>
+        </ul>
+      </div>
+      <div class="grid-2">
+        <div class="stat-box"><div class="stat-value" style="color:var(--accent)">CoT</div><div class="stat-label">Chain of Thought</div></div>
+        <div class="stat-box"><div class="stat-value" style="color:var(--accent2)">Few-shot</div><div class="stat-label">Ejemplos en prompt</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ SLIDE 7: TEMPERATURA -->
+<div class="slide" id="slide-7">
+  <div class="slide-header">
+    <span class="concept-number">07 / 20</span>
+    <div class="slide-title-block">
+      <div class="slide-category cat-behavior">Comportamiento</div>
+      <h2 class="slide-title">Temperatura</h2>
+      <p class="slide-subtitle">Controla cuánto "azar" introduce el modelo al elegir el siguiente token. De 0 (predecible) a 2 (caótico).</p>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <div class="temp-slider-wrap">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem">
+          <span style="font-size:0.85rem;font-weight:700">Temperatura</span>
+          <span id="tempValue" style="font-family:'JetBrains Mono',monospace;font-size:1.5rem;font-weight:700;color:var(--accent)">0.7</span>
+        </div>
+        <input type="range" min="0" max="2" step="0.1" value="0.7" oninput="updateTemp(this.value)">
+        <div style="display:flex;justify-content:space-between;font-size:0.7rem;color:var(--muted)">
+          <span>0 · Determinista</span>
+          <span>1 · Equilibrado</span>
+          <span>2 · Caótico</span>
+        </div>
+        <div class="temp-output" id="tempOutput" style="margin-top:1rem">
+          "La IA generativa permite a las organizaciones sindicales automatizar tareas repetitivas y mejorar la comunicación con sus afiliados."
+        </div>
+        <div id="tempLabel" style="margin-top:0.5rem;font-size:0.75rem;color:var(--accent2);text-align:center">⚖️ Equilibrado — bueno para redacción general</div>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:1rem">
+        <div class="card-title">📊 Cuándo usar cada temperatura</div>
+        <ul class="concept-list">
+          <li><strong>0.0–0.2:</strong> Datos, código, análisis jurídico (máxima precisión)</li>
+          <li><strong>0.3–0.7:</strong> Redacción de informes, resúmenes, comunicados</li>
+          <li><strong>0.8–1.2:</strong> Creatividad, campañas, ideas de campaña sindical</li>
+          <li><strong>1.5–2.0:</strong> Brainstorming extremo, poesía, experimentos</li>
+        </ul>
+      </div>
+      <div class="grid-2">
+        <div class="stat-box"><div class="stat-value" style="color:var(--accent)">0.2</div><div class="stat-label">Claude código</div></div>
+        <div class="stat-box"><div class="stat-value" style="color:var(--accent2)">0.8</div><div class="stat-label">ChatGPT creativo</div></div>
+        <div class="stat-box"><div class="stat-value" style="color:var(--accent3)">1.0</div><div class="stat-label">Gemini default</div></div>
+        <div class="stat-box"><div class="stat-value" style="color:var(--green)">0.6</div><div class="stat-label">DeepSeek análisis</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ SLIDE 8: ALUCINACIONES -->
+<div class="slide" id="slide-8">
+  <div class="slide-header">
+    <span class="concept-number">08 / 20</span>
+    <div class="slide-title-block">
+      <div class="slide-category cat-behavior">Comportamiento</div>
+      <h2 class="slide-title">Alucinaciones</h2>
+      <p class="slide-subtitle">Cuando el modelo genera información falsa con total confianza. No miente intencionalmente: simplemente predice tokens plausibles sin "saber" si son verdad.</p>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:1.5rem">
+    <div>
+      <div class="hallu-example" style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3)">
+        <div class="hallu-label" style="color:var(--red)">🚨 Alucinación real (ejemplo tipo)</div>
+        <div style="font-size:0.88rem;color:var(--muted);line-height:1.6">"El Estatuto de los Trabajadores fue modificado el 14 de marzo de 2024 en su artículo 37.5, añadiendo el derecho a 3 días de permiso por mudanza..."<br><br><strong style="color:var(--red)">⚠ Esto es FALSO.</strong> El modelo inventa fechas, artículos y reformas que suenan plausibles.</div>
+      </div>
+      <div class="card" style="margin-top:1rem">
+        <div class="card-title">🛡️ Cómo detectarlas</div>
+        <ul class="concept-list">
+          <li>Verificar con fuente primaria (BOE, convenio real)</li>
+          <li>Pedir al modelo que cite la fuente exacta</li>
+          <li>Desconfiar de datos muy específicos (fechas, cifras)</li>
+          <li>Usar RAG para que trabaje con documentos reales</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:1rem">
+        <div class="card-title">📈 Tasa de alucinación estimada (2025)</div>
+        <div id="halluBars"></div>
+      </div>
+      <div class="highlight">
+        <div class="highlight-label">Contexto sindical</div>
+        <div class="highlight-text">NUNCA usar IA para redactar artículos de convenio o citas legales sin verificación humana. Siempre revisar con el asesor jurídico.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ SLIDE 9: AGENTES -->
+<div class="slide" id="slide-9">
+  <div class="slide-header">
+    <span class="concept-number">09 / 20</span>
+    <div class="slide-title-block">
+      <div class="slide-category cat-advanced">Capacidades Avanzadas</div>
+      <h2 class="slide-title">Agentes de IA</h2>
+      <p class="slide-subtitle">Sistemas que no solo responden: planifican, usan herramientas, recuerdan pasos y ejecutan tareas complejas de forma autónoma.</p>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:1.5rem">
+    <div>
+      <div class="highlight">
+        <div class="highlight-label">La diferencia clave</div>
+        <div class="highlight-text">Un chatbot responde preguntas. Un agente ejecuta tareas: navega por internet, escribe código, lo ejecuta, lee el resultado y decide el siguiente paso.</div>
+      </div>
+      <div class="diagram">
+        <div class="agent-loop">
+          <div class="agent-step" style="border-color:var(--accent)">1. Recibe objetivo</div>
+          <div class="agent-step">2. Planifica pasos</div>
+          <div class="agent-step">3. Usa herramienta (web, código, API)</div>
+          <div class="agent-step">4. Observa resultado</div>
+          <div class="agent-step">5. ¿Objetivo logrado?</div>
+          <div class="agent-step" style="border-color:var(--green)">6. Entrega resultado final</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="grid-auto" style="gap:0.75rem">
+        <div class="card">
+          <div class="card-icon">🌐</div>
+          <div class="card-title">Claude Computer Use</div>
+          <div class="card-text">Controla el ordenador: navega webs, rellena formularios, extrae datos. Beta de Anthropic.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">💻</div>
+          <div class="card-title">GPT Operator</div>
+          <div class="card-text">OpenAI · Ejecuta tareas en el navegador por ti: compra, busca, reserva.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🔗</div>
+          <div class="card-title">Abacus.ai ChatLLM</div>
+          <div class="card-text">Agentes que conectan bases de datos internas, CRMs y sistemas de RRHH empresariales.</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">⚡</div>
+          <div class="card-title">n8n / Make</div>
+          <div class="card-text">Plataformas para crear flujos de trabajo de agentes sin código. Muy usadas por sindicatos.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ SLIDE 10: MULTIMODALIDAD -->
+<div class="slide" id="slide-10">
+  <div class="slide-header">
+    <span class="concept-number">10 / 20</span>
+    <div class="slide-title-block">
+      <div class="slide-category cat-advanced">Capacidades Avanzadas</div>
+      <h2 class="slide-title">Multimodalidad</h2>
+      <p class="slide-subtitle">Capacidad de un modelo para entender y generar diferentes tipos de datos: texto, imagen, audio, vídeo, código.</p>
+    </div>
+  </div>
+
+  <div class="modal-grid" style="margin-bottom:1.5rem">
+    <div class="modal-item"><div class="modal-item-icon">📝</div><strong>Texto</strong><br><small style="color:var(--muted)">Todos los modelos</small></div>
+    <div class="modal-item"><div class="modal-item-icon">🖼️</div><strong>Imagen Input</strong><br><small style="color:var(--muted)">GPT-4o, Claude, Gemini, Gemma 4</small></div>
+    <div class="modal-item"><div class="modal-item-icon">🎨</div><strong>Imagen Output</strong><br><small style="color:var(--muted)">GPT-4o, Gemini 2.0</small></div>
+    <div class="modal-item"><div class="modal-item-icon">🎵</div><strong>Audio Input</strong><br><small style="color:var(--muted)">GPT-4o, Gemini</small></div>
+    <div class="modal-item"><div class="modal-item-icon">🎤</div><strong>Audio Output</strong><br><small style="color:var(--muted)">GPT-4o Voice, Gemini Live</small></div>
+    <div class="modal-item"><div class="modal-item-icon">🎬</div><strong>Vídeo Input</strong><br><small style="color:var(--muted)">Gemini 1.5+, GPT-4o</small></div>
+    <div class="modal-item"><div class="modal-item-icon">💻</div><strong>Código</strong><br><small style="color:var(--muted)">Todos, DeepSeek V3 líder</small></div>
+    <div class="modal-item"><div class="modal-item-icon">📄</div><strong>PDF/Docs</strong><br><small style="color:var(--muted)">Claude, Gemini, ChatGPT</small></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">🌟 Casos de uso sindical</div>
+      <ul class="concept-list">
+        <li><strong>Foto de nómina → análisis:</strong> "¿hay alguna irregularidad?"</li>
+        <li><strong>Audio de asamblea → acta:</strong> transcripción automática</li>
+        <li><strong>PDF convenio → resumen:</strong> "explica el art. 32 en B1"</li>
+        <li><strong>Imagen de lesión → parte:</strong> ayuda a describir el accidente</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">📊 Soporte multimodal por modelo</div>
+      <table style="min-width:auto;font-size:0.78rem">
+        <thead><tr><th>Modelo</th><th>Img</th><th>Audio</th><th>Vídeo</th></tr></thead>
+        <tbody>
+          <tr><td>GPT-4o</td><td><span class="tag tag-green">✓</span></td><td><span class="tag tag-green">✓</span></td><td><span class="tag tag-amber">Parcial</span></td></tr>
+          <tr><td>Claude 3.7</td><td><span class="tag tag-green">✓</span></td><td><span class="tag tag-red">✗</span></td><td><span class="tag tag-red">✗</span></td></tr>
+          <tr><td>Gemini 2.0</td><td><span class="tag tag-green">✓</span></td><td><span class="tag tag-green">✓</span></td><td><span class="tag tag-green">✓</span></td></tr>
+          <tr><td>Gemma 4</td><td><span class="tag tag-green">✓</span></td><td><span class="tag tag-red">✗</span></td><td><span class="tag tag-red">✗</span></td></tr>
+          <tr><td>DeepSeek</td><td><span class="tag tag-amber">V3</span></td><td><span class="tag tag-red">✗</span></td><td><span class="tag tag-red">✗</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ SLIDE 11: RAG -->
+<div class="slide" id="slide-11">
+  <div class="slide-header">
+    <span class="concept-number">11 / 20</span>
+    <div class="slide-title-block">
+      <div class="slide-category cat-advanced">Capacidades Avanzadas</div>
+      <h2 class="slide-title">RAG</h2>
+      <p class="slide-subtitle">Retrieval-Augmented Generation. El modelo busca información en tus documentos propios ANTES de responder. Elimina alucinaciones y protege datos.</p>
+    </div>
+  </div>
+
+  <div class="highlight">
+    <div class="highlight-label">Por qué RAG es revolucionario</div>
+    <div class="highlight-text">Sin RAG: el modelo inventa. Con RAG: el modelo lee TUS documentos (convenio, BBDD de afiliados, actas) y responde basándose en ellos. Los datos nunca salen de tu control.</div>
+  </div>
+
+  <div class="diagram" style="margin-bottom:1.5rem">
+    <div style="text-align:center;font-size:0.8rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem;color:var(--muted)">Flujo RAG</div>
+    <div class="rag-flow">
+      <div class="rag-box" style="border-color:var(--accent2)">📝 Pregunta del usuario</div>
+      <div style="font-size:1.5rem;color:var(--accent)">→</div>
+      <div class="rag-box" style="border-color:var(--accent3)">🔍 Búsqueda en base documental<br><small style="color:var(--muted)">(embeddings + vector DB)</small></div>
+      <div style="font-size:1.5rem;color:var(--accent)">→</div>
+      <div class="rag-box" style="border-color:var(--green)">💬 LLM genera respuesta<br>con fragmentos relevantes</div>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-icon">📚</div>
+      <div class="card-title">NotebookLM (Google)</div>
+      <div class="card-text">RAG gratuito con interfaz amigable. Subes PDFs y haces preguntas. Genera podcasts de resumen. Perfecto para estudiar convenios.</div>
+      <span class="tag tag-green">Gratis</span> <span class="tag tag-cyan">Sin código</span>
+    </div>
+    <div class="card">
+      <div class="card-icon">⚡</div>
+      <div class="card-title">Abacus.ai</div>
+      <div class="card-text">RAG empresarial con conexión a bases de datos, SharePoint, Google Drive. Responde sobre datos internos de la organización.</div>
+      <span class="tag tag-purple">Empresarial</span>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔒</div>
+      <div class="card-title">RAG Local</div>
+      <div class="card-text">Ollama + Gemma 4 + ChromaDB. 100% privado, sin enviar datos a internet. Ideal para datos sensibles de afiliación.</div>
+      <span class="tag tag-green">Privado</span> <span class="tag tag-green">Gratis</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ SLIDE 12: FINE-TUNING -->
+<div class="slide" id="slide-12">
+  <div class="slide-header">
+    <span class="concept-number">12 / 20</span>
+    <div class="slide-title-block">
+      <div class="slide-category cat-model">Arquitectura</div>
+      <h2 class="slide-title">Fine-tuning</h2>
+      <p class="slide-subtitle">Reentrenar un modelo existente con datos propios para que se especialice. Como contratar a un médico generalista y formarle como cirujano específico.</p>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:1.5rem">
+    <div>
+      <div class="diagram" style="margin-bottom:1rem">
+        <div class="flow" style="flex-direction:column;gap:0.75rem">
+          <div class="flow-node" style="width:100%;border-color:var(--accent2)">Modelo base (GPT, Claude, LLaMA...)</div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-node" style="width:100%;border-color:var(--accent3)">+ Tus datos de entrenamiento (1K–100K ejemplos)</div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-node" style="width:100%;border-color:var(--green)">Modelo especializado en tu dominio</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">💡 Aplicación sindical</div>
+        <ul class="concept-list">
+          <li>Chatbot que responde preguntas sobre TU convenio específico</li>
+          <li>Modelo que redacta en el estilo de comunicación de tu sección</li>
+          <li>Clasificador de quejas o denuncias laborales</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="grid-2" style="margin-bottom:1rem">
+        <div class="stat-box"><div class="stat-value" style="color:var(--accent)">$2-20</div><div class="stat-label">por 1K ejemplos OpenAI</div></div>
+        <div class="stat-box"><div class="stat-value" style="color:var(--green)">Gratis</div><div class="stat-label">LLaMA / Gemma (local)</div></div>
+        <div class="stat-box"><div class="stat-value" style="color:var(--accent3)">1K</div><div class="stat-label">ejemplos mínimos útiles</div></div>
+        <div class="stat-box"><div class="stat-value" style="color:var(--accent2)">LoRA</div><div class="stat-label">técnica eficiente (poco GPU)</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Fine-tuning vs RAG</div>
+        <ul class="concept-list">
+          <li><strong>RAG:</strong> datos cambian frecuentemente, más fácil, sin reentrenar</li>
+          <li><strong>Fine-tuning:</strong> estilo y conocimiento estable, máxima especialización</li>
+          <li><strong>Mejor combinación:</strong> Fine-tuning + RAG juntos</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ SLIDE 13: EMBEDDINGS -->
+<div class="slide" id="slide-13">
+  <div class="slide-header">
+    <span class="concept-number">13 / 20</span>
+    <div class="slide-title-block">
+      <div class="slide-category cat-model">Arquitectura</div>
+      <h2 class="slide-title">Embeddings</h2>
+      <p class="slide-subtitle">Representación de texto como vectores numéricos en un espacio multidimensional. Permiten buscar por <em>significado</em>, no por palabras exactas.</p>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:1.5rem">
+    <div>
+      <div class="highlight">
+        <div class="highlight-label">La magia de los embeddings</div>
+        <div class="highlight-text">"huelga" y "paro laboral" tendrán vectores muy cercanos aunque no compartan letras. "vacaciones" y "IRPF" estarán lejos. Esto permite búsqueda semántica.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">🔢 ¿Cómo se ve un embedding?</div>
+        <div class="code-block" style="font-size:0.75rem">"huelga" → [0.23, -0.87, 0.41, 0.92, ..., -0.15]
+"strike"  → [0.24, -0.85, 0.43, 0.91, ..., -0.14]
+"pizza"   → [-0.67, 0.31, -0.82, 0.05, ..., 0.73]
+
+<span class="code-comment">// huelga y strike son similares (~98% similitud)
+// huelga y pizza son muy distintos (~12% similitud)</span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:1rem">
+        <div class="card-title">📐 Dimensiones típicas</div>
+        <ul class="concept-list">
+          <li><strong>text-embedding-3-small (OpenAI):</strong> 1.536 dimensiones, muy rápido</li>
+          <li><strong>text-embedding-3-large (OpenAI):</strong> 3.072 dimensiones, más preciso</li>
+          <li><strong>Nomic Embed (open-source):</strong> 768 dim, corre local</li>
+          <li><strong>Gemini Text Embedding:</strong> 768 dimensiones</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">🗄️ Bases de datos vectoriales</div>
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+          <span class="tag tag-purple">ChromaDB (local)</span>
+          <span class="tag tag-cyan">Pinecone (cloud)</span>
+          <span class="tag tag-green">Weaviate</span>
+          <span class="tag tag-amber">Qdrant</span>
+          <span class="tag tag-pink">pgvector (PostgreSQL)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ SLIDE 14: TRANSFORMER -->
+<div class="slide" id="slide-14">
+  <div class="slide-header">
+    <span class="concept-number">14 / 20</span>
+    <div class="slide-title-block">
+      <div class="slide-category cat-model">Arquitectura</div>
+      <h2 class="slide-title">Transformer</h2>
+      <p class="slide-subtitle">La arquitectura neuronal que revolucionó la IA en 2017. Todos los modelos de lenguaje modernos (GPT, Claude, Gemini) se basan en ella.</p>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:1.5rem">
+    <div>
+      <div class="highlight">
+        <div class="highlight-label">El paper que lo cambió todo</div>
+        <div class="highlight-text">"Attention Is All You Need" (Google, 2017). 8 investigadores. El modelo aprende a prestar ATENCIÓN a las partes relevantes del texto, igual que los humanos.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">🧠 Mecanismo de Atención</div>
+        <div style="font-size:0.88rem;color:var(--muted);line-height:1.7">
+          <strong style="color:var(--text)">Frase:</strong> "El presidente del sindicato firmó el convenio porque <strong style="color:var(--accent2)">él</strong> tenía la delegación"<br><br>
+          El transformer aprende que "él" se refiere a "presidente", no a "convenio". Resuelve ambigüedad por contexto, igual que lo harías tú.
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="diagram">
+        <div class="flow" style="flex-direction:column;gap:0.75rem;align-items:stretch">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem">
+            <div class="flow-node" style="border-color:var(--accent)">Encoder<br><small>Entiende input</small></div>
+            <div class="flow-node" style="border-color:var(--accent2)">Decoder<br><small>Genera output</small></div>
+          </div>
+          <div class="flow-node">Multi-Head Attention<br><small>Múltiples "focos" simultáneos</small></div>
+          <div class="flow-node">Feed-Forward Network<br><small>Transformación no lineal</small></div>
+          <div class="flow-node" style="border-color:var(--green)">Layer Normalization<br><small>Estabiliza entrenamiento</small></div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:1rem">
+        <div class="card-title">Modelos solo-Decoder (LLMs)</div>
+        <div class="card-text">GPT, Claude, LLaMA → solo tienen Decoder. Generan texto token a token.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ SLIDE 15: INFERENCIA -->
+<div class="slide" id="slide-15">
+  <div class="slide-header">
+    <span class="concept-number">15 / 20</span>
+    <div class="slide-title-block">
+      <div class="slide-category cat-foundation">Fundamento Técnico</div>
+      <h2 class="slide-title">Inferencia</h2>
+      <p class="slide-subtitle">El proceso de usar el modelo entrenado para generar respuestas. El "momento del uso" tras el entrenamiento. Consume GPU en tiempo real.</p>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:1.5rem">
+    <div>
+      <div class="diagram" style="margin-bottom:1rem">
+        <div class="flow" style="flex-direction:column;gap:0.5rem">
+          <div class="flow-node" style="border-color:var(--accent3)">Entrenamiento (semanas, miles de GPUs)</div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-node" style="border-color:var(--accent)">Pesos del modelo guardados</div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-node" style="border-color:var(--green)">Inferencia: respuesta en segundos</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">🔑 Conceptos ligados</div>
+        <ul class="concept-list">
+          <li><strong>Latencia:</strong> tiempo hasta primera palabra (TTFT)</li>
+          <li><strong>Throughput:</strong> tokens por segundo generados</li>
+          <li><strong>Batch:</strong> procesar múltiples peticiones juntas</li>
+          <li><strong>Streaming:</strong> mostrar tokens según se generan (como ChatGPT)</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:1rem">
+        <div class="card-title">⚡ Velocidad de inferencia (tokens/seg)</div>
+        <div id="inferenceBars"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">☁️ Dónde ocurre</div>
+        <ul class="concept-list">
+          <li><strong>Cloud:</strong> en los servidores de OpenAI/Anthropic/Google. Rápido, fácil, datos viajan a sus servidores</li>
+          <li><strong>Local:</strong> Ollama + Gemma 4 en tu PC. Lento si no tienes GPU, 100% privado</li>
+          <li><strong>Edge:</strong> en móvil/tablet (modelos <3B params)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ SLIDE 16: RLHF -->
+<div class="slide" id="slide-16">
+  <div class="slide-header">
+    <span class="concept-number">16 / 20</span>
+    <div class="slide-title-block">
+      <div class="slide-category cat-model">Entrenamiento</div>
+      <h2 class="slide-title">RLHF</h2>
+      <p class="slide-subtitle">Reinforcement Learning from Human Feedback. Cómo los modelos aprenden a ser "buenos" y útiles: humanos los califican y el modelo mejora.</p>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:1.5rem">
+    <div>
+      <div class="diagram">
+        <div class="flow" style="flex-direction:column;gap:0.75rem;align-items:stretch">
+          <div class="flow-node" style="border-color:var(--accent2)">1. Modelo genera múltiples respuestas</div>
+          <div class="flow-arrow" style="text-align:center">↓</div>
+          <div class="flow-node">2. Humanos las ordenan por calidad</div>
+          <div class="flow-arrow" style="text-align:center">↓</div>
+          <div class="flow-node">3. Se entrena un "reward model"</div>
+          <div class="flow-arrow" style="text-align:center">↓</div>
+          <div class="flow-node" style="border-color:var(--green)">4. RL ajusta el LLM para maximizar reward</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:1rem">
+        <div class="card-title">🎯 Variantes modernas</div>
+        <ul class="concept-list">
+          <li><strong>InstructGPT:</strong> el que convirtió GPT-3 en ChatGPT</li>
+          <li><strong>Constitutional AI (Anthropic):</strong> Claude aprende de principios éticos escritos, sin necesitar tanto feedback humano</li>
+          <li><strong>DPO (Direct Preference Optimization):</strong> más eficiente que RLHF clásico, usado en LLaMA 3</li>
+          <li><strong>RLAIF:</strong> IA califica a otra IA (Reinforcement Learning from AI Feedback)</li>
+        </ul>
+      </div>
+      <div class="highlight">
+        <div class="highlight-label">Impacto laboral</div>
+        <div class="highlight-text">Miles de trabajadores en Kenia, India y Filipinas (Mechanical Turk) califican respuestas por $2-15/hora. El "trabajo invisible" detrás de la IA "amigable".</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ SLIDE 17: LATENCIA -->
+<div class="slide" id="slide-17">
+  <div class="slide-header">
+    <span class="concept-number">17 / 20</span>
+    <div class="slide-title-block">
+      <div class="slide-category cat-foundation">Fundamento Técnico</div>
+      <h2 class="slide-title">Latencia y Coste</h2>
+      <p class="slide-subtitle">El tiempo hasta recibir la primera respuesta y el precio por usarlo. Claves para elegir el modelo adecuado según el caso de uso.</p>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:1.5rem">
+    <div>
+      <div class="card" style="margin-bottom:1rem">
+        <div class="card-title">⏱️ Métricas de latencia</div>
+        <ul class="concept-list">
+          <li><strong>TTFT</strong> (Time To First Token): tiempo hasta la primera letra. Importante para chat en vivo.</li>
+          <li><strong>TPS</strong> (Tokens Per Second): velocidad de generación. Groq alcanza 800 TPS.</li>
+          <li><strong>E2E Latency:</strong> tiempo total hasta respuesta completa.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">🏎️ Proveedores de inferencia rápida</div>
+        <ul class="concept-list">
+          <li><strong>Groq:</strong> hardware LPU propio, 800 tok/s. Más rápido del mundo para modelos open.</li>
+          <li><strong>Together.ai:</strong> inferencia de modelos open a gran velocidad.</li>
+          <li><strong>Fireworks.ai:</strong> especializado en tiempo real.</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-title">💰 Comparativa de coste (por 1M tokens)</div>
+        <table style="min-width:auto">
+          <thead><tr><th>Modelo</th><th>Input</th><th>Output</th></tr></thead>
+          <tbody>
+            <tr><td>Gemini 2.0 Flash</td><td style="color:var(--green)">$0.075</td><td style="color:var(--green)">$0.30</td></tr>
+            <tr><td>DeepSeek V3</td><td style="color:var(--green)">$0.27</td><td style="color:var(--green)">$1.10</td></tr>
+            <tr><td>Claude 3.5 Haiku</td><td style="color:var(--accent3)">$0.80</td><td style="color:var(--accent3)">$4.00</td></tr>
+            <tr><td>Claude 3.7 Sonnet</td><td style="color:var(--accent3)">$3.00</td><td style="color:var(--accent3)">$15.00</td></tr>
+            <tr><td>GPT-4o</td><td style="color:var(--red)">$5.00</td><td style="color:var(--red)">$15.00</td></tr>
+            <tr><td>Gemma 4 (local)</td><td style="color:var(--green)">$0</td><td style="color:var(--green)">$0</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ SLIDE 18: BENCHMARKS -->
+<div class="slide" id="slide-18">
+  <div class="slide-header">
+    <span class="concept-number">18 / 20</span>
+    <div class="slide-title-block">
+      <div class="slide-category cat-behavior">Evaluación</div>
+      <h2 class="slide-title">Benchmarks</h2>
+      <p class="slide-subtitle">Pruebas estandarizadas para comparar modelos. Como el MIR de la medicina o el examen de conducir: miden capacidad en tareas concretas.</p>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:1.5rem">
+    <div>
+      <div class="card" style="margin-bottom:1rem">
+        <div class="card-title">📝 Benchmarks más importantes</div>
+        <ul class="concept-list">
+          <li><strong>MMLU:</strong> 57 materias académicas (medicina, derecho, historia). Mide conocimiento general.</li>
+          <li><strong>HumanEval:</strong> generación de código Python. Estándar de programación.</li>
+          <li><strong>MATH:</strong> resolución de problemas matemáticos.</li>
+          <li><strong>HellaSwag:</strong> sentido común y completar frases.</li>
+          <li><strong>GPQA:</strong> preguntas de PhD (biología, química, física).</li>
+          <li><strong>SWE-bench:</strong> resolver bugs reales de GitHub.</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-title">🏆 Puntuaciones MMLU (referencia)</div>
+        <div id="benchmarkBars"></div>
+        <div style="margin-top:1rem;font-size:0.78rem;color:var(--muted)">⚠️ Los benchmarks pueden saturarse (los modelos se entrenan sobre ellos). Chatbot Arena (votos humanos reales) es más fiable.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ SLIDE 19: PRIVACIDAD -->
+<div class="slide" id="slide-19">
+  <div class="slide-header">
+    <span class="concept-number">19 / 20</span>
+    <div class="slide-title-block">
+      <div class="slide-category cat-behavior">Ética y Seguridad</div>
+      <h2 class="slide-title">Privacidad y RGPD</h2>
+      <p class="slide-subtitle">Qué pasa con tus datos cuando usas IA. Especialmente crítico para sindicatos que manejan datos sensibles de afiliación y trabajadores.</p>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:1.5rem">
+    <div>
+      <div class="hallu-example" style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3);margin-bottom:1rem">
+        <div class="hallu-label" style="color:var(--red)">🚨 Riesgos reales</div>
+        <ul class="concept-list" style="margin-top:0.5rem">
+          <li>Samsung filtró código propietario al pegar en ChatGPT</li>
+          <li>OpenAI usa conversaciones para reentrenar (si no lo desactivas)</li>
+          <li>Datos de afiliación sindical son categoría especial RGPD (Art. 9)</li>
+          <li>Servidores fuera de la UE pueden vulnerar transferencias internacionales</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">✅ Buenas prácticas</div>
+        <ul class="concept-list">
+          <li>Nunca incluir nombres, DNIs o datos de afiliados en prompts</li>
+          <li>Anonimizar antes de usar: "el trabajador X" en vez del nombre real</li>
+          <li>Usar versión Enterprise (Claude, GPT, Gemini) si se manejan datos sensibles</li>
+          <li>Opción más segura: modelos locales (Gemma 4 + Ollama)</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:1rem">
+        <div class="card-title">🔒 Niveles de privacidad por plataforma</div>
+        <table style="min-width:auto">
+          <thead><tr><th>Plataforma</th><th>Datos para entrenar</th><th>Servidores</th></tr></thead>
+          <tbody>
+            <tr><td>ChatGPT (gratis)</td><td><span class="tag tag-red">Sí por defecto</span></td><td>EE.UU.</td></tr>
+            <tr><td>ChatGPT Plus/Team</td><td><span class="tag tag-amber">Se puede off</span></td><td>EE.UU.</td></tr>
+            <tr><td>Claude.ai</td><td><span class="tag tag-amber">Se puede off</span></td><td>EE.UU./EU</td></tr>
+            <tr><td>Gemini Workspace</td><td><span class="tag tag-green">No</span></td><td>EU disponible</td></tr>
+            <tr><td>Gemma 4 (local)</td><td><span class="tag tag-green">No, 100%</span></td><td>Tu máquina</td></tr>
+            <tr><td>DeepSeek</td><td><span class="tag tag-red">Sí + China</span></td><td>China</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="highlight">
+        <div class="highlight-label">Recomendación CCOO</div>
+        <div class="highlight-text">Para datos de afiliados: Gemma 4 local o Claude Enterprise con DPA firmado. Nunca DeepSeek ni ChatGPT gratuito.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ SLIDE 20: IA SINDICAL -->
+<div class="slide" id="slide-20">
+  <div class="slide-header">
+    <span class="concept-number">20 / 20</span>
+    <div class="slide-title-block">
+      <div class="slide-category cat-advanced">Aplicación Sindical</div>
+      <h2 class="slide-title">IA para el Trabajo Sindical</h2>
+      <p class="slide-subtitle">Cómo integrar los 20 conceptos en la práctica diaria de CCOO: desde la atención a afiliados hasta la negociación colectiva.</p>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:1.5rem">
+    <div>
+      <div class="card" style="margin-bottom:1rem;border-color:rgba(124,58,237,0.5)">
+        <div class="card-title">🤝 Atención a afiliados</div>
+        <ul class="concept-list">
+          <li>Chatbot RAG con el convenio: responde dudas 24/7 sin datos personales</li>
+          <li>Multimodalidad: analiza foto de nómina para detectar errores</li>
+          <li>NotebookLM: genera resumen del convenio como podcast</li>
+        </ul>
+      </div>
+      <div class="card" style="border-color:rgba(6,182,212,0.5)">
+        <div class="card-title">⚖️ Negociación colectiva</div>
+        <ul class="concept-list">
+          <li>Claude analiza cláusulas y propone mejoras con temperatura 0.2</li>
+          <li>DeepSeek compara artículos con otros convenios del sector</li>
+          <li>Agentes que monitorizan el BOE en busca de cambios legislativos</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:1rem;border-color:rgba(245,158,11,0.5)">
+        <div class="card-title">📢 Comunicación y campaña</div>
+        <ul class="concept-list">
+          <li>Temperatura 0.9: genera ideas creativas para campañas de afiliación</li>
+          <li>Multimodalidad: crea imágenes para redes sociales con IA</li>
+          <li>Resúmenes automáticos de asambleas (audio → acta)</li>
+        </ul>
+      </div>
+      <div class="card" style="border-color:rgba(16,185,129,0.5)">
+        <div class="card-title">🛡️ Control y cautelas</div>
+        <ul class="concept-list">
+          <li>Siempre verificar información legal con asesor jurídico</li>
+          <li>Datos de afiliación solo en sistemas locales o Enterprise</li>
+          <li>Formar a delegados en detección de alucinaciones</li>
+          <li>Negociar cláusulas de IA en convenios colectivos</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin-top:1rem">
+    <button class="btn btn-primary" onclick="openModal('tableModal')" style="margin-right:1rem">📊 Ver tabla comparativa completa</button>
+    <button class="btn" onclick="goTo(0)">🏠 Volver al inicio</button>
+  </div>
+</div>
+
+</div><!-- end slides-container -->
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <button class="btn" id="prevBtn" onclick="prevSlide()" disabled>← Anterior</button>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem">
+    <div class="dots" id="dots"></div>
+    <div class="slide-index" id="slideIndex">Portada</div>
+  </div>
+  <button class="btn btn-primary" id="nextBtn" onclick="nextSlide()">Siguiente →</button>
+</div>
+
+<!-- MODAL: TABLA COMPARATIVA -->
+<div class="modal-overlay" id="tableModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 style="font-size:1.3rem;font-weight:800">📊 Tabla Comparativa de Modelos IA (2025)</h3>
+      <button class="modal-close" onclick="closeModal('tableModal')">✕</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Plataforma / Modelo</th>
+            <th>Empresa</th>
+            <th>Tipo</th>
+            <th>Parámetros</th>
+            <th>Contexto</th>
+            <th>Multimodal</th>
+            <th>Coste (Input/M tok)</th>
+            <th>Privacidad</th>
+            <th>Mejor para</th>
+            <th>Uso sindical</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>ChatGPT / GPT-4o</td>
+            <td>OpenAI</td>
+            <td><span class="tag tag-red">Cerrado</span></td>
+            <td>~200B est.</td>
+            <td>128K</td>
+            <td><span class="tag tag-green">Texto, img, audio, vídeo</span></td>
+            <td>$5.00 / Gratis web</td>
+            <td><span class="tag tag-amber">Media</span></td>
+            <td>Redacción, código, análisis general</td>
+            <td>⭐⭐⭐⭐ — No datos sensibles (versión gratis)</td>
+          </tr>
+          <tr>
+            <td>Claude 3.7 Sonnet</td>
+            <td>Anthropic</td>
+            <td><span class="tag tag-red">Cerrado</span></td>
+            <td>No publicado</td>
+            <td>200K</td>
+            <td><span class="tag tag-cyan">Texto + imagen</span></td>
+            <td>$3.00</td>
+            <td><span class="tag tag-green">Alta</span></td>
+            <td>Análisis de documentos largos, convenios</td>
+            <td>⭐⭐⭐⭐⭐ — Excelente para convenios y textos legales</td>
+          </tr>
+          <tr>
+            <td>Gemini 2.0 Flash</td>
+            <td>Google</td>
+            <td><span class="tag tag-red">Cerrado</span></td>
+            <td>No publicado</td>
+            <td>1M</td>
+            <td><span class="tag tag-green">Texto, img, audio, vídeo</span></td>
+            <td>$0.075</td>
+            <td><span class="tag tag-green">Alta (Workspace)</span></td>
+            <td>Velocidad, coste bajo, Google Suite</td>
+            <td>⭐⭐⭐⭐ — Integrado en Google Docs/Drive</td>
+          </tr>
+          <tr>
+            <td>Gemini 2.5 Pro</td>
+            <td>Google</td>
+            <td><span class="tag tag-red">Cerrado</span></td>
+            <td>No publicado</td>
+            <td>1M</td>
+            <td><span class="tag tag-green">Completo</span></td>
+            <td>$1.25</td>
+            <td><span class="tag tag-green">Alta</span></td>
+            <td>Razonamiento complejo, análisis profundo</td>
+            <td>⭐⭐⭐⭐⭐ — Top 2025 para análisis</td>
+          </tr>
+          <tr>
+            <td>NotebookLM</td>
+            <td>Google</td>
+            <td><span class="tag tag-red">Cerrado</span></td>
+            <td>Gemini interno</td>
+            <td>500K</td>
+            <td><span class="tag tag-cyan">PDF, audio, vídeo</span></td>
+            <td>Gratis</td>
+            <td><span class="tag tag-green">Alta</span></td>
+            <td>Estudio de documentos, podcasts resumen</td>
+            <td>⭐⭐⭐⭐⭐ — Ideal para convenios y formación</td>
+          </tr>
+          <tr>
+            <td>Gemma 4 (27B)</td>
+            <td>Google</td>
+            <td><span class="tag tag-green">Open-source</span></td>
+            <td>4B / 12B / 27B</td>
+            <td>128K</td>
+            <td><span class="tag tag-cyan">Texto + imagen</span></td>
+            <td>$0 (local)</td>
+            <td><span class="tag tag-green">Máxima (local)</span></td>
+            <td>Privacidad total, datos sensibles, sin coste</td>
+            <td>⭐⭐⭐⭐⭐ — Datos de afiliados, 100% privado</td>
+          </tr>
+          <tr>
+            <td>DeepSeek R1 / V3</td>
+            <td>DeepSeek (China)</td>
+            <td><span class="tag tag-green">Open-source</span></td>
+            <td>67B / 671B</td>
+            <td>128K</td>
+            <td><span class="tag tag-amber">V3 parcial</span></td>
+            <td>$0.27 (V3)</td>
+            <td><span class="tag tag-red">Baja (servidores China)</span></td>
+            <td>Matemáticas, código, razonamiento a bajo coste</td>
+            <td>⭐⭐ — Solo análisis público, nunca datos internos</td>
+          </tr>
+          <tr>
+            <td>Abacus.ai ChatLLM</td>
+            <td>Abacus.ai</td>
+            <td><span class="tag tag-purple">Multi-modelo</span></td>
+            <td>Varios modelos</td>
+            <td>Varía</td>
+            <td><span class="tag tag-green">Completo</span></td>
+            <td>Desde $10/mes</td>
+            <td><span class="tag tag-amber">Media-alta</span></td>
+            <td>Empresas, automatización, RAG sobre datos internos</td>
+            <td>⭐⭐⭐ — Bueno para organizaciones medianas</td>
+          </tr>
+          <tr>
+            <td>LLaMA 3.3 (Meta)</td>
+            <td>Meta</td>
+            <td><span class="tag tag-green">Open-source</span></td>
+            <td>8B / 70B</td>
+            <td>128K</td>
+            <td><span class="tag tag-amber">Llama Vision</span></td>
+            <td>$0 (local)</td>
+            <td><span class="tag tag-green">Alta (local)</span></td>
+            <td>Alternativa open robusta, comunidad activa</td>
+            <td>⭐⭐⭐⭐ — Buena alternativa a Gemma para local</td>
+          </tr>
+          <tr>
+            <td>Mistral Large</td>
+            <td>Mistral AI (Francia)</td>
+            <td><span class="tag tag-amber">Semi-open</span></td>
+            <td>123B</td>
+            <td>128K</td>
+            <td><span class="tag tag-amber">Parcial</span></td>
+            <td>$2.00</td>
+            <td><span class="tag tag-green">Alta (UE)</span></td>
+            <td>Empresa europea, cumplimiento RGPD facilitado</td>
+            <td>⭐⭐⭐⭐ — Opción europea, RGPD más sencillo</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top:1.5rem;padding:1rem;background:var(--surface2);border-radius:10px;font-size:0.82rem;color:var(--muted)">
+      <strong style="color:var(--text)">Leyenda:</strong> Precios aproximados abril 2025 · Los datos de parámetros de modelos cerrados son estimaciones · Contexto = ventana de contexto máxima · Privacidad refiere al uso en versión estándar de pago
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════ STATE
+let currentSlide = 0;
+const totalSlides = 21; // 0 = portada, 1-20 = conceptos
+
+// ═══════════ NAVIGATION
+function goTo(n) {
+  document.getElementById(`slide-${currentSlide}`).classList.remove('active');
+  currentSlide = Math.max(0, Math.min(n, totalSlides - 1));
+  document.getElementById(`slide-${currentSlide}`).classList.add('active');
+  updateUI();
+  window.scrollTo(0,0);
+}
+
+function nextSlide() { goTo(currentSlide + 1); }
+function prevSlide() { goTo(currentSlide - 1); }
+
+function updateUI() {
+  const fill = ((currentSlide + 1) / totalSlides) * 100;
+  document.getElementById('progressFill').style.width = fill + '%';
+  document.getElementById('progressLabel').textContent = `${currentSlide + 1} / ${totalSlides}`;
+  document.getElementById('prevBtn').disabled = currentSlide === 0;
+  document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+  document.getElementById('slideIndex').textContent = currentSlide === 0 ? 'Portada' : `Concepto ${currentSlide} / 20`;
+
+  // Update dots
+  const dotsEl = document.getElementById('dots');
+  dotsEl.innerHTML = '';
+  for (let i = 0; i < totalSlides; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === currentSlide ? ' active' : (i < currentSlide ? ' visited' : ''));
+    d.onclick = () => goTo(i);
+    d.title = i === 0 ? 'Portada' : `Concepto ${i}`;
+    dotsEl.appendChild(d);
+  }
+}
+
+// ═══════════ MODAL
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(el => {
+  el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
+});
+
+// ═══════════ TOKEN DEMO
+const tokenColors = [
+  ['rgba(124,58,237,0.25)','#a78bfa'],['rgba(6,182,212,0.25)','#67e8f9'],
+  ['rgba(245,158,11,0.25)','#fcd34d'],['rgba(16,185,129,0.25)','#6ee7b7'],
+  ['rgba(236,72,153,0.25)','#f9a8d4'],['rgba(239,68,68,0.25)','#fca5a5']
+];
+function tokenize() {
+  const text = document.getElementById('tokenInput').value;
+  const out = document.getElementById('tokenOutput');
+  if (!text) { out.innerHTML = ''; return; }
+  // Simple Spanish tokenizer simulation
+  const chunks = [];
+  let i = 0;
+  while (i < text.length) {
+    // spaces become their own token
+    if (text[i] === ' ') { chunks.push(' '); i++; continue; }
+    // numbers
+    if (/\d/.test(text[i])) {
+      let num = '';
+      while (i < text.length && /\d/.test(text[i])) { num += text[i]; i++; }
+      chunks.push(num); continue;
+    }
+    // punctuation
+    if (/[.,!?;:()¿¡"'\-—]/.test(text[i])) { chunks.push(text[i]); i++; continue; }
+    // words: split roughly every 3-4 chars
+    let word = '';
+    while (i < text.length && /[a-záéíóúüñA-ZÁÉÍÓÚÜÑ]/.test(text[i])) { word += text[i]; i++; }
+    if (word.length <= 4) { chunks.push(word); }
+    else {
+      // split into sub-tokens
+      let j = 0;
+      while (j < word.length) {
+        const len = Math.floor(Math.random() * 2) + 3;
+        chunks.push(word.slice(j, j + len));
+        j += len;
+      }
+    }
+  }
+  const tokens = chunks.filter(c => c.trim() !== '' || c === ' ');
+  out.innerHTML = tokens.map((t, idx) => {
+    const [bg, color] = tokenColors[idx % tokenColors.length];
+    if (t === ' ') return '<span style="display:inline-block;width:0.5rem"></span>';
+    return `<span class="token-chip" style="background:${bg};color:${color};border-color:${color}40" title="Token #${idx+1}">${t.replace(/</g,'&lt;')}</span>`;
+  }).join('');
+  const count = tokens.filter(t => t.trim()).length;
+  document.getElementById('tokenCount').textContent = count;
+  document.getElementById('tokenCost').textContent = '$' + (count * 0.000003).toFixed(6);
+}
+tokenize();
+
+// ═══════════ TEMPERATURE DEMO
+const tempData = [
+  { max: 0.2, label: '🎯 Determinista — perfecto para código y datos legales', text: '"La Ley del Estatuto de los Trabajadores establece en su artículo 23.1 el derecho a la formación continua, adaptación a las modificaciones del puesto de trabajo y a la formación para la mejora de competencias."' },
+  { max: 0.5, label: '📋 Preciso — bueno para informes y resúmenes', text: '"La formación continua, según el ET, es un derecho fundamental de los trabajadores que permite adaptarse a los cambios tecnológicos del mercado laboral y mejorar las condiciones de trabajo."' },
+  { max: 0.9, label: '⚖️ Equilibrado — bueno para redacción general', text: '"La IA generativa permite a las organizaciones sindicales automatizar tareas repetitivas y mejorar la comunicación con sus afiliados, creando un puente entre la tecnología y la acción colectiva."' },
+  { max: 1.3, label: '🎨 Creativo — bueno para campañas y comunicación', text: '"Imagina un sindicato donde cada delegado tiene un asistente digital experto en todos los convenios del mundo, disponible 24/7, que aprende de cada negociación y se convierte en tu escudo frente al poder."' },
+  { max: 2.0, label: '🌪️ Experimental — impredecible, solo para brainstorming', text: '"¡ROBOTS SINDICALES AL PODER! La inteligencia colectiva humano-máquina reformula los equilibrios de poder corporativo mientras los tokens danzan en el espacio latente de la justicia laboral."' }
+];
+function updateTemp(val) {
+  const v = parseFloat(val);
+  document.getElementById('tempValue').textContent = v.toFixed(1);
+  const { label, text } = tempData.find(d => v <= d.max) || tempData[tempData.length-1];
+  document.getElementById('tempOutput').innerHTML = text;
+  document.getElementById('tempLabel').textContent = label;
+  const hue = Math.round(v * 30); // blue to red
+  document.getElementById('tempValue').style.color = `hsl(${260 - v*80}, 80%, 70%)`;
+}
+
+// ═══════════ PARAM BARS
+function renderBars(containerId, data, colorFn) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const max = Math.max(...data.map(d => d.val));
+  el.innerHTML = data.map(d => {
+    const pct = (d.val / max) * 100;
+    const color = colorFn(d);
+    return `<div style="margin-bottom:0.6rem">
+      <div style="display:flex;justify-content:space-between;margin-bottom:0.25rem;font-size:0.75rem">
+        <span style="color:var(--text);font-weight:600">${d.name}</span>
+        <span style="color:${color};font-family:'JetBrains Mono',monospace">${d.label}</span>
+      </div>
+      <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden">
+        <div style="height:100%;width:${pct}%;background:${color};border-radius:3px;transition:width 1s ease"></div>
+      </div>
+    </div>`;
+  }).join('');
+  setTimeout(() => {}, 100);
+}
+
+// Wait for render
+window.addEventListener('DOMContentLoaded', () => {
+  updateUI();
+  tokenize();
+
+  renderBars('paramBars', [
+    {name:'GPT-4 (est)', val:1700, label:'~1.7T params'},
+    {name:'Claude 3 Opus', val:200, label:'~200B est.'},
+    {name:'GPT-3.5', val:175, label:'175B'},
+    {name:'DeepSeek R1', val:67, label:'67B'},
+    {name:'Gemma 4 (27B)', val:27, label:'27B'},
+    {name:'Gemma 4 (4B)', val:4, label:'4B — corre en móvil'},
+  ], d => {
+    if (d.val > 500) return '#ef4444';
+    if (d.val > 100) return '#f59e0b';
+    if (d.val > 20) return '#10b981';
+    return '#06b6d4';
+  });
+
+  renderBars('contextBars', [
+    {name:'Gemini 1.5/2.0', val:1000000, label:'1M tokens'},
+    {name:'Claude 3.7', val:200000, label:'200K tokens'},
+    {name:'GPT-4o', val:128000, label:'128K tokens'},
+    {name:'DeepSeek V3', val:128000, label:'128K tokens'},
+    {name:'Gemma 4', val:128000, label:'128K tokens'},
+    {name:'GPT-3.5 (base)', val:4096, label:'4K tokens'},
+  ], () => '#7c3aed');
+
+  renderBars('halluBars', [
+    {name:'Claude 3.7 Sonnet', val:3, label:'~3%'},
+    {name:'GPT-4o', val:5, label:'~5%'},
+    {name:'Gemini 2.0', val:7, label:'~7%'},
+    {name:'DeepSeek R1', val:12, label:'~12%'},
+    {name:'GPT-3.5', val:20, label:'~20%'},
+    {name:'Modelos 7B locales', val:35, label:'~35%'},
+  ], d => {
+    if (d.val < 5) return '#10b981';
+    if (d.val < 15) return '#f59e0b';
+    return '#ef4444';
+  });
+
+  renderBars('inferenceBars', [
+    {name:'Groq (LLaMA 3)', val:800, label:'~800 tok/s'},
+    {name:'Together.ai', val:200, label:'~200 tok/s'},
+    {name:'Gemini 2.0 Flash', val:150, label:'~150 tok/s'},
+    {name:'GPT-4o', val:100, label:'~100 tok/s'},
+    {name:'Claude 3.7', val:80, label:'~80 tok/s'},
+    {name:'Gemma 4 (CPU local)', val:12, label:'~12 tok/s'},
+  ], () => '#06b6d4');
+
+  renderBars('benchmarkBars', [
+    {name:'Gemini 2.5 Pro', val:91.2, label:'91.2%'},
+    {name:'GPT-4o (2024)', val:88.7, label:'88.7%'},
+    {name:'Claude 3.7 Sonnet', val:88.3, label:'88.3%'},
+    {name:'DeepSeek R1', val:87.6, label:'87.6%'},
+    {name:'Gemma 4 27B', val:82.1, label:'82.1%'},
+    {name:'LLaMA 3.3 70B', val:79.6, label:'79.6%'},
+  ], () => '#7c3aed');
+});
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT') return;
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextSlide();
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') prevSlide();
+  if (e.key === 'Escape') document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('open'));
+});
+</script>
+</body>
+</html>
