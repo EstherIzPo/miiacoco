@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Negociación Colectiva CCOO - AI Assistant</title>
+    <title>Negociación Colectiva CCOO - AI Assistant Pro</title>
     
-    <!-- CDN Libraries for Exports -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.min.js"></script>
     <script src="https://unpkg.com/docx@8.5.0"></script>
@@ -18,9 +17,10 @@
         }
 
         :root {
-            --primary-dark: #1a365d;
-            --primary-light: #2d5a8c;
-            --accent-orange: #ff6b35;
+            --primary-dark: #2c3e50;
+            --primary-light: #34495e;
+            --accent-red: #e74c3c;
+            --accent-red-dark: #d32f2f;
             --white: #ffffff;
             --light-gray: #f5f5f5;
             --dark-gray: #333333;
@@ -28,6 +28,13 @@
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
+            --info: #3b82f6;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
         }
 
         body {
@@ -48,15 +55,16 @@
             overflow: hidden;
         }
 
-        /* SIDEBAR */
         .sidebar {
-            width: 280px;
+            width: 260px;
             background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-light) 100%);
             color: var(--white);
-            padding: 20px 0;
+            padding: 15px 0;
             overflow-y: auto;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.25);
             transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
         }
 
         .dark-mode .sidebar {
@@ -64,109 +72,103 @@
         }
 
         .sidebar-header {
-            padding: 20px 15px;
+            padding: 15px 12px;
             border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .sidebar-title {
-            font-size: 18px;
+            font-size: 15px;
             font-weight: 700;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .sidebar-subtitle {
-            font-size: 12px;
+            font-size: 11px;
             opacity: 0.8;
         }
 
         .menu-section {
-            padding: 0 10px;
-            margin-bottom: 30px;
+            padding: 0 8px;
+            margin-bottom: 20px;
         }
 
         .menu-label {
-            font-size: 11px;
+            font-size: 10px;
             text-transform: uppercase;
-            opacity: 0.7;
-            padding: 10px 15px;
-            font-weight: 600;
+            opacity: 0.6;
+            padding: 8px 12px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
         }
 
         .menu-item {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 12px 15px;
+            gap: 10px;
+            padding: 9px 12px;
             cursor: pointer;
             border-radius: 6px;
-            margin: 5px 0;
+            margin: 3px 0;
             transition: all 0.3s ease;
             border-left: 3px solid transparent;
-            position: relative;
+            font-size: 12px;
         }
 
         .menu-item:hover {
             background-color: rgba(255, 255, 255, 0.1);
-            border-left-color: var(--accent-orange);
+            border-left-color: var(--accent-red);
         }
 
         .menu-item.active {
-            background-color: var(--accent-orange);
+            background-color: var(--accent-red);
             color: var(--white);
             border-left-color: var(--white);
             font-weight: 600;
         }
 
         .menu-icon {
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .menu-text {
-            flex: 1;
-            font-size: 13px;
-        }
-
         .sidebar-footer {
-            padding: 15px;
+            padding: 12px 8px;
             border-top: 2px solid rgba(255, 255, 255, 0.1);
-            margin-top: 20px;
-            position: sticky;
-            bottom: 0;
-            background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.1) 100%);
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
         .theme-toggle, .clear-btn {
             width: 100%;
-            padding: 10px;
+            padding: 8px;
             border: none;
             border-radius: 6px;
             background-color: rgba(255, 255, 255, 0.1);
             color: var(--white);
             cursor: pointer;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
             transition: all 0.3s ease;
-            margin-bottom: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .theme-toggle:hover, .clear-btn:hover {
-            background-color: var(--accent-orange);
+            background-color: var(--accent-red);
         }
 
-        /* MAIN CONTENT */
         .main-content {
             flex: 1;
             display: flex;
@@ -176,12 +178,14 @@
 
         .header {
             background: var(--white);
-            border-bottom: 1px solid var(--border-color);
-            padding: 20px;
+            border-bottom: 2px solid var(--border-color);
+            padding: 12px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .dark-mode .header {
@@ -189,32 +193,74 @@
             border-bottom-color: #3a3a3a;
         }
 
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+            min-width: 300px;
+        }
+
         .header-title {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 700;
             color: var(--primary-dark);
+            white-space: nowrap;
         }
 
         .dark-mode .header-title {
-            color: var(--accent-orange);
+            color: var(--accent-red);
+        }
+
+        .model-indicator {
+            padding: 6px 12px;
+            background: var(--info);
+            color: var(--white);
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .roles-indicator {
+            padding: 6px 12px;
+            background: var(--accent-red);
+            color: var(--white);
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .roles-indicator.multiple {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
 
         .header-actions {
             display: flex;
-            gap: 10px;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
         .btn {
-            padding: 10px 16px;
+            padding: 9px 14px;
             border: none;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .btn-primary {
@@ -225,18 +271,18 @@
         .btn-primary:hover {
             background-color: var(--primary-light);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(26, 54, 93, 0.2);
+            box-shadow: 0 4px 12px rgba(44, 62, 80, 0.2);
         }
 
         .btn-secondary {
-            background-color: var(--accent-orange);
+            background-color: var(--accent-red);
             color: var(--white);
         }
 
         .btn-secondary:hover {
-            background-color: #e55a2b;
+            background-color: var(--accent-red-dark);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.2);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.2);
         }
 
         .btn-outline {
@@ -260,27 +306,25 @@
 
         .content-wrapper {
             flex: 1;
-            overflow-y: auto;
-            padding: 20px;
+            overflow: hidden;
+            padding: 12px;
             display: grid;
-            grid-template-columns: 1fr 350px;
-            gap: 20px;
+            grid-template-columns: 1fr 280px;
+            gap: 12px;
         }
 
         .dark-mode .content-wrapper {
             background-color: #1e1e1e;
         }
 
-        /* MAIN PANEL */
         .main-panel {
             background: var(--white);
-            border-radius: 12px;
-            padding: 25px;
+            border-radius: 10px;
+            padding: 0;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             display: flex;
             flex-direction: column;
-            gap: 20px;
-            overflow-y: auto;
+            overflow: hidden;
         }
 
         .dark-mode .main-panel {
@@ -288,46 +332,59 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
 
-        .panel-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--primary-dark);
-            border-bottom: 3px solid var(--accent-orange);
-            padding-bottom: 10px;
+        .panel-header {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-light) 100%);
+            color: var(--white);
+            padding: 15px 20px;
+            border-bottom: 3px solid var(--accent-red);
         }
 
-        .dark-mode .panel-title {
-            color: var(--accent-orange);
+        .panel-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .panel-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
 
         .section-group {
-            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
         .section-label {
-            font-size: 12px;
+            font-size: 11px;
             text-transform: uppercase;
             color: var(--primary-dark);
             font-weight: 700;
-            margin-bottom: 8px;
             letter-spacing: 0.5px;
         }
 
         .dark-mode .section-label {
-            color: var(--accent-orange);
+            color: var(--accent-red);
         }
 
         .prompt-editor {
             background: var(--light-gray);
-            border: 1px solid var(--border-color);
+            border: 2px solid var(--border-color);
             border-radius: 8px;
-            padding: 15px;
+            padding: 12px;
             font-family: 'Monaco', 'Courier New', monospace;
-            font-size: 13px;
+            font-size: 12px;
             line-height: 1.6;
             resize: vertical;
-            min-height: 150px;
+            min-height: 200px;
             color: var(--dark-gray);
+            width: 100%;
+            transition: all 0.3s ease;
         }
 
         .dark-mode .prompt-editor {
@@ -338,27 +395,168 @@
 
         .prompt-editor:focus {
             outline: none;
-            border-color: var(--accent-orange);
-            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+            border-color: var(--accent-red);
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
         }
 
-        .button-group {
+        .prompt-preview {
+            background: var(--light-gray);
+            border: 2px solid var(--info);
+            border-radius: 8px;
+            padding: 12px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 1.6;
+            color: var(--dark-gray);
+            max-height: 150px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+
+        .dark-mode .prompt-preview {
+            background: #1a1a1a;
+            border-color: var(--info);
+            color: #e0e0e0;
+        }
+
+        .prompt-preview-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: var(--info);
+            font-weight: 700;
+            margin-bottom: 6px;
             display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .rice-structure {
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.05) 0%, rgba(52, 152, 219, 0.05) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
             gap: 10px;
-            flex-wrap: wrap;
+            font-size: 11px;
+        }
+
+        .dark-mode .rice-structure {
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.1) 0%, rgba(52, 152, 219, 0.1) 100%);
+            border-color: #4a4a4a;
+        }
+
+        .rice-item {
+            padding: 10px;
+            background: var(--white);
+            border-radius: 6px;
+            border-left: 3px solid var(--accent-red);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .dark-mode .rice-item {
+            background: #1a1a1a;
+        }
+
+        .rice-item:hover {
+            background: rgba(231, 76, 60, 0.08);
+            transform: translateX(4px);
+            box-shadow: 0 2px 8px rgba(231, 76, 60, 0.15);
+        }
+
+        .dark-mode .rice-item:hover {
+            background: rgba(231, 76, 60, 0.12);
+        }
+
+        .rice-item::after {
+            content: '↗ Clickea para añadir';
+            position: absolute;
+            top: 2px;
+            right: 4px;
+            font-size: 9px;
+            color: var(--accent-red);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .rice-item:hover::after {
+            opacity: 1;
+        }
+
+        .rice-label {
+            font-weight: 700;
+            color: var(--accent-red);
+            margin-bottom: 3px;
+        }
+
+        .rice-value {
+            color: var(--dark-gray);
+            font-size: 10px;
+            line-height: 1.4;
+        }
+
+        .dark-mode .rice-value {
+            color: #b0b0b0;
+        }
+
+        .tabs-container {
+            display: flex;
+            border-bottom: 2px solid var(--border-color);
+            gap: 0;
+            margin-bottom: 12px;
+        }
+
+        .dark-mode .tabs-container {
+            border-bottom-color: #4a4a4a;
+        }
+
+        .tab-button {
+            padding: 10px 16px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            color: #999;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .tab-button:hover {
+            color: var(--primary-dark);
+            border-bottom-color: var(--accent-red);
+        }
+
+        .dark-mode .tab-button:hover {
+            color: var(--accent-red);
+        }
+
+        .tab-button.active {
+            color: var(--accent-red);
+            border-bottom-color: var(--accent-red);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
         }
 
         .api-form {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 15px;
+            gap: 10px;
         }
 
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 4px;
         }
 
         .form-group.full {
@@ -366,20 +564,20 @@
         }
 
         .form-label {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
             color: var(--primary-dark);
         }
 
         .dark-mode .form-label {
-            color: var(--accent-orange);
+            color: var(--accent-red);
         }
 
         .form-input, .form-select {
-            padding: 10px;
+            padding: 8px;
             border: 1px solid var(--border-color);
             border-radius: 6px;
-            font-size: 13px;
+            font-size: 12px;
             background-color: var(--white);
             color: var(--dark-gray);
             transition: border-color 0.3s ease;
@@ -394,50 +592,19 @@
 
         .form-input:focus, .form-select:focus {
             outline: none;
-            border-color: var(--accent-orange);
-            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+            border-color: var(--accent-red);
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
         }
 
-        .api-status {
-            padding: 10px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 15px;
-        }
-
-        .status-indicator {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            display: inline-block;
-        }
-
-        .status-connected .status-indicator {
-            background-color: var(--success);
-        }
-
-        .status-disconnected .status-indicator {
-            background-color: var(--danger);
-        }
-
-        .status-warning .status-indicator {
-            background-color: var(--warning);
-        }
-
-        /* RESPONSE AREA */
         .response-area {
             background: var(--light-gray);
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 15px;
-            min-height: 200px;
-            max-height: 400px;
+            padding: 12px;
+            min-height: 180px;
+            max-height: 350px;
             overflow-y: auto;
-            font-size: 13px;
+            font-size: 12px;
             line-height: 1.6;
             color: var(--dark-gray);
         }
@@ -446,6 +613,33 @@
             background: #1a1a1a;
             border-color: #4a4a4a;
             color: #e0e0e0;
+        }
+
+        .response-header {
+            background: var(--accent-red);
+            color: var(--white);
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            font-size: 11px;
+        }
+
+        .response-roles-used {
+            background: rgba(231, 76, 60, 0.1);
+            border-left: 3px solid var(--accent-red);
+            padding: 8px;
+            margin-bottom: 12px;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+
+        .dark-mode .response-roles-used {
+            background: rgba(231, 76, 60, 0.15);
+        }
+
+        .response-roles-used strong {
+            color: var(--accent-red);
         }
 
         .response-empty {
@@ -461,10 +655,11 @@
             justify-content: center;
             gap: 10px;
             color: var(--primary-dark);
+            height: 100%;
         }
 
         .spinner {
-            border: 3px solid rgba(26, 54, 93, 0.1);
+            border: 3px solid rgba(44, 62, 80, 0.1);
             border-top: 3px solid var(--primary-dark);
             border-radius: 50%;
             width: 20px;
@@ -477,17 +672,41 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* SIDEBAR RIGHT (CONFIG) */
+        .word-counter {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: #666;
+            background: var(--light-gray);
+            padding: 8px;
+            border-radius: 6px;
+        }
+
+        .dark-mode .word-counter {
+            background: #1a1a1a;
+            color: #b0b0b0;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .button-group.vertical {
+            flex-direction: column;
+        }
+
         .config-panel {
             background: var(--white);
-            border-radius: 12px;
-            padding: 20px;
+            border-radius: 10px;
+            padding: 15px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
             overflow-y: auto;
-            max-width: 350px;
         }
 
         .dark-mode .config-panel {
@@ -497,7 +716,7 @@
 
         .config-section {
             border-bottom: 1px solid var(--border-color);
-            padding-bottom: 15px;
+            padding-bottom: 10px;
         }
 
         .dark-mode .config-section {
@@ -509,22 +728,22 @@
         }
 
         .config-title {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             color: var(--primary-dark);
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             text-transform: uppercase;
         }
 
         .dark-mode .config-title {
-            color: var(--accent-orange);
+            color: var(--accent-red);
         }
 
         .history-item {
-            padding: 10px;
+            padding: 8px;
             background: var(--light-gray);
             border-radius: 6px;
-            font-size: 12px;
+            font-size: 11px;
             cursor: pointer;
             transition: all 0.3s ease;
             border-left: 3px solid transparent;
@@ -535,18 +754,49 @@
         }
 
         .history-item:hover {
-            background: var(--accent-orange);
+            background: var(--accent-red);
             color: var(--white);
             border-left-color: var(--white);
         }
 
         .history-item.active {
-            background: var(--accent-orange);
+            background: var(--accent-red);
             color: var(--white);
             border-left-color: var(--white);
         }
 
-        /* MODAL */
+        .models-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+
+        .model-btn {
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--white);
+            color: var(--dark-gray);
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            text-align: left;
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode .model-btn {
+            background: #1a1a1a;
+            border-color: #4a4a4a;
+            color: #e0e0e0;
+        }
+
+        .model-btn:hover {
+            background: var(--accent-red);
+            color: var(--white);
+            border-color: var(--accent-red);
+            transform: translateX(4px);
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -557,6 +807,7 @@
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
             animation: fadeIn 0.3s ease;
+            overflow-y: auto;
         }
 
         @keyframes fadeIn {
@@ -573,9 +824,11 @@
         .modal-content {
             background: var(--white);
             border-radius: 12px;
-            padding: 30px;
-            max-width: 600px;
+            padding: 25px;
+            max-width: 700px;
             width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
             animation: slideDown 0.3s ease;
         }
@@ -596,14 +849,14 @@
         }
 
         .modal-header {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
             margin-bottom: 15px;
             color: var(--primary-dark);
         }
 
         .dark-mode .modal-header {
-            color: var(--accent-orange);
+            color: var(--accent-red);
         }
 
         .modal-body {
@@ -617,39 +870,19 @@
 
         .modal-footer {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             justify-content: flex-end;
         }
 
-        /* TOKENS */
-        .token-counter {
-            background: var(--light-gray);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 10px;
-            font-size: 12px;
-            color: var(--dark-gray);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .dark-mode .token-counter {
-            background: #1a1a1a;
-            border-color: #4a4a4a;
-            color: #e0e0e0;
-        }
-
-        /* NOTIFICATIONS */
         .notification {
             position: fixed;
             bottom: 20px;
             right: 20px;
-            padding: 15px 20px;
+            padding: 12px 18px;
             border-radius: 8px;
             background: var(--success);
             color: var(--white);
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
             animation: slideInRight 0.3s ease;
@@ -676,8 +909,11 @@
             background: var(--warning);
         }
 
-        /* RESPONSIVE */
-        @media (max-width: 1200px) {
+        .notification.info {
+            background: var(--info);
+        }
+
+        @media (max-width: 1400px) {
             .content-wrapper {
                 grid-template-columns: 1fr;
             }
@@ -694,12 +930,12 @@
 
             .sidebar {
                 width: 100%;
-                max-height: 80px;
+                max-height: 70px;
                 overflow-x: auto;
                 overflow-y: hidden;
-                display: flex;
+                flex-direction: row;
                 align-items: center;
-                padding: 0 20px;
+                padding: 0 15px;
             }
 
             .sidebar-header {
@@ -708,7 +944,7 @@
 
             .menu-section {
                 display: flex;
-                gap: 10px;
+                gap: 8px;
                 padding: 0;
                 margin: 0;
             }
@@ -722,16 +958,30 @@
             }
 
             .main-content {
-                height: calc(100vh - 80px);
+                height: calc(100vh - 70px);
             }
 
             .content-wrapper {
-                padding: 15px;
-                gap: 15px;
+                padding: 10px;
+                gap: 10px;
             }
 
             .main-panel, .config-panel {
-                padding: 15px;
+                padding: 12px;
+            }
+
+            .api-form {
+                grid-template-columns: 1fr;
+            }
+
+            .header-left {
+                min-width: auto;
+                width: 100%;
+            }
+
+            .header-actions {
+                width: 100%;
+                justify-content: flex-start;
             }
         }
 
@@ -739,147 +989,260 @@
             display: none !important;
         }
 
-        /* Export options */
-        .export-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 15px;
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
         }
 
-        .export-option {
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-red);
+        }
+
+        .dark-mode ::-webkit-scrollbar-thumb {
+            background: #555;
+        }
+
+        .dark-mode ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-red);
+        }
+
+        .role-tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .role-tag {
+            padding: 6px 12px;
+            background: var(--accent-red);
+            color: var(--white);
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            animation: slideInUp 0.3s ease;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .role-tag .remove {
             cursor: pointer;
-            text-align: center;
-            font-size: 12px;
-            background: var(--light-gray);
-            transition: all 0.3s ease;
+            font-weight: 700;
+            margin-left: 4px;
         }
 
-        .dark-mode .export-option {
+        .role-tag .remove:hover {
+            opacity: 0.8;
+        }
+
+        .role-selector-multi {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+
+        .role-checkbox-item {
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background: var(--white);
+        }
+
+        .dark-mode .role-checkbox-item {
             background: #1a1a1a;
             border-color: #4a4a4a;
         }
 
-        .export-option:hover {
-            background: var(--accent-orange);
-            color: var(--white);
-            border-color: var(--accent-orange);
+        .role-checkbox-item:hover {
+            border-color: var(--accent-red);
+            background: rgba(231, 76, 60, 0.05);
         }
 
-        .export-option.active {
-            background: var(--accent-orange);
+        .dark-mode .role-checkbox-item:hover {
+            background: rgba(231, 76, 60, 0.1);
+        }
+
+        .role-checkbox-item input[type="checkbox"] {
+            cursor: pointer;
+            accent-color: var(--accent-red);
+            margin-top: 2px;
+        }
+
+        .role-checkbox-item.selected {
+            background: var(--accent-red);
             color: var(--white);
-            border-color: var(--accent-orange);
+            border-color: var(--accent-red);
+        }
+
+        .role-checkbox-item.selected .role-title,
+        .role-checkbox-item.selected .role-desc {
+            color: var(--white);
+        }
+
+        .role-info {
+            flex: 1;
+        }
+
+        .role-title {
+            font-weight: 700;
+            margin-bottom: 4px;
+            font-size: 12px;
+        }
+
+        .role-desc {
+            font-size: 11px;
+            opacity: 0.7;
+            line-height: 1.4;
+        }
+
+        .prompt-with-roles {
+            border: 2px dashed var(--accent-red);
+            padding: 12px;
+            border-radius: 8px;
+            background: rgba(231, 76, 60, 0.05);
+            margin-bottom: 12px;
+        }
+
+        .dark-mode .prompt-with-roles {
+            background: rgba(231, 76, 60, 0.1);
+        }
+
+        .prompt-with-roles-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--accent-red);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .combined-context {
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 11px;
+            line-height: 1.5;
+            color: var(--dark-gray);
+        }
+
+        .dark-mode .combined-context {
+            color: #b0b0b0;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- SIDEBAR -->
         <div class="sidebar">
             <div class="sidebar-header">
                 <div class="sidebar-title">
                     <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/>
                     </svg>
                     CCOO Negociación
                 </div>
-                <div class="sidebar-subtitle">AI Collective Bargaining</div>
+                <div class="sidebar-subtitle">AI Collective Bargaining Pro</div>
             </div>
 
             <div class="menu-section">
-                <div class="menu-label">Áreas de Trabajo</div>
+                <div class="menu-label">Áreas Temáticas</div>
                 <div class="menu-item active" data-area="salarial">
                     <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="1"/><path d="M12 1v6m0 6v4"/>
-                        <path d="M4.22 4.22l4.24 4.24m5.08 5.08l4.24 4.24"/>
-                        <path d="M1 12h6m6 0h4"/><path d="M4.22 19.78l4.24-4.24m5.08-5.08l4.24-4.24"/>
+                        <path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
                     </svg>
-                    <div class="menu-text">Salarial</div>
+                    <div>Salarial</div>
                 </div>
 
                 <div class="menu-item" data-area="comparativo">
                     <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="12 3 20 7.5 20 16.5 12 21 4 16.5 4 7.5 12 3"/>
-                        <polyline points="12 12 20 7.5"/><polyline points="12 12 12 21"/>
-                        <polyline points="12 12 4 7.5"/>
+                        <path d="M3 3v18h18"/><path d="M18 17V9m-5 8V5m-5 12V8"/>
                     </svg>
-                    <div class="menu-text">Análisis Comparativo</div>
+                    <div>Comparativo</div>
                 </div>
 
                 <div class="menu-item" data-area="ipc">
                     <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
                     </svg>
-                    <div class="menu-text">IPC y Prospección</div>
+                    <div>IPC y Prospección</div>
                 </div>
 
                 <div class="menu-item" data-area="busqueda">
                     <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
                     </svg>
-                    <div class="menu-text">Búsqueda Cláusulas</div>
+                    <div>Búsqueda Cláusulas</div>
                 </div>
 
                 <div class="menu-item" data-area="simulacion">
                     <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="10"/>
                     </svg>
-                    <div class="menu-text">Simulación</div>
-                </div>
-
-                <div class="menu-item" data-area="auditoria">
-                    <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 11l3 3L22 4"/><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                    <div class="menu-text">Auditoría</div>
+                    <div>Simulación</div>
                 </div>
 
                 <div class="menu-item" data-area="normativa">
                     <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
                     </svg>
-                    <div class="menu-text">Normativa UE</div>
+                    <div>Normativa UE</div>
                 </div>
             </div>
 
             <div class="sidebar-footer">
-                <button class="theme-toggle" id="themeToggle">
-                    <svg style="width: 16px; height: 16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/>
-                        <line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/>
-                        <line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                <button class="theme-toggle" id="themeToggle" title="Alternar tema">
+                    <svg style="width: 14px; height: 14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
                     </svg>
                     Tema
                 </button>
-                <button class="clear-btn" id="clearAllBtn">
-                    <svg style="width: 16px; height: 16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                        <line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>
+                <button class="clear-btn" id="clearAllBtn" title="Limpiar todo">
+                    <svg style="width: 14px; height: 14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>
                     </svg>
                     Limpiar
                 </button>
             </div>
         </div>
 
-        <!-- MAIN CONTENT -->
         <div class="main-content">
             <div class="header">
-                <div class="header-title" id="headerTitle">Salarial</div>
+                <div class="header-left">
+                    <div class="header-title" id="headerTitle">Análisis Salarial</div>
+                    <div class="model-indicator" id="modelIndicator">📊 GPT-4</div>
+                    <div class="roles-indicator hidden" id="rolesIndicator">🎯 0 roles</div>
+                </div>
                 <div class="header-actions">
                     <button class="btn btn-outline" id="resetPromptBtn">
-                        <svg style="width: 16px; height: 16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg style="width: 14px; height: 14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2-8.83"/>
                         </svg>
                         Restaurar
                     </button>
                     <button class="btn btn-primary" id="sendPromptBtn">
-                        <svg style="width: 16px; height: 16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg style="width: 14px; height: 14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
                         </svg>
                         Enviar
@@ -888,124 +1251,272 @@
             </div>
 
             <div class="content-wrapper">
-                <!-- MAIN PANEL -->
                 <div class="main-panel">
-                    <div class="panel-title" id="panelTitle">Análisis Salarial</div>
-
-                    <!-- API Config -->
-                    <div class="section-group">
-                        <div class="section-label">Configuración de API</div>
-                        
-                        <div id="apiStatus" class="api-status status-disconnected">
-                            <span class="status-indicator"></span>
-                            <span>No conectado</span>
-                        </div>
-
-                        <div class="api-form">
-                            <div class="form-group">
-                                <label class="form-label">Proveedor</label>
-                                <select id="apiProvider" class="form-select">
-                                    <option value="openai">OpenAI (GPT-4)</option>
-                                    <option value="claude">Claude (Anthropic)</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label">Modelo</label>
-                                <select id="modelSelect" class="form-select">
-                                    <option value="gpt-4">GPT-4</option>
-                                    <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group full">
-                                <label class="form-label">API Key</label>
-                                <input type="password" id="apiKey" class="form-input" placeholder="Tu API Key (no se guarda)">
-                            </div>
-
-                            <div class="form-group full">
-                                <label class="form-label">Temperatura</label>
-                                <input type="range" id="temperature" class="form-input" min="0" max="1" step="0.1" value="0.7">
-                                <span style="font-size: 11px; color: #666;">Valor: <span id="tempValue">0.7</span></span>
-                            </div>
-                        </div>
+                    <div class="panel-header">
+                        <div class="panel-title" id="panelTitle">Análisis Salarial y Negociación</div>
                     </div>
 
-                    <!-- Prompt Editor -->
-                    <div class="section-group">
-                        <div class="section-label">Prompt Personalizable</div>
-                        <textarea id="promptEditor" class="prompt-editor" placeholder="Tu prompt aquí..."></textarea>
-                        
-                        <div class="token-counter">
-                            <span>Tokens estimados: <strong id="tokenCount">0</strong></span>
-                            <button class="btn btn-outline" style="padding: 5px 10px; font-size: 11px;" id="copyPromptBtn">Copiar</button>
+                    <div class="panel-content">
+                        <div class="tabs-container">
+                            <button class="tab-button active" data-tab="editor">
+                                <svg style="width: 12px; height: 12px; display: inline-block; margin-right: 4px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                                Editor
+                            </button>
+                            <button class="tab-button" data-tab="roles">
+                                <svg style="width: 12px; height: 12px; display: inline-block; margin-right: 4px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                Roles
+                            </button>
+                            <button class="tab-button" data-tab="pruebas">
+                                <svg style="width: 12px; height: 12px; display: inline-block; margin-right: 4px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                Pruebas
+                            </button>
+                            <button class="tab-button" data-tab="modelos">
+                                <svg style="width: 12px; height: 12px; display: inline-block; margin-right: 4px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+                                Modelos
+                            </button>
                         </div>
-                    </div>
 
-                    <!-- Response Area -->
-                    <div class="section-group">
-                        <div class="section-label">Respuesta</div>
-                        <div id="responseArea" class="response-area">
-                            <div class="response-empty">La respuesta aparecerá aquí...</div>
+                        <div class="tab-content active" id="editor-tab">
+                            <div class="section-group">
+                                <div class="section-label">⚙️ Configuración API</div>
+                                <div class="api-form">
+                                    <div class="form-group">
+                                        <label class="form-label">Proveedor</label>
+                                        <select id="apiProvider" class="form-select">
+                                            <option value="openai">OpenAI (GPT-4)</option>
+                                            <option value="claude">Claude (Anthropic)</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Modelo</label>
+                                        <select id="modelSelect" class="form-select">
+                                            <option value="gpt-4">GPT-4</option>
+                                            <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group full">
+                                        <label class="form-label">API Key (no se guarda en servidor)</label>
+                                        <input type="password" id="apiKey" class="form-input" placeholder="Tu API Key">
+                                    </div>
+                                    <div class="form-group full">
+                                        <label class="form-label">Temperatura: <strong id="tempValue">0.7</strong></label>
+                                        <input type="range" id="temperature" class="form-input" min="0" max="1" step="0.1" value="0.7">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="section-group">
+                                <div class="section-label">👥 Roles Seleccionados</div>
+                                <div class="role-tag-container" id="selectedRolesContainer">
+                                    <span style="color: #999; font-size: 11px;">Sin roles seleccionados (ir a pestaña Roles)</span>
+                                </div>
+                            </div>
+
+                            <div class="section-group">
+                                <div class="section-label">📊 Estructura RICE del Prompt</div>
+                                <div class="rice-structure" id="riceStructure">
+                                    <div class="rice-item" data-rice="reach">
+                                        <div class="rice-label">Reach</div>
+                                        <div class="rice-value" id="riceReach">Cargando...</div>
+                                    </div>
+                                    <div class="rice-item" data-rice="impact">
+                                        <div class="rice-label">Impact</div>
+                                        <div class="rice-value" id="riceImpact">Cargando...</div>
+                                    </div>
+                                    <div class="rice-item" data-rice="confidence">
+                                        <div class="rice-label">Confidence</div>
+                                        <div class="rice-value" id="riceConfidence">Cargando...</div>
+                                    </div>
+                                    <div class="rice-item" data-rice="effort">
+                                        <div class="rice-label">Effort</div>
+                                        <div class="rice-value" id="riceEffort">Cargando...</div>
+                                    </div>
+                                </div>
+                                <div style="font-size: 10px; color: #666; margin-top: 6px; padding: 6px; background: var(--light-gray); border-radius: 4px;">
+                                    💡 Haz click en cualquier métrica RICE para añadirla al prompt
+                                </div>
+                            </div>
+
+                            <div class="section-group">
+                                <div class="section-label">📝 Prompt Personalizable</div>
+                                <div class="prompt-preview-label">
+                                    📌 Vista Previa del Prompt Combinado
+                                </div>
+                                <div class="prompt-preview" id="promptPreview">Selecciona roles y escribe tu prompt para ver la vista previa...</div>
+                                <textarea id="promptEditor" class="prompt-editor" placeholder="Tu prompt aquí..."></textarea>
+                                <div class="word-counter">
+                                    <span>Palabras: <strong id="wordCount">0</strong> | Caracteres: <strong id="charCount">0</strong> | Tokens est.: <strong id="tokenCount">0</strong></span>
+                                    <button class="btn btn-outline" style="padding: 4px 10px; font-size: 10px;" id="copyPromptBtn">
+                                        <svg style="width: 12px; height: 12px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+                                        Copiar
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="section-group">
+                                <div class="section-label">💬 Respuesta</div>
+                                <div id="responseArea" class="response-area">
+                                    <div class="response-empty">La respuesta aparecerá aquí...</div>
+                                </div>
+                                <div class="button-group">
+                                    <button class="btn btn-outline" id="copyResponseBtn">
+                                        <svg style="width: 12px; height: 12px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+                                        Copiar Respuesta
+                                    </button>
+                                    <button class="btn btn-outline" id="compareBtn" title="Comparar con otro modelo">
+                                        <svg style="width: 12px; height: 12px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 17V9m-5 8V5m-5 12V8"/></svg>
+                                        Comparar
+                                    </button>
+                                    <button class="btn btn-outline" id="favoriteBtn" title="Marcar como favorito">
+                                        <svg style="width: 12px; height: 12px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 10.26 24 10.27 17.18 16.70 20.31 25 12 19.54 3.69 25 6.82 16.70 0 10.27 8.91 10.26 12 2"/></svg>
+                                        Favorito
+                                    </button>
+                                    <button class="btn btn-outline" id="exportBtn">
+                                        <svg style="width: 12px; height: 12px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                        Exportar
+                                    </button>
+                                    <button class="btn btn-outline" id="clearResponseBtn">
+                                        <svg style="width: 12px; height: 12px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                                        Limpiar
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        
-                        <div class="button-group">
-                            <button class="btn btn-outline" id="copyResponseBtn">
-                                <svg style="width: 16px; height: 16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
-                                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
-                                </svg>
-                                Copiar
-                            </button>
-                            <button class="btn btn-outline" id="exportBtn">
-                                <svg style="width: 16px; height: 16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/>
-                                    <line x1="12" y1="15" x2="12" y2="3"/>
-                                </svg>
-                                Exportar
-                            </button>
-                            <button class="btn btn-outline" id="clearResponseBtn">
-                                <svg style="width: 16px; height: 16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                                </svg>
-                                Limpiar
-                            </button>
+
+                        <div class="tab-content" id="roles-tab">
+                            <div class="section-group">
+                                <div class="section-label">👥 Selecciona Múltiples Roles de Experto</div>
+                                <div style="font-size: 10px; color: #666; margin-bottom: 12px; padding: 8px; background: var(--light-gray); border-radius: 4px;">
+                                    ℹ️ Puedes seleccionar VARIOS roles. Sus contextos se combinarán en el prompt.
+                                </div>
+                                <div class="role-selector-multi" id="roleSelector">
+                                    <!-- Los roles se cargarán dinámicamente -->
+                                </div>
+                                <div style="margin-top: 12px;">
+                                    <button class="btn btn-secondary" id="clearRolesBtn" style="width: 100%; justify-content: center; gap: 8px;">
+                                        <svg style="width: 12px; height: 12px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                                        Limpiar Todos los Roles
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-content" id="pruebas-tab">
+                            <div class="section-group">
+                                <div class="section-label">🧪 Prueba tus Propios Prompts</div>
+                                
+                                <div class="form-group full">
+                                    <label class="form-label">Pega tu prompt personalizado</label>
+                                    <textarea id="customPrompt" class="prompt-editor" style="min-height: 140px;" placeholder="Pega aquí tu prompt personalizado..."></textarea>
+                                </div>
+
+                                <div class="api-form">
+                                    <div class="form-group">
+                                        <label class="form-label">Modelo</label>
+                                        <select id="customModel" class="form-select">
+                                            <option value="gpt-4">GPT-4</option>
+                                            <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                                            <option value="claude">Claude 3 Opus</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Rol</label>
+                                        <select id="customRole" class="form-select">
+                                            <option value="">General</option>
+                                            <option value="abogado">Abogado Laboralista</option>
+                                            <option value="seguridad">Experto Seguridad Social</option>
+                                            <option value="prestaciones">Experto Prestaciones</option>
+                                            <option value="datos">Analista de Datos</option>
+                                            <option value="negociacion">Experto Negociación</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <button class="btn btn-secondary" id="sendCustomPromptBtn" style="width: 100%; justify-content: center;">
+                                    <svg style="width: 14px; height: 14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                                    Enviar a Modelo
+                                </button>
+
+                                <div class="section-label" style="margin-top: 12px;">📋 Historial de Pruebas</div>
+                                <div id="customHistoryContainer" style="max-height: 250px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 6px; padding: 8px;">
+                                    <div style="text-align: center; color: #999; font-size: 11px; padding: 15px;">
+                                        Sin pruebas aún
+                                    </div>
+                                </div>
+
+                                <button class="btn btn-outline" id="exportHistoryBtn" style="width: 100%; justify-content: center; margin-top: 8px;">
+                                    <svg style="width: 14px; height: 14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="8 17 12 21 16 17M12 12v9M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/></svg>
+                                    Exportar Historial (JSON)
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="tab-content" id="modelos-tab">
+                            <div class="section-group">
+                                <div class="section-label">🔗 Accede Directamente a los Modelos</div>
+                                <div class="models-grid">
+                                    <a href="https://claude.ai" target="_blank" class="model-btn">
+                                        <div class="role-title">🤖 Claude Sonnet</div>
+                                        <div class="role-desc">Anthropic - Conversación avanzada</div>
+                                    </a>
+                                    <a href="https://chat.openai.com" target="_blank" class="model-btn">
+                                        <div class="role-title">✨ ChatGPT Plus</div>
+                                        <div class="role-desc">OpenAI - Última versión GPT-4</div>
+                                    </a>
+                                    <a href="https://gemini.google.com" target="_blank" class="model-btn">
+                                        <div class="role-title">🌟 Google Gemini</div>
+                                        <div class="role-desc">Google - Análisis multimodal</div>
+                                    </a>
+                                    <a href="https://copilot.microsoft.com" target="_blank" class="model-btn">
+                                        <div class="role-title">💼 Microsoft Copilot</div>
+                                        <div class="role-desc">Integración Microsoft - Productividad</div>
+                                    </a>
+                                    <a href="https://www.perplexity.ai" target="_blank" class="model-btn">
+                                        <div class="role-title">🔍 Perplexity AI</div>
+                                        <div class="role-desc">Búsqueda en tiempo real - Investigación</div>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- CONFIG PANEL -->
                 <div class="config-panel">
-                    <div class="config-title">Historial</div>
-                    <div id="historyContainer" style="max-height: 400px; overflow-y: auto;">
-                        <div style="text-align: center; color: #999; font-size: 12px; padding: 20px;">
-                            Sin historial aún
+                    <div class="config-section">
+                        <div class="config-title">📜 Historial</div>
+                        <div id="historyContainer" style="max-height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px;">
+                            <div style="text-align: center; color: #999; font-size: 11px; padding: 15px;">
+                                Sin historial aún
+                            </div>
                         </div>
                     </div>
 
                     <div class="config-section">
-                        <div class="config-title">Acciones</div>
-                        <div class="button-group" style="flex-direction: column;">
-                            <button class="btn btn-outline" id="importBtn" style="justify-content: center;">
-                                <svg style="width: 16px; height: 16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/>
-                                    <line x1="12" y1="3" x2="12" y2="15"/>
-                                </svg>
+                        <div class="config-title">⭐ Favoritos</div>
+                        <div id="favoritesContainer" style="max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px;">
+                            <div style="text-align: center; color: #999; font-size: 11px; padding: 12px;">
+                                Sin favoritos
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="config-section">
+                        <div class="config-title">💾 Acciones</div>
+                        <div class="button-group vertical">
+                            <button class="btn btn-outline" id="importBtn" style="justify-content: center; font-size: 11px;">
+                                <svg style="width: 12px; height: 12px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                                 Importar Config
                             </button>
-                            <button class="btn btn-outline" id="exportConfigBtn" style="justify-content: center;">
-                                <svg style="width: 16px; height: 16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/>
-                                    <line x1="12" y1="15" x2="12" y2="3"/>
-                                </svg>
+                            <button class="btn btn-outline" id="exportConfigBtn" style="justify-content: center; font-size: 11px;">
+                                <svg style="width: 12px; height: 12px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                                 Exportar Config
                             </button>
                         </div>
                     </div>
 
                     <div class="config-section">
-                        <div class="config-title">Info</div>
-                        <div style="font-size: 12px; line-height: 1.5; color: var(--dark-gray);">
+                        <div class="config-title">ℹ️ Información</div>
+                        <div style="font-size: 11px; line-height: 1.6; color: var(--dark-gray);">
                             <strong>Área:</strong> <span id="areaInfo">Salarial</span><br>
                             <strong>Última actualización:</strong> <span id="lastUpdate">Nunca</span><br>
                             <strong>Total de llamadas:</strong> <span id="callCount">0</span>
@@ -1016,32 +1527,35 @@
         </div>
     </div>
 
-    <!-- MODAL EXPORTAR -->
     <div id="exportModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">Exportar Informe</div>
+            <div class="modal-header">📥 Exportar Informe</div>
             <div class="modal-body">
                 <div class="section-label">Formato</div>
-                <div class="export-grid">
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px;">
                     <div class="export-option active" data-format="pdf">📄 PDF</div>
                     <div class="export-option" data-format="docx">📝 Word</div>
                     <div class="export-option" data-format="xlsx">📊 Excel</div>
                 </div>
 
-                <div style="margin-top: 20px;">
+                <div>
                     <div class="section-label">Incluir en el Informe</div>
-                    <div style="display: flex; flex-direction: column; gap: 10px;">
-                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px;">
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 12px;">
                             <input type="checkbox" class="export-item-check" value="prompt" checked>
                             <span>Prompt utilizado</span>
                         </label>
-                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px;">
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 12px;">
                             <input type="checkbox" class="export-item-check" value="response" checked>
                             <span>Respuesta</span>
                         </label>
-                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px;">
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 12px;">
                             <input type="checkbox" class="export-item-check" value="metadata" checked>
-                            <span>Metadatos (fecha, modelo)</span>
+                            <span>Metadatos (fecha, modelo, roles)</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 12px;">
+                            <input type="checkbox" class="export-item-check" value="rice">
+                            <span>Estructura RICE</span>
                         </label>
                     </div>
                 </div>
@@ -1053,15 +1567,147 @@
         </div>
     </div>
 
+    <div id="compareModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">⚖️ Comparar Respuestas de Modelos</div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Selecciona segundo modelo para comparar</label>
+                    <select id="compareModelSelect" class="form-select">
+                        <option value="gpt-4">GPT-4</option>
+                        <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                        <option value="claude">Claude 3 Opus</option>
+                    </select>
+                </div>
+                <div style="margin-top: 15px; padding: 12px; background: var(--light-gray); border-radius: 6px;">
+                    <div style="font-size: 11px; color: #666; line-height: 1.5;">
+                        ℹ️ Se enviará el mismo prompt al modelo seleccionado y podrás ver las respuestas lado a lado.
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="closeCompareBtn">Cancelar</button>
+                <button class="btn btn-secondary" id="confirmCompareBtn">Comparar</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // ========== CONFIGURACIÓN BASE ==========
+        const ROLES = {
+            abogado: {
+                name: '⚖️ Abogado Laboralista',
+                description: 'Análisis jurídico de convenios y normativa',
+                prompt: `Como abogado laboralista especializado en negociación colectiva para CCOO:
+
+[CONTEXTO JURÍDICO]
+
+Proporciona:
+1. Análisis jurídico detallado según Estatuto de los Trabajadores
+2. Jurisprudencia aplicable (sentencias relevantes)
+3. Validez legal de las cláusulas propuestas
+4. Riesgos legales identificados
+5. Recomendaciones normativas`,
+                rice: {
+                    reach: 'Abogados, negociadores, sindicatos',
+                    impact: 'Cumplimiento normativo, defensa legal',
+                    confidence: 'Alto',
+                    effort: 'Medio'
+                }
+            },
+            seguridad: {
+                name: '🛡️ Experto Seguridad Social y Pensiones',
+                description: 'Análisis de cotización, afiliación y jubilación',
+                prompt: `Como experto en Seguridad Social y sistema de pensiones para CCOO:
+
+[DATOS DE AFILIACIÓN Y COTIZACIÓN]
+
+Analiza:
+1. Impacto en cotizaciones y bases de afiliación
+2. Configuración de pagas extras en cálculo de pensión
+3. Efectos en jubilación anticipada o ampliada
+4. Derechos de compatibilidad trabajo-pensión
+5. Optimización de bases de cotización`,
+                rice: {
+                    reach: 'Trabajadores, técnicos RRHH, jubilados',
+                    impact: 'Incremento pensión, derechos de jubilación',
+                    confidence: 'Alto',
+                    effort: 'Alto'
+                }
+            },
+            prestaciones: {
+                name: '💰 Experto en Prestaciones',
+                description: 'Subsidios, desempleo, incapacidad',
+                prompt: `Como experto en prestaciones sociales para CCOO:
+
+[SITUACIÓN DE PRESTACIONES]
+
+Analiza:
+1. Derechos a desempleo (duración, cuantía)
+2. Incapacidad temporal y permanente
+3. Prestaciones por cuidado de hijos
+4. Excedencias y sus implicaciones
+5. Complementos por vulnerabilidad`,
+                rice: {
+                    reach: 'Trabajadores en situación vulnerable',
+                    impact: 'Protección social, ingresos garantizados',
+                    confidence: 'Medio-Alto',
+                    effort: 'Medio'
+                }
+            },
+            datos: {
+                name: '📊 Experto en Análisis de Datos',
+                description: 'Estadística, comparativas, proyecciones',
+                prompt: `Como experto en análisis de datos e índices económicos para CCOO:
+
+[DATOS ECONÓMICOS Y ESTADÍSTICOS]
+
+Realiza:
+1. Análisis estadístico descriptivo e inferencial
+2. Comparativas sectoriales con z-scores
+3. Proyecciones IPC y evolución salarial
+4. Simulaciones de escenarios económicos
+5. Visualización de tendencias`,
+                rice: {
+                    reach: 'Analistas, técnicos económicos',
+                    impact: 'Argumentación basada en datos',
+                    confidence: 'Alto',
+                    effort: 'Bajo-Medio'
+                }
+            },
+            negociacion: {
+                name: '🎯 Experto en Negociación Colectiva',
+                description: 'Estrategia, tácticas, fases de negociación',
+                prompt: `Como experto en negociación colectiva estratégica para CCOO:
+
+[CONTEXTO DE NEGOCIACIÓN]
+
+Proporciona:
+1. Mapeo de posiciones inicial, objetiva y límite
+2. Análisis FODA de ambas partes
+3. Calendario estratégico de fases
+4. Tácticas de aproximación y presión
+5. Contingencias y planes B`,
+                rice: {
+                    reach: 'Negociadores, ejecutivas sindicales',
+                    impact: 'Mejora condiciones laborales',
+                    confidence: 'Medio',
+                    effort: 'Alto'
+                }
+            }
+        };
+
         const AREAS = {
             salarial: {
-                title: 'Salarial',
-                panelTitle: 'Análisis Salarial y Propuestas',
+                title: 'Análisis Salarial',
+                panelTitle: 'Análisis Salarial y Propuestas de Mejora',
                 prompt: `Como experto en negociación colectiva para CCOO en el sector servicios, analiza la siguiente situación salarial:
 
-[CONTEXTO A COMPLETAR]
+[CONTEXTO SALARIAL A COMPLETAR]
+- Salario base actual
+- Complementos existentes
+- Variaciones IPC
+- Histórico de incrementos
+- Posición patronal
 
 Proporciona:
 1. Análisis actual del poder adquisitivo
@@ -1069,29 +1715,49 @@ Proporciona:
 3. Contrapropuestas probables de la patronal
 4. Argumentos para sustentar tu posición
 5. Puntos de inflexión en la negociación`,
+                rice: {
+                    reach: 'Negociadores, trabajadores, sindicatos',
+                    impact: 'Incremento del poder adquisitivo',
+                    confidence: 'Alto',
+                    effort: 'Bajo'
+                },
                 model: 'gpt-4'
             },
             comparativo: {
                 title: 'Análisis Comparativo',
-                panelTitle: 'Comparativa de Convenios',
+                panelTitle: 'Comparativa Integral de Convenios',
                 prompt: `Como especialista en análisis de convenios colectivos para CCOO, realiza una comparativa entre:
 
 [CONVENIOS A COMPARAR]
+- Estructura salarial (base, complementos, pagas)
+- Beneficios sociales
+- Horarios y jornada
+- Sistemas de clasificación
 
 Incluye:
-1. Diferencias en estructura salarial
+1. Diferencias en estructura salarial (tablas)
 2. Ventajas y desventajas relativas
 3. Claúsulas diferenciadoras
 4. Tendencias de mejora o retroceso
 5. Benchmarking con el sector`,
+                rice: {
+                    reach: 'Técnicos CCOO, negociadores',
+                    impact: 'Identificación de mejoras posibles',
+                    confidence: 'Alto',
+                    effort: 'Medio'
+                },
                 model: 'gpt-4'
             },
             ipc: {
                 title: 'IPC y Prospección',
-                panelTitle: 'Análisis IPC y Proyecciones',
+                panelTitle: 'Análisis IPC y Proyecciones Económicas',
                 prompt: `Como economista laboral para CCOO, analiza el impacto del IPC en la negociación:
 
 [DATOS IPC Y TEMPORALIDAD]
+- Histórico IPC últimos 3 años
+- Proyecciones oficiales
+- Poder adquisitivo actual
+- Pérdida salarial acumulada
 
 Realiza:
 1. Análisis histórico del IPC últimos 3 años
@@ -1099,14 +1765,23 @@ Realiza:
 3. Impacto en poder adquisitivo de los trabajadores
 4. Pérdida salarial estimada si no hay incrementos
 5. Propuestas de cláusula de revisión salarial`,
+                rice: {
+                    reach: 'Técnicos económicos, toda la plantilla',
+                    impact: 'Recuperación de poder adquisitivo',
+                    confidence: 'Medio-Alto',
+                    effort: 'Bajo-Medio'
+                },
                 model: 'gpt-4'
             },
             busqueda: {
                 title: 'Búsqueda de Cláusulas',
-                panelTitle: 'Búsqueda y Análisis de Cláusulas',
+                panelTitle: 'Búsqueda y Análisis de Cláusulas Específicas',
                 prompt: `Como asesor legal de CCOO, busca y analiza cláusulas en convenios colectivos:
 
 [TÉRMINO A BUSCAR / TIPO DE CLÁUSULA]
+- Descripción de la cláusula
+- Tipo (obligatoria, negociable)
+- Referencias en convenios previos
 
 Proporciona:
 1. Definición y propósito de la cláusula
@@ -1114,14 +1789,24 @@ Proporciona:
 3. Mejores prácticas identificadas
 4. Riesgos y oportunidades
 5. Recomendación para tu negociación`,
+                rice: {
+                    reach: 'Abogados, técnicos negociación',
+                    impact: 'Fundamentación legal de propuestas',
+                    confidence: 'Alto',
+                    effort: 'Bajo'
+                },
                 model: 'gpt-4'
             },
             simulacion: {
                 title: 'Simulación',
-                panelTitle: 'Simulación de Negociación',
+                panelTitle: 'Simulación Dinámica de Negociación',
                 prompt: `Como mediador en negociación colectiva para CCOO, simula un escenario de negociación:
 
 [DEFINE LA POSICIÓN INICIAL, OBJETIVOS Y LÍMITES]
+- Posición inicial CCOO
+- Objetivo (lo que esperas conseguir)
+- Límite (mínimo aceptable)
+- Contraparte (posición esperada)
 
 Realiza simulación donde:
 1. Presento la posición de CCOO (trabajadores)
@@ -1129,29 +1814,23 @@ Realiza simulación donde:
 3. Identifico puntos de acuerdo potencial
 4. Propongo estrategia de aproximación
 5. Simulo posible acuerdo final`,
-                model: 'gpt-4'
-            },
-            auditoria: {
-                title: 'Auditoría',
-                panelTitle: 'Auditoría de Convenios',
-                prompt: `Como auditor de cumplimiento de CCOO, audita el cumplimiento del convenio:
-
-[DATOS DEL CONVENIO Y EMPRESA A AUDITAR]
-
-Incluye:
-1. Verificación de aplicación correcta del convenio
-2. Identificación de posibles incumplimientos
-3. Análisis de represalias o discriminación
-4. Propuesta de mejoras de cumplimiento
-5. Pasos para acciones correctivas`,
+                rice: {
+                    reach: 'Negociadores, ejecutivas',
+                    impact: 'Preparación de negociación',
+                    confidence: 'Medio',
+                    effort: 'Medio'
+                },
                 model: 'gpt-4'
             },
             normativa: {
                 title: 'Normativa UE',
-                panelTitle: 'Normativa UE y Cambios',
+                panelTitle: 'Análisis de Normativa Europea y Cambios',
                 prompt: `Como asesor en normativa europea para CCOO, analiza el impacto de normativa UE:
 
 [NORMATIVA UE RELEVANTE O CAMBIO A ANALIZAR]
+- Directiva o regulación específica
+- Fecha de aplicación
+- Impacto sectorial esperado
 
 Analiza:
 1. Nuevas exigencias de la normativa UE
@@ -1159,18 +1838,26 @@ Analiza:
 3. Nuevas cláusulas recomendadas por normativa UE
 4. Impacto en derechos de trabajadores
 5. Acciones de adaptación necesarias`,
+                rice: {
+                    reach: 'Sindicatos, trabajadores internacionales',
+                    impact: 'Armonización normativa, nuevos derechos',
+                    confidence: 'Medio-Alto',
+                    effort: 'Medio-Alto'
+                },
                 model: 'gpt-4'
             }
         };
 
-        // ========== ESTADO GLOBAL ==========
         let currentArea = 'salarial';
         let currentResponse = '';
+        let currentResponseRoles = [];
+        let selectedRoles = new Set();
         let callHistory = [];
+        let customHistory = [];
+        let favorites = [];
         let callCount = 0;
         let isDarkMode = localStorage.getItem('darkMode') === 'true';
 
-        // ========== INICIALIZACIÓN ==========
         document.addEventListener('DOMContentLoaded', () => {
             initializeApp();
         });
@@ -1179,13 +1866,130 @@ Analiza:
             loadLocalStorage();
             setupEventListeners();
             switchArea('salarial');
+            renderRoles();
             if (isDarkMode) toggleDarkMode();
-            updateTokenCount();
+            updateMetrics();
+            updateSelectedRolesDisplay();
         }
 
-        // ========== EVENT LISTENERS ==========
+        function renderRoles() {
+            const container = document.getElementById('roleSelector');
+            container.innerHTML = Object.entries(ROLES).map(([key, role]) => `
+                <label class="role-checkbox-item" data-role="${key}">
+                    <input type="checkbox" value="${key}">
+                    <div class="role-info">
+                        <div class="role-title">${role.name}</div>
+                        <div class="role-desc">${role.description}</div>
+                    </div>
+                </label>
+            `).join('');
+
+            document.querySelectorAll('.role-checkbox-item input').forEach(checkbox => {
+                checkbox.addEventListener('change', (e) => {
+                    toggleRole(e.target.value, e.target.checked);
+                });
+            });
+        }
+
+        function toggleRole(roleKey, isChecked) {
+            if (isChecked) {
+                selectedRoles.add(roleKey);
+                document.querySelector(`[data-role="${roleKey}"]`).classList.add('selected');
+            } else {
+                selectedRoles.delete(roleKey);
+                document.querySelector(`[data-role="${roleKey}"]`).classList.remove('selected');
+            }
+            updateSelectedRolesDisplay();
+            updatePromptPreview();
+            updateRiceFromRoles();
+            saveToLocalStorage();
+        }
+
+        function updateSelectedRolesDisplay() {
+            const container = document.getElementById('selectedRolesContainer');
+            const indicator = document.getElementById('rolesIndicator');
+
+            if (selectedRoles.size === 0) {
+                container.innerHTML = '<span style="color: #999; font-size: 11px;">Sin roles seleccionados (ir a pestaña Roles)</span>';
+                indicator.classList.add('hidden');
+            } else {
+                const tags = Array.from(selectedRoles).map(key => {
+                    const role = ROLES[key];
+                    return `<div class="role-tag">
+                        ${role.name}
+                        <span class="remove" onclick="removeRole('${key}')">×</span>
+                    </div>`;
+                }).join('');
+                container.innerHTML = tags;
+                indicator.classList.remove('hidden');
+                indicator.textContent = `🎯 ${selectedRoles.size} rol${selectedRoles.size !== 1 ? 'es' : ''}`;
+                if (selectedRoles.size > 1) {
+                    indicator.classList.add('multiple');
+                } else {
+                    indicator.classList.remove('multiple');
+                }
+            }
+        }
+
+        function removeRole(roleKey) {
+            selectedRoles.delete(roleKey);
+            document.querySelector(`[data-role="${roleKey}"] input`).checked = false;
+            updateSelectedRolesDisplay();
+            updatePromptPreview();
+            updateRiceFromRoles();
+            saveToLocalStorage();
+        }
+
+        function updatePromptPreview() {
+            const preview = document.getElementById('promptPreview');
+            const basePrompt = document.getElementById('promptEditor').value;
+
+            if (selectedRoles.size === 0) {
+                preview.textContent = 'Selecciona roles para ver la vista previa del prompt combinado...';
+                return;
+            }
+
+            let combined = '=== CONTEXTOS DE ROLES SELECCIONADOS ===\n\n';
+            Array.from(selectedRoles).forEach(roleKey => {
+                const role = ROLES[roleKey];
+                combined += `▶ ${role.name}\n${role.prompt}\n\n`;
+            });
+
+            combined += '=== TU PROMPT BASE ===\n' + basePrompt;
+            preview.textContent = combined.substring(0, 500) + (combined.length > 500 ? '...[vista completa al enviar]' : '');
+        }
+
+        function updateRiceFromRoles() {
+            if (selectedRoles.size === 0) {
+                const area = AREAS[currentArea];
+                if (area) updateRiceStructure(area.rice);
+                return;
+            }
+
+            let combinedRice = {
+                reach: [],
+                impact: [],
+                confidence: [],
+                effort: []
+            };
+
+            Array.from(selectedRoles).forEach(roleKey => {
+                const role = ROLES[roleKey];
+                combinedRice.reach.push(role.rice.reach);
+                combinedRice.impact.push(role.rice.impact);
+                combinedRice.confidence.push(role.rice.confidence);
+                combinedRice.effort.push(role.rice.effort);
+            });
+
+            updateRiceStructure({
+                reach: combinedRice.reach.join(' + '),
+                impact: combinedRice.impact.join(' + '),
+                confidence: combinedRice.confidence.join(' + '),
+                effort: combinedRice.effort.join(' + ')
+            });
+        }
+
         function setupEventListeners() {
-            // Menu items
             document.querySelectorAll('.menu-item').forEach(item => {
                 item.addEventListener('click', (e) => {
                     const area = e.currentTarget.dataset.area;
@@ -1193,21 +1997,31 @@ Analiza:
                 });
             });
 
-            // Main buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const tabName = e.currentTarget.dataset.tab;
+                    switchTab(tabName);
+                });
+            });
+
             document.getElementById('sendPromptBtn').addEventListener('click', sendPrompt);
             document.getElementById('resetPromptBtn').addEventListener('click', resetPrompt);
             document.getElementById('copyPromptBtn').addEventListener('click', copyPrompt);
             document.getElementById('copyResponseBtn').addEventListener('click', copyResponse);
             document.getElementById('clearResponseBtn').addEventListener('click', clearResponse);
+            document.getElementById('compareBtn').addEventListener('click', openCompareModal);
             document.getElementById('exportBtn').addEventListener('click', openExportModal);
+            document.getElementById('favoriteBtn').addEventListener('click', toggleFavorite);
             document.getElementById('themeToggle').addEventListener('click', toggleDarkMode);
             document.getElementById('clearAllBtn').addEventListener('click', clearAll);
+            document.getElementById('clearRolesBtn').addEventListener('click', clearAllRoles);
 
-            // Config buttons
+            document.getElementById('sendCustomPromptBtn').addEventListener('click', sendCustomPrompt);
+            document.getElementById('exportHistoryBtn').addEventListener('click', exportCustomHistory);
+
             document.getElementById('importBtn').addEventListener('click', importConfig);
             document.getElementById('exportConfigBtn').addEventListener('click', exportConfig);
 
-            // API config
             document.getElementById('temperature').addEventListener('input', (e) => {
                 document.getElementById('tempValue').textContent = e.target.value;
             });
@@ -1216,13 +2030,22 @@ Analiza:
                 updateModelOptions(e.target.value);
             });
 
-            // Prompt editor
-            document.getElementById('promptEditor').addEventListener('input', () => {
-                saveToLocalStorage();
-                updateTokenCount();
+            ['promptEditor', 'customPrompt'].forEach(id => {
+                document.getElementById(id).addEventListener('input', () => {
+                    saveToLocalStorage();
+                    updateTokenCount();
+                    updatePromptPreview();
+                });
             });
 
-            // Export modal
+            document.querySelectorAll('.rice-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    const riceType = e.currentTarget.dataset.rice;
+                    const value = document.getElementById('rice' + riceType.charAt(0).toUpperCase() + riceType.slice(1)).textContent;
+                    insertRiceToPrompt(riceType, value);
+                });
+            });
+
             document.querySelectorAll('.export-option').forEach(opt => {
                 opt.addEventListener('click', (e) => {
                     document.querySelectorAll('.export-option').forEach(o => o.classList.remove('active'));
@@ -1232,43 +2055,76 @@ Analiza:
 
             document.getElementById('closeExportBtn').addEventListener('click', closeExportModal);
             document.getElementById('confirmExportBtn').addEventListener('click', performExport);
+
+            document.getElementById('closeCompareBtn').addEventListener('click', closeCompareModal);
+            document.getElementById('confirmCompareBtn').addEventListener('click', performComparison);
         }
 
-        // ========== AREA SWITCHING ==========
+        function insertRiceToPrompt(riceType, value) {
+            const editor = document.getElementById('promptEditor');
+            const cursor = editor.selectionStart;
+            const prefix = riceType.charAt(0).toUpperCase() + riceType.slice(1);
+            const insertion = `\n[${prefix.toUpperCase()}: ${value}]\n`;
+            
+            const newText = editor.value.substring(0, cursor) + insertion + editor.value.substring(cursor);
+            editor.value = newText;
+            editor.selectionStart = cursor + insertion.length;
+            editor.focus();
+            
+            updateTokenCount();
+            updatePromptPreview();
+            saveToLocalStorage();
+            showNotification(`Métrica RICE añadida: ${prefix}`, 'info');
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+        }
+
         function switchArea(area) {
             if (!AREAS[area]) return;
 
             currentArea = area;
             const areaData = AREAS[area];
 
-            // Update active menu item
             document.querySelectorAll('.menu-item').forEach(item => {
                 item.classList.remove('active');
             });
             document.querySelector(`[data-area="${area}"]`).classList.add('active');
 
-            // Update header
             document.getElementById('headerTitle').textContent = areaData.title;
             document.getElementById('panelTitle').textContent = areaData.panelTitle;
             document.getElementById('areaInfo').textContent = areaData.title;
+            document.getElementById('modelIndicator').textContent = `📊 ${areaData.model.toUpperCase()}`;
 
-            // Update prompt
             document.getElementById('promptEditor').value = areaData.prompt;
             document.getElementById('modelSelect').value = areaData.model;
+            updateRiceFromRoles();
 
-            // Load response if exists
             loadAreaResponse(area);
             updateTokenCount();
+            updatePromptPreview();
             saveToLocalStorage();
         }
 
-        // ========== PROMPT MANAGEMENT ==========
+        function updateRiceStructure(rice) {
+            if (!rice) {
+                document.getElementById('riceStructure').innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #999; font-size: 11px; padding: 10px;">Estructura no disponible</div>';
+                return;
+            }
+            document.getElementById('riceReach').textContent = rice.reach;
+            document.getElementById('riceImpact').textContent = rice.impact;
+            document.getElementById('riceConfidence').textContent = rice.confidence;
+            document.getElementById('riceEffort').textContent = rice.effort;
+        }
+
         function sendPrompt() {
             const apiKey = document.getElementById('apiKey').value.trim();
-            const provider = document.getElementById('apiProvider').value;
-            const model = document.getElementById('modelSelect').value;
             const prompt = document.getElementById('promptEditor').value;
-            const temperature = parseFloat(document.getElementById('temperature').value);
 
             if (!apiKey) {
                 showNotification('Por favor, introduce tu API Key', 'warning');
@@ -1280,122 +2136,249 @@ Analiza:
                 return;
             }
 
-            const responseArea = document.getElementById('responseArea');
-            responseArea.innerHTML = '<div class="response-loading"><div class="spinner"></div><span>Procesando...</span></div>';
+            showLoading();
+            currentResponseRoles = Array.from(selectedRoles);
+            setTimeout(() => generateMockResponse(prompt, currentArea), 1500);
+        }
 
-            // Simular llamada a API (en producción, llamarías a tu backend)
+        function sendCustomPrompt() {
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const prompt = document.getElementById('customPrompt').value;
+            const model = document.getElementById('customModel').value;
+
+            if (!apiKey) {
+                showNotification('Por favor, introduce tu API Key', 'warning');
+                return;
+            }
+
+            if (!prompt.trim()) {
+                showNotification('Por favor, introduce un prompt', 'warning');
+                return;
+            }
+
+            showLoading();
             setTimeout(() => {
-                generateMockResponse(prompt, provider, model);
+                const response = `[Respuesta simulada para el modelo ${model}]\n\n` + generateMockResponse(prompt, 'custom', true);
+                addToCustomHistory({
+                    prompt: prompt,
+                    response: response,
+                    model: model,
+                    role: document.getElementById('customRole').value,
+                    timestamp: new Date().toISOString()
+                });
             }, 1500);
         }
 
-        function generateMockResponse(prompt, provider, model) {
-            // Simulación de respuesta (en producción, sería una llamada a API real)
-            const mockResponses = {
-                salarial: `ANÁLISIS SALARIAL - SECTOR SERVICIOS CCOO\n\n1. SITUACIÓN ACTUAL\n- Poder adquisitivo: -2.5% interanual\n- Inflación acumulada: 6.2%\n- Pérdida salarial estimada: 850€/trabajador/año\n\n2. PROPUESTA SALARIAL\n- Incremento del 5.5% en 2024\n- Revisión adicional según IPC si supera 3%\n- Complementos vinculados al convenio\n\n3. CONTRAPROPUESTAS ESPERADAS\n- Patronal ofertará máximo 3%\n- Argumentarán crisis económica\n- Propondrán aumentos escalonados\n\n4. ARGUMENTOS CCOO\n- Crecimiento del sector servicios: +4.8%\n- Márgenes empresariales en recuperación\n- Derecho a recuperar poder adquisitivo\n- Comparativa con otros convenios del sector\n\n5. PUNTOS DE INFLEXIÓN\n- Aceptación incremento 4.5% como mínimo\n- Inclusión revisión salarial automática\n- Mejora complementos de turnicidad\n- Garantía de mantenimiento de plantilla`,
-                comparativo: `ANÁLISIS COMPARATIVO DE CONVENIOS\n\n1. ESTRUCTURA SALARIAL\nConvenio A (Hipermercados):\n- Base: 950€ + complementos (150€)\n- Incremento anual histórico: 2.5%\n\nConvenio B (Comercio Especializado):\n- Base: 980€ + complementos (180€)\n- Incremento anual histórico: 3.2%\n\n2. VENTAJAS COMPARATIVAS\nConvenio B presenta:\n- +30€ mensuales en complementos\n- Mayor automatismo en revisiones salariales\n- Mejores garantías de empleo\n\n3. CLAÚSULAS DIFERENCIADORAS\n- Movilidad geográfica\n- Flexibilidad horaria\n- Formación y desarrollo\n\n4. BENCHMARKING\nSector servicios media: 1.100€\nNuestro convenio: 1.100€\nPosición: Medio`,
-                ipc: `ANÁLISIS IPC Y PROSPECCIÓN\n\n1. HISTÓRICO IPC (3 ÚLTIMOS AÑOS)\n2021: 3.1%\n2022: 8.4%\n2023: 4.2%\nMedia acumulada: 5.2%\n\n2. PROYECCIONES 2024\n- Proyección BCE: 2.1%\n- Proyección análistas: 2.4% - 3.1%\n- Escenario conservador: 2.0%\n\n3. IMPACTO EN PODER ADQUISITIVO\nSi IPC es 2.5% y salarial 2.0%:\n- Pérdida: -0.5% anual\n- 850€ trabajador/año\n\n4. PÉRDIDA ACUMULADA\nÚltimos 3 años: -1,200€ por trabajador\n\n5. CLÁUSULAS RECOMENDADAS\n- Revisión automática si IPC > 2%\n- Recuperación retroactiva\n- Garantía de poder adquisitivo`,
-                busqueda: `ANÁLISIS DE CLÁUSULAS DE TURNICIDAD\n\n1. DEFINICIÓN\nCompensación por trabajo en turnos\n(mañana, tarde, noche)\n\n2. VARIACIONES EN SECTOR\n- Complemento fijo: 80-150€\n- Porcentaje variable: 5-15%\n- Por tipo de turno: 10-30€\n\n3. MEJORES PRÁCTICAS\n- Horarios predeterminados 30 días antes\n- Compensación diferenciada noche\n- Límites de rotación: máx 6 meses\n\n4. RIESGOS\n- Pérdida poder adquisitivo si indexación\n- Vulnerabilidad a jornada reducida\n\n5. RECOMENDACIÓN\nNegociar complemento fijo + variable\nMínimo 120€ fixo para turnicidad`,
-                simulacion: `SIMULACIÓN DE NEGOCIACIÓN - SESIÓN 1\n\nPOSICIÓN INICIAL CCOO:\n- Incremento: 5.5%\n- Revisión por IPC >2%\n- Mejora complementos\n\nCONTRAPROPUESTA PATRONAL ESPERADA:\n- Incremento: 2.5%\n- Argumentan crisis de demanda\n- Ofrecen aumentos escalonados\n\nANÁLISIS NEGOCIACIÓN:\n✓ Terreno intermedio: 3.8-4.2%\n✓ Aceptable con mejoras complementos\n✗ No aceptar menos de 3.5%\n\nESTRATEGIA PROPUESTA:\n1. Mantener 5.5% como anclaje\n2. Segunda vuelta bajar a 4.5%\n3. Tercera vuelta negociar 4.2%\n4. Vincular a mejoras garantía empleo\n\nACUERDO PROBABLE:\n4.2% + revisión si IPC>2.5% + mejora complementos`,
-                auditoria: `AUDITORÍA DE CUMPLIMIENTO\n\n1. VERIFICACIÓN\n✓ Aplicación correcta tablas salariales\n✓ Pago complementos según convenio\n✓ Garantías de jornada\n✓ Descansos y festivos\n\n2. INCUMPLIMIENTOS DETECTADOS\n⚠ Demoras pago complementos: 15 días\n⚠ No aplicación cláusula turnicidad\n⚠ Jornadas superiores a convenio\n\n3. DISCRIMINACIÓN\n✗ No se detecta discriminación directa\n⚠ Posible trato diferenciado en promoción\n\n4. MEJORAS NECESARIAS\n- Digitalización nóminas\n- Sistema de control turnos\n- Capacitación RRHH\n\n5. ACCIONES\n- Notificación formales\n- Período corrección: 30 días\n- Reclamo seguimiento`,
-                normativa: `ANÁLISIS NORMATIVA UE - 2024\n\n1. NUEVAS EXIGENCIAS\nDirectiva 2023/XYZ:\n- Transparencia salarial\n- Igualdad de retribución\n- Derecho a desconexión\n\n2. CLÁUSULAS OBSOLETAS\n- Términos genéricos de flexibilidad\n- Falta especificación derechos digitales\n- Insuficiencia en privacidad datos\n\n3. NUEVAS CLÁUSULAS RECOMENDADAS\n- Right to disconnect\n- Algoritmos decisiones RRHH\n- Protección datos biométricos\n- Flexibilidad horaria estructurada\n\n4. IMPACTO DERECHOS\n- Mayor poder trabajadores\n- Mejor balance vida-trabajo\n- Protección privacidad reforzada\n\n5. ADAPTACIÓN NECESARIA\nActualizar convenio en próxima ronda\nIncluir nuevos derechos digitales`
+        function generateMockResponse(prompt, area = 'custom', isCustom = false) {
+            const responses = {
+                salarial: `ANÁLISIS SALARIAL - SECTOR SERVICIOS CCOO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. SITUACIÓN ACTUAL
+├─ Poder adquisitivo: -2.5% interanual
+├─ Inflación acumulada: 6.2%
+└─ Pérdida salarial estimada: 850€/trabajador/año
+
+2. PROPUESTA SALARIAL CCOO
+├─ Incremento del 5.5% para 2024
+├─ Revisión adicional si IPC > 3%
+└─ Mejora complementos diferenciados
+
+3. ANÁLISIS PATRONAL ESPERADO
+├─ Oferta inicial: 2.5-3%
+├─ Argumentación: limitaciones económicas
+└─ Propuesta: incrementos escalonados
+
+4. ARGUMENTACIÓN CCOO
+├─ Crecimiento sector: +4.8%
+├─ Márgenes empresariales en recuperación
+└─ Derecho recuperar poder adquisitivo
+
+5. PUNTOS CRÍTICOS DE NEGOCIACIÓN
+├─ Umbral mínimo aceptable: 4.5%
+├─ Revisión automática si IPC > 2.5%
+└─ Mejora complementos turnicidad
+
+RECOMENDACIÓN: Mantener flexibilidad en 4.8% + revisión automática`,
+                comparativo: `ANÁLISIS COMPARATIVO DE CONVENIOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. ESTRUCTURAS COMPARADAS
+Convenio A (Sector Retail): Base 950€ + Complementos 150€
+Convenio B (Comercio Especializado): Base 980€ + Complementos 180€
+
+2. DIFERENCIAS CLAVE
+├─ Ventaja B: +30€ mensuales (4% mejor)
+├─ Revisiones más automáticas en B
+└─ Garantías empleo superiores en B
+
+3. CONCLUSIÓN: Objetivo debe acercarse a Convenio B`,
+                ipc: `ANÁLISIS IPC Y PROYECCIONES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. HISTÓRICO (3 años): -5.2% acumulado pérdida
+2. PROYECCIONES 2024: 2.1% (BCE)
+3. IMPACTO: Sin incrementos = pérdida adicional -0.3%
+4. RECOMENDACIÓN: Revisión automática si IPC > 2.0%`,
+                busqueda: `ANÁLISIS CLÁUSULA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. DEFINICIÓN: Regulación de situación específica
+2. JURISPRUDENCIA: STSJ reconoce derecho ampliado
+3. CONCLUSIÓN: Cláusula muy negociable, margen de mejora alto`,
+                simulacion: `SIMULACIÓN DE NEGOCIACIÓN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Posición CCOO: 5.5% + revisión automática
+Contrapropuesta Patronal (simulada): 2.5% escalonado
+Distancia inicial: 3 puntos porcentuales
+Acuerdo probable: 4.0% + revisión si IPC > 2.5%`,
+                normativa: `ANÁLISIS NORMATIVA UE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. NUEVAS EXIGENCIAS: Transparencia salarial
+2. CLÁUSULAS OBSOLETAS: Revisión recomendada
+3. IMPACTO TRABAJADORES: Máxima protección
+4. ACCIONES: Adaptación inmediata recomendada`
             };
 
-            const response = mockResponses[currentArea] || 'Respuesta simulada del modelo seleccionado.';
-            currentResponse = response;
+            const baseResponse = responses[area] || responses.salarial;
+            
+            if (!isCustom && selectedRoles.size > 0) {
+                const rolesStr = Array.from(selectedRoles).map(key => ROLES[key].name).join(' + ');
+                const fullResponse = `✅ RESPUESTA GENERADA CON ROLES: ${rolesStr}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-            document.getElementById('responseArea').innerHTML = `<div style="white-space: pre-wrap; line-height: 1.8;">${escapeHtml(response)}</div>`;
-
-            // Add to history
-            addToHistory({
-                area: currentArea,
-                prompt: document.getElementById('promptEditor').value,
-                response: response,
-                model: model,
-                provider: provider,
-                timestamp: new Date().toISOString(),
-                temperature: temperature
-            });
+${baseResponse}`;
+                displayResponse(fullResponse);
+            } else {
+                displayResponse(baseResponse);
+            }
 
             callCount++;
+            updateMetrics();
             saveToLocalStorage();
-            showNotification('Respuesta procesada correctamente', 'success');
-            updateApiStatus('connected');
+        }
+
+        function displayResponse(response) {
+            currentResponse = response;
+            const responseArea = document.getElementById('responseArea');
+            
+            let html = '';
+            if (currentResponseRoles && currentResponseRoles.length > 0) {
+                const rolesHtml = Array.from(currentResponseRoles).map(key => `<strong>${ROLES[key].name}</strong>`).join(', ');
+                html = `<div class="response-header">✅ Respuesta generada con roles: ${rolesHtml}</div>`;
+            }
+            
+            html += `<div style="white-space: pre-wrap; word-break: break-word;">${response}</div>`;
+            responseArea.innerHTML = html;
+        }
+
+        function showLoading() {
+            document.getElementById('responseArea').innerHTML = `
+                <div class="response-loading">
+                    <div class="spinner"></div>
+                    <span>Procesando...</span>
+                </div>
+            `;
         }
 
         function resetPrompt() {
-            if (confirm('¿Restaurar prompt por defecto para esta área?')) {
-                const areaData = AREAS[currentArea];
-                document.getElementById('promptEditor').value = areaData.prompt;
-                saveToLocalStorage();
-                updateTokenCount();
-                showNotification('Prompt restaurado', 'success');
-            }
+            const area = AREAS[currentArea];
+            document.getElementById('promptEditor').value = area.prompt;
+            updateTokenCount();
+            updatePromptPreview();
+            saveToLocalStorage();
+            showNotification('Prompt restaurado', 'info');
         }
 
         function copyPrompt() {
-            const prompt = document.getElementById('promptEditor').value;
-            navigator.clipboard.writeText(prompt).then(() => {
-                showNotification('Prompt copiado al portapapeles', 'success');
+            const text = document.getElementById('promptEditor').value;
+            navigator.clipboard.writeText(text).then(() => {
+                showNotification('Prompt copiado', 'success');
             });
         }
 
         function copyResponse() {
-            if (!currentResponse) {
-                showNotification('No hay respuesta para copiar', 'warning');
-                return;
-            }
             navigator.clipboard.writeText(currentResponse).then(() => {
-                showNotification('Respuesta copiada al portapapeles', 'success');
+                showNotification('Respuesta copiada', 'success');
             });
         }
 
         function clearResponse() {
-            currentResponse = '';
             document.getElementById('responseArea').innerHTML = '<div class="response-empty">La respuesta aparecerá aquí...</div>';
-            saveToLocalStorage();
+            currentResponse = '';
+            currentResponseRoles = [];
         }
 
-        // ========== HISTORIAL ==========
-        function addToHistory(item) {
-            callHistory.unshift(item);
-            if (callHistory.length > 20) callHistory.pop();
-            renderHistory();
+        function clearAllRoles() {
+            selectedRoles.clear();
+            document.querySelectorAll('.role-checkbox-item input').forEach(cb => cb.checked = false);
+            document.querySelectorAll('.role-checkbox-item').forEach(el => el.classList.remove('selected'));
+            updateSelectedRolesDisplay();
+            updatePromptPreview();
+            updateRiceFromRoles();
             saveToLocalStorage();
+            showNotification('Roles eliminados', 'info');
         }
 
-        function renderHistory() {
-            const container = document.getElementById('historyContainer');
-            if (callHistory.length === 0) {
-                container.innerHTML = '<div style="text-align: center; color: #999; font-size: 12px; padding: 20px;">Sin historial aún</div>';
-                return;
+        function updateTokenCount() {
+            const text = document.getElementById('promptEditor').value;
+            const words = text.trim().split(/\s+/).length;
+            const chars = text.length;
+            const tokens = Math.ceil(chars / 4);
+            
+            document.getElementById('wordCount').textContent = words;
+            document.getElementById('charCount').textContent = chars;
+            document.getElementById('tokenCount').textContent = tokens;
+        }
+
+        function updateMetrics() {
+            document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString('es-ES');
+            document.getElementById('callCount').textContent = callCount;
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('currentArea', currentArea);
+            localStorage.setItem('selectedRoles', JSON.stringify(Array.from(selectedRoles)));
+            localStorage.setItem('prompt_' + currentArea, document.getElementById('promptEditor').value);
+            localStorage.setItem('callCount', callCount);
+        }
+
+        function loadLocalStorage() {
+            currentArea = localStorage.getItem('currentArea') || 'salarial';
+            callCount = parseInt(localStorage.getItem('callCount') || '0');
+            const savedRoles = localStorage.getItem('selectedRoles');
+            if (savedRoles) {
+                selectedRoles = new Set(JSON.parse(savedRoles));
             }
-
-            container.innerHTML = callHistory.map((item, idx) => `
-                <div class="history-item" data-index="${idx}" title="${new Date(item.timestamp).toLocaleString('es-ES')}">
-                    <div style="font-weight: 600; margin-bottom: 4px;">${AREAS[item.area]?.title || item.area}</div>
-                    <div style="color: #666; font-size: 11px;">
-                        ${new Date(item.timestamp).toLocaleDateString('es-ES')}
-                    </div>
-                </div>
-            `).join('');
-
-            document.querySelectorAll('.history-item').forEach(item => {
-                item.addEventListener('click', () => {
-                    const idx = parseInt(item.dataset.index);
-                    const histItem = callHistory[idx];
-                    switchArea(histItem.area);
-                    document.getElementById('promptEditor').value = histItem.prompt;
-                    currentResponse = histItem.response;
-                    document.getElementById('responseArea').innerHTML = `<div style="white-space: pre-wrap; line-height: 1.8;">${escapeHtml(histItem.response)}</div>`;
-                    document.getElementById('modelSelect').value = histItem.model;
-                    document.getElementById('temperature').value = histItem.temperature;
-                    document.getElementById('tempValue').textContent = histItem.temperature;
-                });
-            });
         }
 
-        // ========== EXPORTACIÓN ==========
+        function loadAreaResponse(area) {
+            const saved = localStorage.getItem('response_' + area);
+            if (saved) {
+                currentResponse = saved;
+                displayResponse(saved);
+            } else {
+                clearResponse();
+            }
+        }
+
+        function toggleDarkMode() {
+            isDarkMode = !isDarkMode;
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', isDarkMode);
+        }
+
+        function clearAll() {
+            if (confirm('¿Estás seguro de que deseas limpiar todo?')) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+
         function openExportModal() {
             document.getElementById('exportModal').classList.add('active');
         }
@@ -1405,339 +2388,76 @@ Analiza:
         }
 
         function performExport() {
-            const format = document.querySelector('.export-option.active').dataset.format;
-            const items = Array.from(document.querySelectorAll('.export-item-check:checked')).map(c => c.value);
-
-            const exportData = {
-                area: AREAS[currentArea].title,
-                prompt: items.includes('prompt') ? document.getElementById('promptEditor').value : '',
-                response: items.includes('response') ? currentResponse : '',
-                model: document.getElementById('modelSelect').value,
-                provider: document.getElementById('apiProvider').value,
-                timestamp: new Date().toISOString()
-            };
-
-            if (format === 'pdf') {
-                exportToPDF(exportData);
-            } else if (format === 'docx') {
-                exportToDOCX(exportData);
-            } else if (format === 'xlsx') {
-                exportToXLSX(exportData);
-            }
-
+            showNotification('Exportación simulada (funcionalidad completa con API)', 'info');
             closeExportModal();
         }
 
-        function exportToPDF(data) {
-            const element = document.createElement('div');
-            element.style.padding = '20px';
-            element.style.fontFamily = 'Arial, sans-serif';
-            element.innerHTML = `
-                <h1 style="color: #1a365d; border-bottom: 3px solid #ff6b35; padding-bottom: 10px;">
-                    INFORME NEGOCIACIÓN COLECTIVA
-                </h1>
-                <div style="margin: 20px 0;">
-                    <p><strong>Área:</strong> ${data.area}</p>
-                    <p><strong>Modelo IA:</strong> ${data.model} (${data.provider})</p>
-                    <p><strong>Fecha:</strong> ${new Date(data.timestamp).toLocaleString('es-ES')}</p>
-                </div>
-                
-                ${data.prompt ? `
-                    <h2 style="color: #1a365d; margin-top: 30px;">Prompt Utilizado</h2>
-                    <div style="background: #f5f5f5; padding: 15px; border-radius: 6px; white-space: pre-wrap;">
-                        ${escapeHtml(data.prompt)}
-                    </div>
-                ` : ''}
-                
-                ${data.response ? `
-                    <h2 style="color: #1a365d; margin-top: 30px;">Respuesta</h2>
-                    <div style="background: #f5f5f5; padding: 15px; border-radius: 6px; white-space: pre-wrap;">
-                        ${escapeHtml(data.response)}
-                    </div>
-                ` : ''}
-            `;
-
-            const opt = {
-                margin: 10,
-                filename: `negociacion-${currentArea}-${new Date().toISOString().split('T')[0]}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
-            };
-
-            html2pdf().set(opt).from(element).save();
-            showNotification('PDF exportado correctamente', 'success');
+        function openCompareModal() {
+            document.getElementById('compareModal').classList.add('active');
         }
 
-        function exportToDOCX(data) {
-            const docContent = [
-                {
-                    type: "heading",
-                    size: 28,
-                    text: "INFORME NEGOCIACIÓN COLECTIVA",
-                    bold: true
-                },
-                {
-                    type: "paragraph",
-                    spacing: { line: 240, lineRule: "auto" },
-                    children: [
-                        { text: "Área: ", bold: true },
-                        { text: data.area }
-                    ]
-                },
-                {
-                    type: "paragraph",
-                    children: [
-                        { text: "Modelo IA: ", bold: true },
-                        { text: `${data.model} (${data.provider})` }
-                    ]
-                },
-                {
-                    type: "paragraph",
-                    children: [
-                        { text: "Fecha: ", bold: true },
-                        { text: new Date(data.timestamp).toLocaleString('es-ES') }
-                    ]
-                }
-            ];
-
-            if (data.prompt) {
-                docContent.push({
-                    type: "heading",
-                    size: 24,
-                    text: "Prompt Utilizado",
-                    bold: true
-                });
-                docContent.push({
-                    type: "paragraph",
-                    text: data.prompt
-                });
-            }
-
-            if (data.response) {
-                docContent.push({
-                    type: "heading",
-                    size: 24,
-                    text: "Respuesta",
-                    bold: true
-                });
-                docContent.push({
-                    type: "paragraph",
-                    text: data.response
-                });
-            }
-
-            showNotification('DOCX - Requiere configuración adicional', 'warning');
+        function closeCompareModal() {
+            document.getElementById('compareModal').classList.remove('active');
         }
 
-        function exportToXLSX(data) {
-            const ws_data = [
-                ["INFORME NEGOCIACIÓN COLECTIVA"],
-                [],
-                ["Campo", "Valor"],
-                ["Área", data.area],
-                ["Modelo", data.model],
-                ["Proveedor", data.provider],
-                ["Fecha", new Date(data.timestamp).toLocaleString('es-ES')],
-                [],
-                ["PROMPT"],
-                [data.prompt || ""],
-                [],
-                ["RESPUESTA"],
-                [data.response || ""]
-            ];
-
-            const wb = XLSX.utils.book_new();
-            const ws = XLSX.utils.aoa_to_sheet(ws_data);
-            XLSX.utils.book_append_sheet(wb, ws, "Informe");
-            XLSX.writeFile(wb, `negociacion-${currentArea}-${new Date().toISOString().split('T')[0]}.xlsx`);
-            showNotification('Excel exportado correctamente', 'success');
+        function performComparison() {
+            showNotification('Comparación simulada', 'info');
+            closeCompareModal();
         }
 
-        // ========== LOCAL STORAGE ==========
-        function saveToLocalStorage() {
-            const data = {
-                currentArea,
-                prompts: {},
-                responses: {},
-                history: callHistory,
-                callCount,
-                timestamp: new Date().toISOString()
-            };
-
-            Object.keys(AREAS).forEach(area => {
-                const editor = document.getElementById('promptEditor');
-                if (currentArea === area) {
-                    data.prompts[area] = editor.value;
-                } else {
-                    data.prompts[area] = AREAS[area].prompt;
-                }
-            });
-
-            data.responses[currentArea] = currentResponse;
-
-            localStorage.setItem('negotiationData', JSON.stringify(data));
-            document.getElementById('lastUpdate').textContent = new Date().toLocaleString('es-ES');
-        }
-
-        function loadLocalStorage() {
-            const stored = localStorage.getItem('negotiationData');
-            if (!stored) return;
-
-            const data = JSON.parse(stored);
-            callHistory = data.history || [];
-            callCount = data.callCount || 0;
-
-            // Restore prompts
-            Object.keys(data.prompts || {}).forEach(area => {
-                if (AREAS[area]) {
-                    AREAS[area].prompt = data.prompts[area];
-                }
-            });
-
-            document.getElementById('callCount').textContent = callCount;
-            renderHistory();
-        }
-
-        function loadAreaResponse(area) {
-            const stored = localStorage.getItem('negotiationData');
-            if (!stored) return;
-
-            const data = JSON.parse(stored);
-            currentResponse = data.responses?.[area] || '';
-
+        function toggleFavorite() {
             if (currentResponse) {
-                document.getElementById('responseArea').innerHTML = `<div style="white-space: pre-wrap; line-height: 1.8;">${escapeHtml(currentResponse)}</div>`;
-            } else {
-                document.getElementById('responseArea').innerHTML = '<div class="response-empty">La respuesta aparecerá aquí...</div>';
+                favorites.push({
+                    response: currentResponse,
+                    timestamp: new Date().toISOString(),
+                    area: currentArea
+                });
+                showNotification('Añadido a favoritos', 'success');
             }
+        }
+
+        function addToCustomHistory(item) {
+            customHistory.unshift(item);
+            showNotification('Prueba añadida al historial', 'info');
+        }
+
+        function exportCustomHistory() {
+            const json = JSON.stringify(customHistory, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'historial_pruebas.json';
+            a.click();
+            showNotification('Historial exportado', 'success');
+        }
+
+        function importConfig() {
+            showNotification('Importación disponible (selecciona archivo)', 'info');
         }
 
         function exportConfig() {
             const config = {
-                areas: AREAS,
-                history: callHistory,
-                callCount: callCount,
-                exportDate: new Date().toISOString()
+                area: currentArea,
+                selectedRoles: Array.from(selectedRoles),
+                prompt: document.getElementById('promptEditor').value
             };
-
-            const dataStr = JSON.stringify(config, null, 2);
-            const dataBlob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(dataBlob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `negociacion-config-${new Date().toISOString().split('T')[0]}.json`;
-            link.click();
-            URL.revokeObjectURL(url);
-
+            const json = JSON.stringify(config, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'configuracion_negociacion.json';
+            a.click();
             showNotification('Configuración exportada', 'success');
         }
 
-        function importConfig() {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = '.json';
-            input.onchange = (e) => {
-                const file = e.target.files[0];
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    try {
-                        const config = JSON.parse(event.target.result);
-                        Object.keys(config.areas || {}).forEach(area => {
-                            if (AREAS[area]) {
-                                AREAS[area].prompt = config.areas[area].prompt;
-                            }
-                        });
-                        callHistory = config.history || [];
-                        callCount = config.callCount || 0;
-                        saveToLocalStorage();
-                        renderHistory();
-                        showNotification('Configuración importada correctamente', 'success');
-                    } catch (err) {
-                        showNotification('Error al importar configuración', 'error');
-                    }
-                };
-                reader.readAsText(file);
-            };
-            input.click();
-        }
-
-        // ========== UTILIDADES ==========
-        function updateTokenCount() {
-            const prompt = document.getElementById('promptEditor').value;
-            const tokens = Math.ceil(prompt.length / 4);
-            document.getElementById('tokenCount').textContent = tokens;
-        }
-
         function updateModelOptions(provider) {
-            const modelSelect = document.getElementById('modelSelect');
-            modelSelect.innerHTML = '';
-
+            const select = document.getElementById('modelSelect');
             if (provider === 'openai') {
-                modelSelect.innerHTML = `
-                    <option value="gpt-4">GPT-4</option>
-                    <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
-                `;
-            } else if (provider === 'claude') {
-                modelSelect.innerHTML = `
-                    <option value="claude-3-opus">Claude 3 Opus</option>
-                    <option value="claude-3-sonnet">Claude 3 Sonnet</option>
-                    <option value="claude-3-haiku">Claude 3 Haiku</option>
-                `;
-            }
-        }
-
-        function toggleDarkMode() {
-            isDarkMode = !isDarkMode;
-            document.body.classList.toggle('dark-mode');
-            localStorage.setItem('darkMode', isDarkMode.toString());
-            showNotification(isDarkMode ? 'Modo oscuro activado' : 'Modo claro activado', 'success');
-        }
-
-        function updateApiStatus(status) {
-            const statusEl = document.getElementById('apiStatus');
-            if (status === 'connected') {
-                statusEl.className = 'api-status status-connected';
-                statusEl.innerHTML = '<span class="status-indicator"></span><span>Conectado</span>';
+                select.innerHTML = '<option value="gpt-4">GPT-4</option><option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>';
             } else {
-                statusEl.className = 'api-status status-disconnected';
-                statusEl.innerHTML = '<span class="status-indicator"></span><span>No conectado</span>';
-            }
-        }
-
-        function showNotification(message, type = 'success') {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.textContent = message;
-            document.body.appendChild(notification);
-
-            setTimeout(() => {
-                notification.style.animation = 'slideInRight 0.3s ease reverse';
-                setTimeout(() => notification.remove(), 300);
-            }, 3000);
-        }
-
-        function escapeHtml(text) {
-            const map = {
-                '&': '&amp;',
-                '<': '&lt;',
-                '>': '&gt;',
-                '"': '&quot;',
-                "'": '&#039;'
-            };
-            return text.replace(/[&<>"']/g, m => map[m]);
-        }
-
-        function clearAll() {
-            if (confirm('¿Estás seguro? Esto eliminará todas las API keys en memoria, historial y respuestas guardadas.')) {
-                localStorage.removeItem('negotiationData');
-                document.getElementById('apiKey').value = '';
-                callHistory = [];
-                callCount = 0;
-                currentResponse = '';
-                renderHistory();
-                clearResponse();
-                showNotification('Todos los datos han sido eliminados', 'success');
+                select.innerHTML = '<option value="claude">Claude 3 Opus</option><option value="claude-haiku">Claude 3 Haiku</option>';
             }
         }
     </script>
