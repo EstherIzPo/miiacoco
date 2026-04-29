@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Negociación Colectiva CCOO - AI Assistant Pro</title>
+    <title>Generador de Prompts - Negociación Colectiva CCOO</title>
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.min.js"></script>
-    <script src="https://unpkg.com/docx@8.5.0"></script>
+    <!-- Librería docx.js para exportar a Word -->
+    <script src="https://unpkg.com/docx@8.5.0/build/index.js"></script>
     
     <style>
         * {
@@ -17,877 +16,351 @@
         }
 
         :root {
+            --primary-red: #e74c3c;
             --primary-dark: #2c3e50;
-            --primary-light: #34495e;
-            --accent-red: #e74c3c;
-            --accent-red-dark: #d32f2f;
             --white: #ffffff;
             --light-gray: #f5f5f5;
-            --dark-gray: #333333;
-            --border-color: #e0e0e0;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --info: #3b82f6;
-        }
-
-        html, body {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
+            --border-gray: #e0e0e0;
+            --text-dark: #333333;
+            --text-medium: #666666;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--light-gray);
-            color: var(--dark-gray);
-            transition: background-color 0.3s ease;
-        }
-
-        body.dark-mode {
-            background-color: #1e1e1e;
-            color: #e0e0e0;
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
         }
 
         .container {
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
-        .sidebar {
-            width: 260px;
-            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-light) 100%);
+        /* Header */
+        .header {
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary-red) 0%, #c0392b 100%);
             color: var(--white);
-            padding: 15px 0;
-            overflow-y: auto;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.25);
-            transition: transform 0.3s ease;
-            display: flex;
-            flex-direction: column;
+            padding: 40px 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(231, 76, 60, 0.3);
         }
 
-        .dark-mode .sidebar {
-            background: linear-gradient(135deg, #0f1419 0%, #1a2a3a 100%);
-        }
-
-        .sidebar-header {
-            padding: 15px 12px;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 15px;
-        }
-
-        .sidebar-title {
-            font-size: 15px;
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
             font-weight: 700;
-            margin-bottom: 3px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.95;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Sección */
+        .section {
+            margin-bottom: 35px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--primary-red);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
-        .sidebar-subtitle {
-            font-size: 11px;
-            opacity: 0.8;
-        }
-
-        .menu-section {
-            padding: 0 8px;
+        /* Selector de Roles */
+        .roles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
             margin-bottom: 20px;
         }
 
-        .menu-label {
-            font-size: 10px;
-            text-transform: uppercase;
-            opacity: 0.6;
-            padding: 8px 12px;
-            font-weight: 700;
-            letter-spacing: 0.8px;
-        }
-
-        .menu-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 9px 12px;
+        .role-item {
+            background: var(--light-gray);
+            border: 3px solid var(--border-gray);
+            border-radius: 10px;
+            padding: 18px;
             cursor: pointer;
-            border-radius: 6px;
-            margin: 3px 0;
-            transition: all 0.3s ease;
-            border-left: 3px solid transparent;
-            font-size: 12px;
-        }
-
-        .menu-item:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-left-color: var(--accent-red);
-        }
-
-        .menu-item.active {
-            background-color: var(--accent-red);
-            color: var(--white);
-            border-left-color: var(--white);
-            font-weight: 600;
-        }
-
-        .menu-icon {
-            width: 20px;
-            height: 20px;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .sidebar-footer {
-            padding: 12px 8px;
-            border-top: 2px solid rgba(255, 255, 255, 0.1);
-            margin-top: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .theme-toggle, .clear-btn {
-            width: 100%;
-            padding: 8px;
-            border: none;
-            border-radius: 6px;
-            background-color: rgba(255, 255, 255, 0.1);
-            color: var(--white);
-            cursor: pointer;
-            font-size: 11px;
-            font-weight: 600;
             transition: all 0.3s ease;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
+            align-items: flex-start;
+            gap: 12px;
         }
 
-        .theme-toggle:hover, .clear-btn:hover {
-            background-color: var(--accent-red);
-        }
-
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .header {
-            background: var(--white);
-            border-bottom: 2px solid var(--border-color);
-            padding: 12px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .dark-mode .header {
-            background: #2a2a2a;
-            border-bottom-color: #3a3a3a;
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            flex: 1;
-            min-width: 300px;
-        }
-
-        .header-title {
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--primary-dark);
-            white-space: nowrap;
-        }
-
-        .dark-mode .header-title {
-            color: var(--accent-red);
-        }
-
-        .model-indicator {
-            padding: 6px 12px;
-            background: var(--info);
-            color: var(--white);
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-
-        .roles-indicator {
-            padding: 6px 12px;
-            background: var(--accent-red);
-            color: var(--white);
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            white-space: nowrap;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .roles-indicator.multiple {
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 9px 14px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .btn-primary {
-            background-color: var(--primary-dark);
-            color: var(--white);
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary-light);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(44, 62, 80, 0.2);
-        }
-
-        .btn-secondary {
-            background-color: var(--accent-red);
-            color: var(--white);
-        }
-
-        .btn-secondary:hover {
-            background-color: var(--accent-red-dark);
+        .role-item:hover {
+            border-color: var(--primary-red);
+            background: rgba(231, 76, 60, 0.05);
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(231, 76, 60, 0.2);
         }
 
-        .btn-outline {
-            background-color: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--dark-gray);
-        }
-
-        .dark-mode .btn-outline {
-            border-color: #4a4a4a;
-            color: #e0e0e0;
-        }
-
-        .btn-outline:hover {
-            background-color: var(--light-gray);
-        }
-
-        .dark-mode .btn-outline:hover {
-            background-color: #3a3a3a;
-        }
-
-        .content-wrapper {
-            flex: 1;
-            overflow: hidden;
-            padding: 12px;
-            display: grid;
-            grid-template-columns: 1fr 280px;
-            gap: 12px;
-        }
-
-        .dark-mode .content-wrapper {
-            background-color: #1e1e1e;
-        }
-
-        .main-panel {
-            background: var(--white);
-            border-radius: 10px;
-            padding: 0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .dark-mode .main-panel {
-            background: #2a2a2a;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        .panel-header {
-            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-light) 100%);
+        .role-item.selected {
+            background: var(--primary-red);
+            border-color: var(--primary-red);
             color: var(--white);
-            padding: 15px 20px;
-            border-bottom: 3px solid var(--accent-red);
         }
 
-        .panel-title {
-            font-size: 18px;
-            font-weight: 700;
-            margin: 0;
+        .role-item input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            accent-color: var(--primary-red);
+            flex-shrink: 0;
+            margin-top: 2px;
         }
 
-        .panel-content {
+        .role-item.selected input[type="checkbox"] {
+            accent-color: var(--white);
+        }
+
+        .role-info {
             flex: 1;
-            overflow-y: auto;
-            padding: 15px 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
         }
 
-        .section-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .section-label {
-            font-size: 11px;
-            text-transform: uppercase;
-            color: var(--primary-dark);
+        .role-name {
+            font-size: 16px;
             font-weight: 700;
-            letter-spacing: 0.5px;
+            margin-bottom: 5px;
         }
 
-        .dark-mode .section-label {
-            color: var(--accent-red);
+        .role-desc {
+            font-size: 13px;
+            opacity: 0.85;
         }
 
-        .prompt-editor {
-            background: var(--light-gray);
-            border: 2px solid var(--border-color);
-            border-radius: 8px;
-            padding: 12px;
-            font-family: 'Monaco', 'Courier New', monospace;
-            font-size: 12px;
-            line-height: 1.6;
-            resize: vertical;
-            min-height: 200px;
-            color: var(--dark-gray);
-            width: 100%;
-            transition: all 0.3s ease;
-        }
-
-        .dark-mode .prompt-editor {
-            background: #1a1a1a;
-            border-color: #4a4a4a;
-            color: #e0e0e0;
-        }
-
-        .prompt-editor:focus {
-            outline: none;
-            border-color: var(--accent-red);
-            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
-        }
-
-        .prompt-preview {
-            background: var(--light-gray);
-            border: 2px solid var(--info);
-            border-radius: 8px;
-            padding: 12px;
-            font-family: 'Monaco', 'Courier New', monospace;
-            font-size: 12px;
-            line-height: 1.6;
-            color: var(--dark-gray);
-            max-height: 150px;
-            overflow-y: auto;
-            margin-bottom: 10px;
-        }
-
-        .dark-mode .prompt-preview {
-            background: #1a1a1a;
-            border-color: var(--info);
-            color: #e0e0e0;
-        }
-
-        .prompt-preview-label {
-            font-size: 10px;
-            text-transform: uppercase;
-            color: var(--info);
-            font-weight: 700;
-            margin-bottom: 6px;
+        /* Badges de Roles Seleccionados */
+        .selected-badges {
             display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            min-height: 50px;
+            padding: 15px;
+            background: var(--light-gray);
+            border-radius: 8px;
+            border: 2px dashed var(--border-gray);
+        }
+
+        .role-badge {
+            background: var(--primary-red);
+            color: var(--white);
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
+            animation: slideIn 0.3s ease;
         }
 
-        .rice-structure {
-            background: linear-gradient(135deg, rgba(231, 76, 60, 0.05) 0%, rgba(52, 152, 219, 0.05) 100%);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 12px;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            font-size: 11px;
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
-        .dark-mode .rice-structure {
-            background: linear-gradient(135deg, rgba(231, 76, 60, 0.1) 0%, rgba(52, 152, 219, 0.1) 100%);
-            border-color: #4a4a4a;
-        }
-
-        .rice-item {
-            padding: 10px;
-            background: var(--white);
-            border-radius: 6px;
-            border-left: 3px solid var(--accent-red);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .dark-mode .rice-item {
-            background: #1a1a1a;
-        }
-
-        .rice-item:hover {
-            background: rgba(231, 76, 60, 0.08);
-            transform: translateX(4px);
-            box-shadow: 0 2px 8px rgba(231, 76, 60, 0.15);
-        }
-
-        .dark-mode .rice-item:hover {
-            background: rgba(231, 76, 60, 0.12);
-        }
-
-        .rice-item::after {
-            content: '↗ Clickea para añadir';
-            position: absolute;
-            top: 2px;
-            right: 4px;
-            font-size: 9px;
-            color: var(--accent-red);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .rice-item:hover::after {
-            opacity: 1;
-        }
-
-        .rice-label {
-            font-weight: 700;
-            color: var(--accent-red);
-            margin-bottom: 3px;
-        }
-
-        .rice-value {
-            color: var(--dark-gray);
-            font-size: 10px;
-            line-height: 1.4;
-        }
-
-        .dark-mode .rice-value {
-            color: #b0b0b0;
-        }
-
-        .tabs-container {
-            display: flex;
-            border-bottom: 2px solid var(--border-color);
-            gap: 0;
-            margin-bottom: 12px;
-        }
-
-        .dark-mode .tabs-container {
-            border-bottom-color: #4a4a4a;
-        }
-
-        .tab-button {
-            padding: 10px 16px;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
-            color: #999;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-        }
-
-        .tab-button:hover {
-            color: var(--primary-dark);
-            border-bottom-color: var(--accent-red);
-        }
-
-        .dark-mode .tab-button:hover {
-            color: var(--accent-red);
-        }
-
-        .tab-button.active {
-            color: var(--accent-red);
-            border-bottom-color: var(--accent-red);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .api-form {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .form-group.full {
-            grid-column: 1 / -1;
-        }
-
-        .form-label {
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--primary-dark);
-        }
-
-        .dark-mode .form-label {
-            color: var(--accent-red);
-        }
-
-        .form-input, .form-select {
-            padding: 8px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            font-size: 12px;
-            background-color: var(--white);
-            color: var(--dark-gray);
-            transition: border-color 0.3s ease;
-        }
-
-        .dark-mode .form-input,
-        .dark-mode .form-select {
-            background-color: #1a1a1a;
-            border-color: #4a4a4a;
-            color: #e0e0e0;
-        }
-
-        .form-input:focus, .form-select:focus {
-            outline: none;
-            border-color: var(--accent-red);
-            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
-        }
-
-        .response-area {
-            background: var(--light-gray);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 12px;
-            min-height: 180px;
-            max-height: 350px;
-            overflow-y: auto;
-            font-size: 12px;
-            line-height: 1.6;
-            color: var(--dark-gray);
-        }
-
-        .dark-mode .response-area {
-            background: #1a1a1a;
-            border-color: #4a4a4a;
-            color: #e0e0e0;
-        }
-
-        .response-header {
-            background: var(--accent-red);
-            color: var(--white);
-            padding: 10px;
-            border-radius: 6px;
-            margin-bottom: 12px;
-            font-weight: 600;
-            font-size: 11px;
-        }
-
-        .response-roles-used {
-            background: rgba(231, 76, 60, 0.1);
-            border-left: 3px solid var(--accent-red);
-            padding: 8px;
-            margin-bottom: 12px;
-            border-radius: 4px;
-            font-size: 11px;
-        }
-
-        .dark-mode .response-roles-used {
-            background: rgba(231, 76, 60, 0.15);
-        }
-
-        .response-roles-used strong {
-            color: var(--accent-red);
-        }
-
-        .response-empty {
-            color: #999;
-            text-align: center;
-            padding: 40px 20px;
+        .badge-empty {
+            color: var(--text-medium);
+            font-size: 14px;
             font-style: italic;
         }
 
-        .response-loading {
+        /* Selector de Área de Trabajo */
+        .area-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .area-btn {
+            background: var(--white);
+            border: 2px solid var(--border-gray);
+            border-radius: 8px;
+            padding: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-dark);
+            text-align: center;
+        }
+
+        .area-btn:hover {
+            border-color: var(--primary-red);
+            background: rgba(231, 76, 60, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .area-btn.active {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+            color: var(--white);
+        }
+
+        /* Botones RICE */
+        .rice-buttons {
             display: flex;
-            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
             justify-content: center;
-            gap: 10px;
+        }
+
+        .rice-btn {
+            background: var(--white);
+            border: 2px solid var(--primary-dark);
             color: var(--primary-dark);
-            height: 100%;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .spinner {
-            border: 3px solid rgba(44, 62, 80, 0.1);
-            border-top: 3px solid var(--primary-dark);
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
+        .rice-btn:hover {
+            background: var(--primary-dark);
+            color: var(--white);
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(44, 62, 80, 0.3);
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .rice-btn.active {
+            background: var(--primary-dark);
+            color: var(--white);
         }
 
-        .word-counter {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 11px;
-            color: #666;
+        /* Caja de Prompt GRANDE */
+        .prompt-box {
             background: var(--light-gray);
-            padding: 8px;
-            border-radius: 6px;
+            border: 3px solid var(--border-gray);
+            border-radius: 12px;
+            padding: 20px;
+            min-height: 500px;
+            font-size: 16px;
+            line-height: 1.8;
+            color: var(--text-dark);
+            font-family: 'Courier New', monospace;
+            resize: vertical;
+            width: 100%;
+            transition: all 0.3s ease;
         }
 
-        .dark-mode .word-counter {
-            background: #1a1a1a;
-            color: #b0b0b0;
+        .prompt-box:focus {
+            outline: none;
+            border-color: var(--primary-red);
+            box-shadow: 0 0 0 4px rgba(231, 76, 60, 0.1);
         }
 
-        .button-group {
+        .prompt-box::placeholder {
+            color: var(--text-medium);
+            font-style: italic;
+        }
+
+        /* Botones de Acción */
+        .action-buttons {
             display: flex;
-            gap: 8px;
+            gap: 15px;
+            justify-content: center;
             flex-wrap: wrap;
         }
 
-        .button-group.vertical {
-            flex-direction: column;
-        }
-
-        .config-panel {
-            background: var(--white);
+        .btn {
+            padding: 18px 40px;
+            border: none;
             border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            overflow-y: auto;
-        }
-
-        .dark-mode .config-panel {
-            background: #2a2a2a;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        .config-section {
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 10px;
-        }
-
-        .dark-mode .config-section {
-            border-bottom-color: #4a4a4a;
-        }
-
-        .config-section:last-child {
-            border-bottom: none;
-        }
-
-        .config-title {
-            font-size: 12px;
+            font-size: 17px;
             font-weight: 700;
-            color: var(--primary-dark);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-
-        .dark-mode .config-title {
-            color: var(--accent-red);
-        }
-
-        .history-item {
-            padding: 8px;
-            background: var(--light-gray);
-            border-radius: 6px;
-            font-size: 11px;
             cursor: pointer;
             transition: all 0.3s ease;
-            border-left: 3px solid transparent;
-        }
-
-        .dark-mode .history-item {
-            background: #1a1a1a;
-        }
-
-        .history-item:hover {
-            background: var(--accent-red);
-            color: var(--white);
-            border-left-color: var(--white);
-        }
-
-        .history-item.active {
-            background: var(--accent-red);
-            color: var(--white);
-            border-left-color: var(--white);
-        }
-
-        .models-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 8px;
-        }
-
-        .model-btn {
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            background: var(--white);
-            color: var(--dark-gray);
-            cursor: pointer;
-            font-size: 11px;
-            font-weight: 600;
-            text-align: left;
-            transition: all 0.3s ease;
-        }
-
-        .dark-mode .model-btn {
-            background: #1a1a1a;
-            border-color: #4a4a4a;
-            color: #e0e0e0;
-        }
-
-        .model-btn:hover {
-            background: var(--accent-red);
-            color: var(--white);
-            border-color: var(--accent-red);
-            transform: translateX(4px);
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            animation: fadeIn 0.3s ease;
-            overflow-y: auto;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .modal.active {
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        .modal-content {
-            background: var(--white);
-            border-radius: 12px;
-            padding: 25px;
-            max-width: 700px;
-            width: 90%;
-            max-height: 85vh;
-            overflow-y: auto;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            animation: slideDown 0.3s ease;
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
         }
 
-        .dark-mode .modal-content {
-            background: #2a2a2a;
-        }
-
-        @keyframes slideDown {
-            from {
-                transform: translateY(-30px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .modal-header {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 15px;
-            color: var(--primary-dark);
-        }
-
-        .dark-mode .modal-header {
-            color: var(--accent-red);
-        }
-
-        .modal-body {
-            margin-bottom: 20px;
-            color: var(--dark-gray);
-        }
-
-        .dark-mode .modal-body {
-            color: #e0e0e0;
-        }
-
-        .modal-footer {
-            display: flex;
-            gap: 8px;
-            justify-content: flex-end;
-        }
-
-        .notification {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 12px 18px;
-            border-radius: 8px;
-            background: var(--success);
+        .btn-primary {
+            background: var(--primary-red);
             color: var(--white);
-            font-size: 12px;
+        }
+
+        .btn-primary:hover {
+            background: #c0392b;
+        }
+
+        .btn-secondary {
+            background: var(--primary-dark);
+            color: var(--white);
+        }
+
+        .btn-secondary:hover {
+            background: #1a252f;
+        }
+
+        .btn-outline {
+            background: var(--white);
+            color: var(--primary-dark);
+            border: 2px solid var(--primary-dark);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-dark);
+            color: var(--white);
+        }
+
+        /* Feedback Visual */
+        .feedback {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #27ae60;
+            color: var(--white);
+            padding: 16px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
             font-weight: 600;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            animation: slideInRight 0.3s ease;
-            z-index: 999;
-            max-width: 300px;
+            animation: slideInRight 0.4s ease;
+            z-index: 1000;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.error {
+            background: #e74c3c;
         }
 
         @keyframes slideInRight {
@@ -901,1565 +374,795 @@
             }
         }
 
-        .notification.error {
-            background: var(--danger);
+        /* Loading Spinner */
+        .spinner {
+            border: 4px solid rgba(231, 76, 60, 0.2);
+            border-top: 4px solid var(--primary-red);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 0.8s linear infinite;
         }
 
-        .notification.warning {
-            background: var(--warning);
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        .notification.info {
-            background: var(--info);
-        }
-
-        @media (max-width: 1400px) {
-            .content-wrapper {
-                grid-template-columns: 1fr;
-            }
-
-            .config-panel {
-                max-width: 100%;
-            }
-        }
-
+        /* Responsive */
         @media (max-width: 768px) {
             .container {
-                flex-direction: column;
-            }
-
-            .sidebar {
-                width: 100%;
-                max-height: 70px;
-                overflow-x: auto;
-                overflow-y: hidden;
-                flex-direction: row;
-                align-items: center;
-                padding: 0 15px;
-            }
-
-            .sidebar-header {
-                display: none;
-            }
-
-            .menu-section {
-                display: flex;
-                gap: 8px;
-                padding: 0;
-                margin: 0;
-            }
-
-            .menu-label {
-                display: none;
-            }
-
-            .sidebar-footer {
-                display: none;
+                padding: 10px;
             }
 
             .main-content {
-                height: calc(100vh - 70px);
+                padding: 20px;
             }
 
-            .content-wrapper {
-                padding: 10px;
-                gap: 10px;
+            .header h1 {
+                font-size: 24px;
             }
 
-            .main-panel, .config-panel {
-                padding: 12px;
-            }
-
-            .api-form {
+            .roles-grid {
                 grid-template-columns: 1fr;
             }
 
-            .header-left {
-                min-width: auto;
+            .area-selector {
+                grid-template-columns: 1fr;
+            }
+
+            .rice-buttons {
+                flex-direction: column;
+            }
+
+            .rice-btn {
                 width: 100%;
             }
 
-            .header-actions {
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
                 width: 100%;
-                justify-content: flex-start;
+                justify-content: center;
+            }
+
+            .prompt-box {
+                min-height: 350px;
             }
         }
 
-        .hidden {
-            display: none !important;
-        }
-
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #ccc;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--accent-red);
-        }
-
-        .dark-mode ::-webkit-scrollbar-thumb {
-            background: #555;
-        }
-
-        .dark-mode ::-webkit-scrollbar-thumb:hover {
-            background: var(--accent-red);
-        }
-
-        .role-tag-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-
-        .role-tag {
-            padding: 6px 12px;
-            background: var(--accent-red);
-            color: var(--white);
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            animation: slideInUp 0.3s ease;
-        }
-
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .role-tag .remove {
-            cursor: pointer;
-            font-weight: 700;
-            margin-left: 4px;
-        }
-
-        .role-tag .remove:hover {
-            opacity: 0.8;
-        }
-
-        .role-selector-multi {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 8px;
-        }
-
-        .role-checkbox-item {
-            padding: 12px;
-            border: 2px solid var(--border-color);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            background: var(--white);
-        }
-
-        .dark-mode .role-checkbox-item {
-            background: #1a1a1a;
-            border-color: #4a4a4a;
-        }
-
-        .role-checkbox-item:hover {
-            border-color: var(--accent-red);
-            background: rgba(231, 76, 60, 0.05);
-        }
-
-        .dark-mode .role-checkbox-item:hover {
-            background: rgba(231, 76, 60, 0.1);
-        }
-
-        .role-checkbox-item input[type="checkbox"] {
-            cursor: pointer;
-            accent-color: var(--accent-red);
-            margin-top: 2px;
-        }
-
-        .role-checkbox-item.selected {
-            background: var(--accent-red);
-            color: var(--white);
-            border-color: var(--accent-red);
-        }
-
-        .role-checkbox-item.selected .role-title,
-        .role-checkbox-item.selected .role-desc {
-            color: var(--white);
-        }
-
-        .role-info {
-            flex: 1;
-        }
-
-        .role-title {
-            font-weight: 700;
-            margin-bottom: 4px;
-            font-size: 12px;
-        }
-
-        .role-desc {
-            font-size: 11px;
-            opacity: 0.7;
-            line-height: 1.4;
-        }
-
-        .prompt-with-roles {
-            border: 2px dashed var(--accent-red);
-            padding: 12px;
-            border-radius: 8px;
-            background: rgba(231, 76, 60, 0.05);
-            margin-bottom: 12px;
-        }
-
-        .dark-mode .prompt-with-roles {
-            background: rgba(231, 76, 60, 0.1);
-        }
-
-        .prompt-with-roles-label {
-            font-size: 10px;
-            font-weight: 700;
-            color: var(--accent-red);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-
-        .combined-context {
-            font-family: 'Monaco', 'Courier New', monospace;
-            font-size: 11px;
-            line-height: 1.5;
-            color: var(--dark-gray);
-        }
-
-        .dark-mode .combined-context {
-            color: #b0b0b0;
+        /* Info Helper */
+        .info-helper {
+            background: rgba(52, 152, 219, 0.1);
+            border-left: 4px solid #3498db;
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            color: var(--text-dark);
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
+    <!-- Feedback de notificaciones -->
+    <div class="feedback" id="feedback"></div>
+
     <div class="container">
-        <div class="sidebar">
-            <div class="sidebar-header">
-                <div class="sidebar-title">
-                    <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/>
-                    </svg>
-                    CCOO Negociación
-                </div>
-                <div class="sidebar-subtitle">AI Collective Bargaining Pro</div>
-            </div>
-
-            <div class="menu-section">
-                <div class="menu-label">Áreas Temáticas</div>
-                <div class="menu-item active" data-area="salarial">
-                    <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                    </svg>
-                    <div>Salarial</div>
-                </div>
-
-                <div class="menu-item" data-area="comparativo">
-                    <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M3 3v18h18"/><path d="M18 17V9m-5 8V5m-5 12V8"/>
-                    </svg>
-                    <div>Comparativo</div>
-                </div>
-
-                <div class="menu-item" data-area="ipc">
-                    <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
-                    </svg>
-                    <div>IPC y Prospección</div>
-                </div>
-
-                <div class="menu-item" data-area="busqueda">
-                    <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-                    </svg>
-                    <div>Búsqueda Cláusulas</div>
-                </div>
-
-                <div class="menu-item" data-area="simulacion">
-                    <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="10"/>
-                    </svg>
-                    <div>Simulación</div>
-                </div>
-
-                <div class="menu-item" data-area="normativa">
-                    <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
-                    </svg>
-                    <div>Normativa UE</div>
-                </div>
-            </div>
-
-            <div class="sidebar-footer">
-                <button class="theme-toggle" id="themeToggle" title="Alternar tema">
-                    <svg style="width: 14px; height: 14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-                    </svg>
-                    Tema
-                </button>
-                <button class="clear-btn" id="clearAllBtn" title="Limpiar todo">
-                    <svg style="width: 14px; height: 14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>
-                    </svg>
-                    Limpiar
-                </button>
-            </div>
+        <!-- Header -->
+        <div class="header">
+            <h1>🤝 Generador de Prompts - Negociación Colectiva CCOO</h1>
+            <p>Herramienta simple y efectiva para generar prompts profesionales</p>
         </div>
 
+        <!-- Contenido Principal -->
         <div class="main-content">
-            <div class="header">
-                <div class="header-left">
-                    <div class="header-title" id="headerTitle">Análisis Salarial</div>
-                    <div class="model-indicator" id="modelIndicator">📊 GPT-4</div>
-                    <div class="roles-indicator hidden" id="rolesIndicator">🎯 0 roles</div>
+            
+            <!-- Selector de Roles -->
+            <div class="section">
+                <div class="section-title">
+                    👥 Selecciona los Roles de Experto
                 </div>
-                <div class="header-actions">
-                    <button class="btn btn-outline" id="resetPromptBtn">
-                        <svg style="width: 14px; height: 14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2-8.83"/>
-                        </svg>
-                        Restaurar
+                <div class="roles-grid" id="rolesGrid">
+                    <!-- Los roles se generan dinámicamente -->
+                </div>
+                <div class="selected-badges" id="selectedBadges">
+                    <span class="badge-empty">Selecciona al menos un rol arriba</span>
+                </div>
+            </div>
+
+            <!-- Selector de Área de Trabajo -->
+            <div class="section">
+                <div class="section-title">
+                    📋 Selecciona el Área de Trabajo
+                </div>
+                <div class="area-selector" id="areaSelector">
+                    <!-- Las áreas se generan dinámicamente -->
+                </div>
+            </div>
+
+            <!-- Botones RICE -->
+            <div class="section">
+                <div class="section-title">
+                    📊 Estructura RICE (Opcional - Clickea para insertar)
+                </div>
+                <div class="rice-buttons" id="riceButtons">
+                    <button class="rice-btn" data-rice="reach">Reach</button>
+                    <button class="rice-btn" data-rice="impact">Impact</button>
+                    <button class="rice-btn" data-rice="confidence">Confidence</button>
+                    <button class="rice-btn" data-rice="effort">Effort</button>
+                </div>
+                <div class="info-helper">
+                    💡 Haz clic en los botones RICE para añadir la estructura al prompt generado
+                </div>
+            </div>
+
+            <!-- Caja de Prompt Grande -->
+            <div class="section">
+                <div class="section-title">
+                    ✍️ Tu Prompt Generado
+                </div>
+                <textarea 
+                    class="prompt-box" 
+                    id="promptBox" 
+                    placeholder="Aquí aparecerá tu prompt generado. Puedes editarlo antes de descargarlo..."
+                ></textarea>
+                <div class="info-helper">
+                    ℹ️ Selecciona roles y área de trabajo, luego presiona "Generar Prompt" para crear tu prompt personalizado
+                </div>
+            </div>
+
+            <!-- Botones de Acción -->
+            <div class="section">
+                <div class="action-buttons">
+                    <button class="btn btn-primary" id="generateBtn">
+                        🔄 Generar Prompt
                     </button>
-                    <button class="btn btn-primary" id="sendPromptBtn">
-                        <svg style="width: 14px; height: 14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
-                        </svg>
-                        Enviar
+                    <button class="btn btn-secondary" id="downloadBtn">
+                        📥 Descargar en Word
+                    </button>
+                    <button class="btn btn-outline" id="copyBtn">
+                        📋 Copiar al Portapapeles
                     </button>
                 </div>
             </div>
 
-            <div class="content-wrapper">
-                <div class="main-panel">
-                    <div class="panel-header">
-                        <div class="panel-title" id="panelTitle">Análisis Salarial y Negociación</div>
-                    </div>
-
-                    <div class="panel-content">
-                        <div class="tabs-container">
-                            <button class="tab-button active" data-tab="editor">
-                                <svg style="width: 12px; height: 12px; display: inline-block; margin-right: 4px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                                Editor
-                            </button>
-                            <button class="tab-button" data-tab="roles">
-                                <svg style="width: 12px; height: 12px; display: inline-block; margin-right: 4px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                                Roles
-                            </button>
-                            <button class="tab-button" data-tab="pruebas">
-                                <svg style="width: 12px; height: 12px; display: inline-block; margin-right: 4px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                                Pruebas
-                            </button>
-                            <button class="tab-button" data-tab="modelos">
-                                <svg style="width: 12px; height: 12px; display: inline-block; margin-right: 4px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
-                                Modelos
-                            </button>
-                        </div>
-
-                        <div class="tab-content active" id="editor-tab">
-                            <div class="section-group">
-                                <div class="section-label">⚙️ Configuración API</div>
-                                <div class="api-form">
-                                    <div class="form-group">
-                                        <label class="form-label">Proveedor</label>
-                                        <select id="apiProvider" class="form-select">
-                                            <option value="openai">OpenAI (GPT-4)</option>
-                                            <option value="claude">Claude (Anthropic)</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">Modelo</label>
-                                        <select id="modelSelect" class="form-select">
-                                            <option value="gpt-4">GPT-4</option>
-                                            <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group full">
-                                        <label class="form-label">API Key (no se guarda en servidor)</label>
-                                        <input type="password" id="apiKey" class="form-input" placeholder="Tu API Key">
-                                    </div>
-                                    <div class="form-group full">
-                                        <label class="form-label">Temperatura: <strong id="tempValue">0.7</strong></label>
-                                        <input type="range" id="temperature" class="form-input" min="0" max="1" step="0.1" value="0.7">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="section-group">
-                                <div class="section-label">👥 Roles Seleccionados</div>
-                                <div class="role-tag-container" id="selectedRolesContainer">
-                                    <span style="color: #999; font-size: 11px;">Sin roles seleccionados (ir a pestaña Roles)</span>
-                                </div>
-                            </div>
-
-                            <div class="section-group">
-                                <div class="section-label">📊 Estructura RICE del Prompt</div>
-                                <div class="rice-structure" id="riceStructure">
-                                    <div class="rice-item" data-rice="reach">
-                                        <div class="rice-label">Reach</div>
-                                        <div class="rice-value" id="riceReach">Cargando...</div>
-                                    </div>
-                                    <div class="rice-item" data-rice="impact">
-                                        <div class="rice-label">Impact</div>
-                                        <div class="rice-value" id="riceImpact">Cargando...</div>
-                                    </div>
-                                    <div class="rice-item" data-rice="confidence">
-                                        <div class="rice-label">Confidence</div>
-                                        <div class="rice-value" id="riceConfidence">Cargando...</div>
-                                    </div>
-                                    <div class="rice-item" data-rice="effort">
-                                        <div class="rice-label">Effort</div>
-                                        <div class="rice-value" id="riceEffort">Cargando...</div>
-                                    </div>
-                                </div>
-                                <div style="font-size: 10px; color: #666; margin-top: 6px; padding: 6px; background: var(--light-gray); border-radius: 4px;">
-                                    💡 Haz click en cualquier métrica RICE para añadirla al prompt
-                                </div>
-                            </div>
-
-                            <div class="section-group">
-                                <div class="section-label">📝 Prompt Personalizable</div>
-                                <div class="prompt-preview-label">
-                                    📌 Vista Previa del Prompt Combinado
-                                </div>
-                                <div class="prompt-preview" id="promptPreview">Selecciona roles y escribe tu prompt para ver la vista previa...</div>
-                                <textarea id="promptEditor" class="prompt-editor" placeholder="Tu prompt aquí..."></textarea>
-                                <div class="word-counter">
-                                    <span>Palabras: <strong id="wordCount">0</strong> | Caracteres: <strong id="charCount">0</strong> | Tokens est.: <strong id="tokenCount">0</strong></span>
-                                    <button class="btn btn-outline" style="padding: 4px 10px; font-size: 10px;" id="copyPromptBtn">
-                                        <svg style="width: 12px; height: 12px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
-                                        Copiar
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="section-group">
-                                <div class="section-label">💬 Respuesta</div>
-                                <div id="responseArea" class="response-area">
-                                    <div class="response-empty">La respuesta aparecerá aquí...</div>
-                                </div>
-                                <div class="button-group">
-                                    <button class="btn btn-outline" id="copyResponseBtn">
-                                        <svg style="width: 12px; height: 12px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
-                                        Copiar Respuesta
-                                    </button>
-                                    <button class="btn btn-outline" id="compareBtn" title="Comparar con otro modelo">
-                                        <svg style="width: 12px; height: 12px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 17V9m-5 8V5m-5 12V8"/></svg>
-                                        Comparar
-                                    </button>
-                                    <button class="btn btn-outline" id="favoriteBtn" title="Marcar como favorito">
-                                        <svg style="width: 12px; height: 12px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 10.26 24 10.27 17.18 16.70 20.31 25 12 19.54 3.69 25 6.82 16.70 0 10.27 8.91 10.26 12 2"/></svg>
-                                        Favorito
-                                    </button>
-                                    <button class="btn btn-outline" id="exportBtn">
-                                        <svg style="width: 12px; height: 12px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                                        Exportar
-                                    </button>
-                                    <button class="btn btn-outline" id="clearResponseBtn">
-                                        <svg style="width: 12px; height: 12px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                                        Limpiar
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="tab-content" id="roles-tab">
-                            <div class="section-group">
-                                <div class="section-label">👥 Selecciona Múltiples Roles de Experto</div>
-                                <div style="font-size: 10px; color: #666; margin-bottom: 12px; padding: 8px; background: var(--light-gray); border-radius: 4px;">
-                                    ℹ️ Puedes seleccionar VARIOS roles. Sus contextos se combinarán en el prompt.
-                                </div>
-                                <div class="role-selector-multi" id="roleSelector">
-                                    <!-- Los roles se cargarán dinámicamente -->
-                                </div>
-                                <div style="margin-top: 12px;">
-                                    <button class="btn btn-secondary" id="clearRolesBtn" style="width: 100%; justify-content: center; gap: 8px;">
-                                        <svg style="width: 12px; height: 12px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                                        Limpiar Todos los Roles
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="tab-content" id="pruebas-tab">
-                            <div class="section-group">
-                                <div class="section-label">🧪 Prueba tus Propios Prompts</div>
-                                
-                                <div class="form-group full">
-                                    <label class="form-label">Pega tu prompt personalizado</label>
-                                    <textarea id="customPrompt" class="prompt-editor" style="min-height: 140px;" placeholder="Pega aquí tu prompt personalizado..."></textarea>
-                                </div>
-
-                                <div class="api-form">
-                                    <div class="form-group">
-                                        <label class="form-label">Modelo</label>
-                                        <select id="customModel" class="form-select">
-                                            <option value="gpt-4">GPT-4</option>
-                                            <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
-                                            <option value="claude">Claude 3 Opus</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">Rol</label>
-                                        <select id="customRole" class="form-select">
-                                            <option value="">General</option>
-                                            <option value="abogado">Abogado Laboralista</option>
-                                            <option value="seguridad">Experto Seguridad Social</option>
-                                            <option value="prestaciones">Experto Prestaciones</option>
-                                            <option value="datos">Analista de Datos</option>
-                                            <option value="negociacion">Experto Negociación</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <button class="btn btn-secondary" id="sendCustomPromptBtn" style="width: 100%; justify-content: center;">
-                                    <svg style="width: 14px; height: 14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                                    Enviar a Modelo
-                                </button>
-
-                                <div class="section-label" style="margin-top: 12px;">📋 Historial de Pruebas</div>
-                                <div id="customHistoryContainer" style="max-height: 250px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 6px; padding: 8px;">
-                                    <div style="text-align: center; color: #999; font-size: 11px; padding: 15px;">
-                                        Sin pruebas aún
-                                    </div>
-                                </div>
-
-                                <button class="btn btn-outline" id="exportHistoryBtn" style="width: 100%; justify-content: center; margin-top: 8px;">
-                                    <svg style="width: 14px; height: 14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="8 17 12 21 16 17M12 12v9M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/></svg>
-                                    Exportar Historial (JSON)
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="tab-content" id="modelos-tab">
-                            <div class="section-group">
-                                <div class="section-label">🔗 Accede Directamente a los Modelos</div>
-                                <div class="models-grid">
-                                    <a href="https://claude.ai" target="_blank" class="model-btn">
-                                        <div class="role-title">🤖 Claude Sonnet</div>
-                                        <div class="role-desc">Anthropic - Conversación avanzada</div>
-                                    </a>
-                                    <a href="https://chat.openai.com" target="_blank" class="model-btn">
-                                        <div class="role-title">✨ ChatGPT Plus</div>
-                                        <div class="role-desc">OpenAI - Última versión GPT-4</div>
-                                    </a>
-                                    <a href="https://gemini.google.com" target="_blank" class="model-btn">
-                                        <div class="role-title">🌟 Google Gemini</div>
-                                        <div class="role-desc">Google - Análisis multimodal</div>
-                                    </a>
-                                    <a href="https://copilot.microsoft.com" target="_blank" class="model-btn">
-                                        <div class="role-title">💼 Microsoft Copilot</div>
-                                        <div class="role-desc">Integración Microsoft - Productividad</div>
-                                    </a>
-                                    <a href="https://www.perplexity.ai" target="_blank" class="model-btn">
-                                        <div class="role-title">🔍 Perplexity AI</div>
-                                        <div class="role-desc">Búsqueda en tiempo real - Investigación</div>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="config-panel">
-                    <div class="config-section">
-                        <div class="config-title">📜 Historial</div>
-                        <div id="historyContainer" style="max-height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px;">
-                            <div style="text-align: center; color: #999; font-size: 11px; padding: 15px;">
-                                Sin historial aún
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="config-section">
-                        <div class="config-title">⭐ Favoritos</div>
-                        <div id="favoritesContainer" style="max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px;">
-                            <div style="text-align: center; color: #999; font-size: 11px; padding: 12px;">
-                                Sin favoritos
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="config-section">
-                        <div class="config-title">💾 Acciones</div>
-                        <div class="button-group vertical">
-                            <button class="btn btn-outline" id="importBtn" style="justify-content: center; font-size: 11px;">
-                                <svg style="width: 12px; height: 12px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                                Importar Config
-                            </button>
-                            <button class="btn btn-outline" id="exportConfigBtn" style="justify-content: center; font-size: 11px;">
-                                <svg style="width: 12px; height: 12px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                                Exportar Config
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="config-section">
-                        <div class="config-title">ℹ️ Información</div>
-                        <div style="font-size: 11px; line-height: 1.6; color: var(--dark-gray);">
-                            <strong>Área:</strong> <span id="areaInfo">Salarial</span><br>
-                            <strong>Última actualización:</strong> <span id="lastUpdate">Nunca</span><br>
-                            <strong>Total de llamadas:</strong> <span id="callCount">0</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="exportModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">📥 Exportar Informe</div>
-            <div class="modal-body">
-                <div class="section-label">Formato</div>
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px;">
-                    <div class="export-option active" data-format="pdf">📄 PDF</div>
-                    <div class="export-option" data-format="docx">📝 Word</div>
-                    <div class="export-option" data-format="xlsx">📊 Excel</div>
-                </div>
-
-                <div>
-                    <div class="section-label">Incluir en el Informe</div>
-                    <div style="display: flex; flex-direction: column; gap: 8px;">
-                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 12px;">
-                            <input type="checkbox" class="export-item-check" value="prompt" checked>
-                            <span>Prompt utilizado</span>
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 12px;">
-                            <input type="checkbox" class="export-item-check" value="response" checked>
-                            <span>Respuesta</span>
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 12px;">
-                            <input type="checkbox" class="export-item-check" value="metadata" checked>
-                            <span>Metadatos (fecha, modelo, roles)</span>
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 12px;">
-                            <input type="checkbox" class="export-item-check" value="rice">
-                            <span>Estructura RICE</span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-outline" id="closeExportBtn">Cancelar</button>
-                <button class="btn btn-secondary" id="confirmExportBtn">Exportar</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="compareModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">⚖️ Comparar Respuestas de Modelos</div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">Selecciona segundo modelo para comparar</label>
-                    <select id="compareModelSelect" class="form-select">
-                        <option value="gpt-4">GPT-4</option>
-                        <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
-                        <option value="claude">Claude 3 Opus</option>
-                    </select>
-                </div>
-                <div style="margin-top: 15px; padding: 12px; background: var(--light-gray); border-radius: 6px;">
-                    <div style="font-size: 11px; color: #666; line-height: 1.5;">
-                        ℹ️ Se enviará el mismo prompt al modelo seleccionado y podrás ver las respuestas lado a lado.
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-outline" id="closeCompareBtn">Cancelar</button>
-                <button class="btn btn-secondary" id="confirmCompareBtn">Comparar</button>
-            </div>
         </div>
     </div>
 
     <script>
-        const ROLES = {
-            abogado: {
-                name: '⚖️ Abogado Laboralista',
-                description: 'Análisis jurídico de convenios y normativa',
-                prompt: `Como abogado laboralista especializado en negociación colectiva para CCOO:
-
-[CONTEXTO JURÍDICO]
-
-Proporciona:
-1. Análisis jurídico detallado según Estatuto de los Trabajadores
-2. Jurisprudencia aplicable (sentencias relevantes)
-3. Validez legal de las cláusulas propuestas
-4. Riesgos legales identificados
-5. Recomendaciones normativas`,
-                rice: {
-                    reach: 'Abogados, negociadores, sindicatos',
-                    impact: 'Cumplimiento normativo, defensa legal',
-                    confidence: 'Alto',
-                    effort: 'Medio'
-                }
+        // ========== CONFIGURACIÓN ==========
+        
+        const ROLES = [
+            {
+                id: 'abogado',
+                name: 'Abogado Laboralista',
+                desc: 'Especializado en derecho laboral y negociación colectiva',
+                context: 'Eres un abogado laboralista especializado en negociación colectiva con más de 15 años de experiencia. Conoces a fondo el Estatuto de los Trabajadores, jurisprudencia del Tribunal Supremo y convenios colectivos sectoriales.'
             },
-            seguridad: {
-                name: '🛡️ Experto Seguridad Social y Pensiones',
-                description: 'Análisis de cotización, afiliación y jubilación',
-                prompt: `Como experto en Seguridad Social y sistema de pensiones para CCOO:
-
-[DATOS DE AFILIACIÓN Y COTIZACIÓN]
-
-Analiza:
-1. Impacto en cotizaciones y bases de afiliación
-2. Configuración de pagas extras en cálculo de pensión
-3. Efectos en jubilación anticipada o ampliada
-4. Derechos de compatibilidad trabajo-pensión
-5. Optimización de bases de cotización`,
-                rice: {
-                    reach: 'Trabajadores, técnicos RRHH, jubilados',
-                    impact: 'Incremento pensión, derechos de jubilación',
-                    confidence: 'Alto',
-                    effort: 'Alto'
-                }
+            {
+                id: 'seguridad',
+                name: 'Experto en Seguridad Social',
+                desc: 'Conocimiento profundo del sistema de Seguridad Social',
+                context: 'Eres un experto en Seguridad Social con amplio conocimiento de cotizaciones, prestaciones y normativa del INSS. Dominas los aspectos técnicos de las bases de cotización y regímenes especiales.'
             },
-            prestaciones: {
-                name: '💰 Experto en Prestaciones',
-                description: 'Subsidios, desempleo, incapacidad',
-                prompt: `Como experto en prestaciones sociales para CCOO:
-
-[SITUACIÓN DE PRESTACIONES]
-
-Analiza:
-1. Derechos a desempleo (duración, cuantía)
-2. Incapacidad temporal y permanente
-3. Prestaciones por cuidado de hijos
-4. Excedencias y sus implicaciones
-5. Complementos por vulnerabilidad`,
-                rice: {
-                    reach: 'Trabajadores en situación vulnerable',
-                    impact: 'Protección social, ingresos garantizados',
-                    confidence: 'Medio-Alto',
-                    effort: 'Medio'
-                }
+            {
+                id: 'prestaciones',
+                name: 'Experto en Prestaciones',
+                desc: 'Especialista en prestaciones laborales y beneficios',
+                context: 'Eres un especialista en prestaciones laborales, beneficios sociales y complementos salariales. Conoces en detalle las diferentes modalidades de prestaciones, su fiscalidad y gestión administrativa.'
             },
-            datos: {
-                name: '📊 Experto en Análisis de Datos',
-                description: 'Estadística, comparativas, proyecciones',
-                prompt: `Como experto en análisis de datos e índices económicos para CCOO:
-
-[DATOS ECONÓMICOS Y ESTADÍSTICOS]
-
-Realiza:
-1. Análisis estadístico descriptivo e inferencial
-2. Comparativas sectoriales con z-scores
-3. Proyecciones IPC y evolución salarial
-4. Simulaciones de escenarios económicos
-5. Visualización de tendencias`,
-                rice: {
-                    reach: 'Analistas, técnicos económicos',
-                    impact: 'Argumentación basada en datos',
-                    confidence: 'Alto',
-                    effort: 'Bajo-Medio'
-                }
+            {
+                id: 'datos',
+                name: 'Experto en Análisis de Datos',
+                desc: 'Análisis estadístico y visualización de datos laborales',
+                context: 'Eres un analista de datos especializado en el sector laboral. Dominas técnicas estadísticas, visualización de datos y análisis comparativo de convenios colectivos. Puedes interpretar series temporales, indicadores económicos y realizar proyecciones.'
             },
-            negociacion: {
-                name: '🎯 Experto en Negociación Colectiva',
-                description: 'Estrategia, tácticas, fases de negociación',
-                prompt: `Como experto en negociación colectiva estratégica para CCOO:
-
-[CONTEXTO DE NEGOCIACIÓN]
-
-Proporciona:
-1. Mapeo de posiciones inicial, objetiva y límite
-2. Análisis FODA de ambas partes
-3. Calendario estratégico de fases
-4. Tácticas de aproximación y presión
-5. Contingencias y planes B`,
-                rice: {
-                    reach: 'Negociadores, ejecutivas sindicales',
-                    impact: 'Mejora condiciones laborales',
-                    confidence: 'Medio',
-                    effort: 'Alto'
-                }
+            {
+                id: 'negociacion',
+                name: 'Experto en Negociación Colectiva',
+                desc: 'Estrategia y tácticas de negociación sindical',
+                context: 'Eres un experto en negociación colectiva con amplia trayectoria en CCOO. Conoces las estrategias de negociación, técnicas de persuasión, gestión de conflictos y dinámicas de poder en las mesas de negociación.'
             }
-        };
+        ];
 
-        const AREAS = {
-            salarial: {
-                title: 'Análisis Salarial',
-                panelTitle: 'Análisis Salarial y Propuestas de Mejora',
-                prompt: `Como experto en negociación colectiva para CCOO en el sector servicios, analiza la siguiente situación salarial:
+        const AREAS = [
+            {
+                id: 'salarial',
+                name: '💰 Análisis Salarial',
+                template: `# ANÁLISIS SALARIAL Y NEGOCIACIÓN
 
-[CONTEXTO SALARIAL A COMPLETAR]
-- Salario base actual
-- Complementos existentes
-- Variaciones IPC
-- Histórico de incrementos
-- Posición patronal
+## Contexto
+Necesito realizar un análisis exhaustivo de las condiciones salariales para preparar una negociación colectiva.
 
-Proporciona:
-1. Análisis actual del poder adquisitivo
-2. Propuesta de incremento salarial justificada
-3. Contrapropuestas probables de la patronal
-4. Argumentos para sustentar tu posición
-5. Puntos de inflexión en la negociación`,
-                rice: {
-                    reach: 'Negociadores, trabajadores, sindicatos',
-                    impact: 'Incremento del poder adquisitivo',
-                    confidence: 'Alto',
-                    effort: 'Bajo'
-                },
-                model: 'gpt-4'
+## Objetivos
+1. Analizar las tablas salariales actuales
+2. Comparar con convenios similares del sector
+3. Proponer mejoras salariales justificadas
+4. Calcular el impacto económico de las propuestas
+
+## Información que necesito
+- Análisis de las tablas salariales actuales
+- Comparativa con el convenio anterior
+- Benchmarking con otros convenios del sector
+- Propuestas de incremento salarial justificadas
+- Cálculo de impacto económico
+
+## Formato esperado
+Informe estructurado con datos, tablas comparativas y recomendaciones`
             },
-            comparativo: {
-                title: 'Análisis Comparativo',
-                panelTitle: 'Comparativa Integral de Convenios',
-                prompt: `Como especialista en análisis de convenios colectivos para CCOO, realiza una comparativa entre:
+            {
+                id: 'comparativo',
+                name: '📊 Comparativa de Convenios',
+                template: `# COMPARATIVA DE CONVENIOS COLECTIVOS
 
-[CONVENIOS A COMPARAR]
-- Estructura salarial (base, complementos, pagas)
+## Contexto
+Necesito realizar una comparativa detallada entre diferentes convenios colectivos del sector.
+
+## Objetivos
+1. Identificar convenios comparables
+2. Analizar cláusulas clave
+3. Detectar mejores prácticas
+4. Identificar oportunidades de mejora
+
+## Aspectos a comparar
+- Condiciones salariales
+- Jornada laboral
+- Permisos y licencias
+- Clasificación profesional
+- Cláusulas de flexibilidad
 - Beneficios sociales
-- Horarios y jornada
-- Sistemas de clasificación
 
-Incluye:
-1. Diferencias en estructura salarial (tablas)
-2. Ventajas y desventajas relativas
-3. Claúsulas diferenciadoras
-4. Tendencias de mejora o retroceso
-5. Benchmarking con el sector`,
-                rice: {
-                    reach: 'Técnicos CCOO, negociadores',
-                    impact: 'Identificación de mejoras posibles',
-                    confidence: 'Alto',
-                    effort: 'Medio'
-                },
-                model: 'gpt-4'
+## Formato esperado
+Tabla comparativa con análisis detallado por cada cláusula relevante`
             },
-            ipc: {
-                title: 'IPC y Prospección',
-                panelTitle: 'Análisis IPC y Proyecciones Económicas',
-                prompt: `Como economista laboral para CCOO, analiza el impacto del IPC en la negociación:
+            {
+                id: 'ipc',
+                name: '📈 IPC y Prospección',
+                template: `# ANÁLISIS DE IPC Y PROSPECCIÓN ECONÓMICA
 
-[DATOS IPC Y TEMPORALIDAD]
-- Histórico IPC últimos 3 años
-- Proyecciones oficiales
-- Poder adquisitivo actual
-- Pérdida salarial acumulada
+## Contexto
+Necesito un análisis del IPC y prospección económica para fundamentar las propuestas salariales.
 
-Realiza:
-1. Análisis histórico del IPC últimos 3 años
-2. Proyecciones de inflación para próximos 12 meses
-3. Impacto en poder adquisitivo de los trabajadores
-4. Pérdida salarial estimada si no hay incrementos
-5. Propuestas de cláusula de revisión salarial`,
-                rice: {
-                    reach: 'Técnicos económicos, toda la plantilla',
-                    impact: 'Recuperación de poder adquisitivo',
-                    confidence: 'Medio-Alto',
-                    effort: 'Bajo-Medio'
-                },
-                model: 'gpt-4'
+## Objetivos
+1. Analizar la evolución del IPC (histórico y proyección)
+2. Estudiar indicadores económicos relevantes
+3. Evaluar el poder adquisitivo
+4. Justificar cláusulas de revisión salarial
+
+## Datos necesarios
+- Series históricas de IPC
+- Proyecciones económicas
+- Análisis de pérdida de poder adquisitivo
+- Comparativa sectorial
+- Propuesta de cláusulas de revisión
+
+## Formato esperado
+Informe con gráficos, datos estadísticos y recomendaciones`
             },
-            busqueda: {
-                title: 'Búsqueda de Cláusulas',
-                panelTitle: 'Búsqueda y Análisis de Cláusulas Específicas',
-                prompt: `Como asesor legal de CCOO, busca y analiza cláusulas en convenios colectivos:
+            {
+                id: 'busqueda',
+                name: '🔍 Búsqueda de Cláusulas',
+                template: `# BÚSQUEDA Y ANÁLISIS DE CLÁUSULAS ESPECÍFICAS
 
-[TÉRMINO A BUSCAR / TIPO DE CLÁUSULA]
-- Descripción de la cláusula
-- Tipo (obligatoria, negociable)
-- Referencias en convenios previos
+## Contexto
+Necesito localizar y analizar cláusulas específicas en convenios colectivos.
 
-Proporciona:
-1. Definición y propósito de la cláusula
-2. Variaciones en diferentes convenios
-3. Mejores prácticas identificadas
-4. Riesgos y oportunidades
-5. Recomendación para tu negociación`,
-                rice: {
-                    reach: 'Abogados, técnicos negociación',
-                    impact: 'Fundamentación legal de propuestas',
-                    confidence: 'Alto',
-                    effort: 'Bajo'
-                },
-                model: 'gpt-4'
+## Objetivos
+1. Buscar cláusulas sobre [ESPECIFICAR TEMA]
+2. Analizar redacción y aplicación práctica
+3. Comparar con nuestra situación actual
+4. Proponer redacción mejorada
+
+## Tipo de cláusulas buscadas
+[Especificar: conciliación, teletrabajo, igualdad, prevención, formación, etc.]
+
+## Formato esperado
+Recopilación de cláusulas con análisis comparativo y propuestas de redacción`
             },
-            simulacion: {
-                title: 'Simulación',
-                panelTitle: 'Simulación Dinámica de Negociación',
-                prompt: `Como mediador en negociación colectiva para CCOO, simula un escenario de negociación:
+            {
+                id: 'simulacion',
+                name: '🎯 Simulación de Negociación',
+                template: `# SIMULACIÓN DE ESCENARIOS DE NEGOCIACIÓN
 
-[DEFINE LA POSICIÓN INICIAL, OBJETIVOS Y LÍMITES]
-- Posición inicial CCOO
-- Objetivo (lo que esperas conseguir)
-- Límite (mínimo aceptable)
-- Contraparte (posición esperada)
+## Contexto
+Necesito preparar diferentes escenarios para la negociación colectiva.
 
-Realiza simulación donde:
-1. Presento la posición de CCOO (trabajadores)
-2. Analizo contrapropuesta probable de patronal
-3. Identifico puntos de acuerdo potencial
-4. Propongo estrategia de aproximación
-5. Simulo posible acuerdo final`,
-                rice: {
-                    reach: 'Negociadores, ejecutivas',
-                    impact: 'Preparación de negociación',
-                    confidence: 'Medio',
-                    effort: 'Medio'
-                },
-                model: 'gpt-4'
+## Objetivos
+1. Definir posición inicial (máxima)
+2. Establecer posición mínima aceptable
+3. Identificar puntos de intercambio
+4. Preparar argumentarios para cada escenario
+5. Anticipar contraofertas empresariales
+
+## Escenarios a simular
+- Escenario optimista
+- Escenario realista
+- Escenario de mínimos
+- Plan B (alternativas)
+
+## Formato esperado
+Matriz de negociación con escenarios, argumentos y estrategias para cada punto`
             },
-            normativa: {
-                title: 'Normativa UE',
-                panelTitle: 'Análisis de Normativa Europea y Cambios',
-                prompt: `Como asesor en normativa europea para CCOO, analiza el impacto de normativa UE:
+            {
+                id: 'auditoria',
+                name: '🔎 Auditoría de Convenios',
+                template: `# AUDITORÍA Y REVISIÓN DE CONVENIO ACTUAL
 
-[NORMATIVA UE RELEVANTE O CAMBIO A ANALIZAR]
-- Directiva o regulación específica
-- Fecha de aplicación
-- Impacto sectorial esperado
+## Contexto
+Necesito realizar una auditoría del convenio colectivo actual para identificar problemas y oportunidades.
 
-Analiza:
-1. Nuevas exigencias de la normativa UE
-2. Cláusulas del convenio que pueden quedar obsoletas
-3. Nuevas cláusulas recomendadas por normativa UE
-4. Impacto en derechos de trabajadores
-5. Acciones de adaptación necesarias`,
-                rice: {
-                    reach: 'Sindicatos, trabajadores internacionales',
-                    impact: 'Armonización normativa, nuevos derechos',
-                    confidence: 'Medio-Alto',
-                    effort: 'Medio-Alto'
-                },
-                model: 'gpt-4'
+## Objetivos
+1. Revisar cumplimiento del convenio actual
+2. Identificar cláusulas problemáticas
+3. Detectar vacíos legales o lagunas
+4. Proponer mejoras y actualizaciones
+
+## Áreas de auditoría
+- Adecuación a normativa vigente
+- Claridad en la redacción
+- Aplicación práctica
+- Conflictos de interpretación
+- Cláusulas obsoletas
+
+## Formato esperado
+Informe de auditoría con hallazgos, riesgos y recomendaciones priorizadas`
+            },
+            {
+                id: 'normativa',
+                name: '🇪🇺 Normativa UE',
+                template: `# ANÁLISIS DE NORMATIVA DE LA UNIÓN EUROPEA
+
+## Contexto
+Necesito analizar normativa europea relevante para la negociación colectiva.
+
+## Objetivos
+1. Identificar directivas europeas aplicables
+2. Analizar su transposición al derecho español
+3. Evaluar impacto en el convenio colectivo
+4. Proponer adaptaciones necesarias
+
+## Áreas normativas
+- Tiempo de trabajo
+- Igualdad y no discriminación
+- Salud y seguridad laboral
+- Conciliación familiar
+- Desplazamiento de trabajadores
+
+## Formato esperado
+Informe normativo con análisis de directivas, jurisprudencia del TJUE y propuestas de adaptación`
             }
+        ];
+
+        const RICE_CONTENT = {
+            reach: `
+## 🎯 REACH (Alcance)
+¿A cuántas personas afecta esta propuesta?
+- Número de trabajadores impactados
+- Colectivos específicos beneficiados
+- Alcance temporal de la medida`,
+            
+            impact: `
+## 💥 IMPACT (Impacto)
+¿Qué impacto tendrá esta medida?
+- Mejora en las condiciones laborales
+- Impacto económico para los trabajadores
+- Efectos en la organización del trabajo`,
+            
+            confidence: `
+## 📊 CONFIDENCE (Confianza)
+¿Qué nivel de confianza tenemos en esta propuesta?
+- Base legal y normativa
+- Precedentes en otros convenios
+- Viabilidad de implementación`,
+            
+            effort: `
+## ⚙️ EFFORT (Esfuerzo)
+¿Qué esfuerzo requiere implementar esta medida?
+- Coste económico estimado
+- Complejidad administrativa
+- Tiempo de implementación`
         };
 
-        let currentArea = 'salarial';
-        let currentResponse = '';
-        let currentResponseRoles = [];
-        let selectedRoles = new Set();
-        let callHistory = [];
-        let customHistory = [];
-        let favorites = [];
-        let callCount = 0;
-        let isDarkMode = localStorage.getItem('darkMode') === 'true';
+        // ========== ESTADO DE LA APLICACIÓN ==========
+        
+        let selectedRoles = [];
+        let selectedArea = null;
+        let selectedRICE = [];
 
-        document.addEventListener('DOMContentLoaded', () => {
-            initializeApp();
-        });
-
-        function initializeApp() {
-            loadLocalStorage();
-            setupEventListeners();
-            switchArea('salarial');
+        // ========== INICIALIZACIÓN ==========
+        
+        function init() {
             renderRoles();
-            if (isDarkMode) toggleDarkMode();
-            updateMetrics();
-            updateSelectedRolesDisplay();
+            renderAreas();
+            setupEventListeners();
         }
 
+        // ========== RENDERIZADO ==========
+        
         function renderRoles() {
-            const container = document.getElementById('roleSelector');
-            container.innerHTML = Object.entries(ROLES).map(([key, role]) => `
-                <label class="role-checkbox-item" data-role="${key}">
-                    <input type="checkbox" value="${key}">
+            const grid = document.getElementById('rolesGrid');
+            grid.innerHTML = ROLES.map(role => `
+                <div class="role-item" data-role="${role.id}">
+                    <input type="checkbox" id="role-${role.id}" data-role="${role.id}">
                     <div class="role-info">
-                        <div class="role-title">${role.name}</div>
-                        <div class="role-desc">${role.description}</div>
+                        <div class="role-name">${role.name}</div>
+                        <div class="role-desc">${role.desc}</div>
                     </div>
-                </label>
-            `).join('');
-
-            document.querySelectorAll('.role-checkbox-item input').forEach(checkbox => {
-                checkbox.addEventListener('change', (e) => {
-                    toggleRole(e.target.value, e.target.checked);
-                });
-            });
-        }
-
-        function toggleRole(roleKey, isChecked) {
-            if (isChecked) {
-                selectedRoles.add(roleKey);
-                document.querySelector(`[data-role="${roleKey}"]`).classList.add('selected');
-            } else {
-                selectedRoles.delete(roleKey);
-                document.querySelector(`[data-role="${roleKey}"]`).classList.remove('selected');
-            }
-            updateSelectedRolesDisplay();
-            updatePromptPreview();
-            updateRiceFromRoles();
-            saveToLocalStorage();
-        }
-
-        function updateSelectedRolesDisplay() {
-            const container = document.getElementById('selectedRolesContainer');
-            const indicator = document.getElementById('rolesIndicator');
-
-            if (selectedRoles.size === 0) {
-                container.innerHTML = '<span style="color: #999; font-size: 11px;">Sin roles seleccionados (ir a pestaña Roles)</span>';
-                indicator.classList.add('hidden');
-            } else {
-                const tags = Array.from(selectedRoles).map(key => {
-                    const role = ROLES[key];
-                    return `<div class="role-tag">
-                        ${role.name}
-                        <span class="remove" onclick="removeRole('${key}')">×</span>
-                    </div>`;
-                }).join('');
-                container.innerHTML = tags;
-                indicator.classList.remove('hidden');
-                indicator.textContent = `🎯 ${selectedRoles.size} rol${selectedRoles.size !== 1 ? 'es' : ''}`;
-                if (selectedRoles.size > 1) {
-                    indicator.classList.add('multiple');
-                } else {
-                    indicator.classList.remove('multiple');
-                }
-            }
-        }
-
-        function removeRole(roleKey) {
-            selectedRoles.delete(roleKey);
-            document.querySelector(`[data-role="${roleKey}"] input`).checked = false;
-            updateSelectedRolesDisplay();
-            updatePromptPreview();
-            updateRiceFromRoles();
-            saveToLocalStorage();
-        }
-
-        function updatePromptPreview() {
-            const preview = document.getElementById('promptPreview');
-            const basePrompt = document.getElementById('promptEditor').value;
-
-            if (selectedRoles.size === 0) {
-                preview.textContent = 'Selecciona roles para ver la vista previa del prompt combinado...';
-                return;
-            }
-
-            let combined = '=== CONTEXTOS DE ROLES SELECCIONADOS ===\n\n';
-            Array.from(selectedRoles).forEach(roleKey => {
-                const role = ROLES[roleKey];
-                combined += `▶ ${role.name}\n${role.prompt}\n\n`;
-            });
-
-            combined += '=== TU PROMPT BASE ===\n' + basePrompt;
-            preview.textContent = combined.substring(0, 500) + (combined.length > 500 ? '...[vista completa al enviar]' : '');
-        }
-
-        function updateRiceFromRoles() {
-            if (selectedRoles.size === 0) {
-                const area = AREAS[currentArea];
-                if (area) updateRiceStructure(area.rice);
-                return;
-            }
-
-            let combinedRice = {
-                reach: [],
-                impact: [],
-                confidence: [],
-                effort: []
-            };
-
-            Array.from(selectedRoles).forEach(roleKey => {
-                const role = ROLES[roleKey];
-                combinedRice.reach.push(role.rice.reach);
-                combinedRice.impact.push(role.rice.impact);
-                combinedRice.confidence.push(role.rice.confidence);
-                combinedRice.effort.push(role.rice.effort);
-            });
-
-            updateRiceStructure({
-                reach: combinedRice.reach.join(' + '),
-                impact: combinedRice.impact.join(' + '),
-                confidence: combinedRice.confidence.join(' + '),
-                effort: combinedRice.effort.join(' + ')
-            });
-        }
-
-        function setupEventListeners() {
-            document.querySelectorAll('.menu-item').forEach(item => {
-                item.addEventListener('click', (e) => {
-                    const area = e.currentTarget.dataset.area;
-                    switchArea(area);
-                });
-            });
-
-            document.querySelectorAll('.tab-button').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const tabName = e.currentTarget.dataset.tab;
-                    switchTab(tabName);
-                });
-            });
-
-            document.getElementById('sendPromptBtn').addEventListener('click', sendPrompt);
-            document.getElementById('resetPromptBtn').addEventListener('click', resetPrompt);
-            document.getElementById('copyPromptBtn').addEventListener('click', copyPrompt);
-            document.getElementById('copyResponseBtn').addEventListener('click', copyResponse);
-            document.getElementById('clearResponseBtn').addEventListener('click', clearResponse);
-            document.getElementById('compareBtn').addEventListener('click', openCompareModal);
-            document.getElementById('exportBtn').addEventListener('click', openExportModal);
-            document.getElementById('favoriteBtn').addEventListener('click', toggleFavorite);
-            document.getElementById('themeToggle').addEventListener('click', toggleDarkMode);
-            document.getElementById('clearAllBtn').addEventListener('click', clearAll);
-            document.getElementById('clearRolesBtn').addEventListener('click', clearAllRoles);
-
-            document.getElementById('sendCustomPromptBtn').addEventListener('click', sendCustomPrompt);
-            document.getElementById('exportHistoryBtn').addEventListener('click', exportCustomHistory);
-
-            document.getElementById('importBtn').addEventListener('click', importConfig);
-            document.getElementById('exportConfigBtn').addEventListener('click', exportConfig);
-
-            document.getElementById('temperature').addEventListener('input', (e) => {
-                document.getElementById('tempValue').textContent = e.target.value;
-            });
-
-            document.getElementById('apiProvider').addEventListener('change', (e) => {
-                updateModelOptions(e.target.value);
-            });
-
-            ['promptEditor', 'customPrompt'].forEach(id => {
-                document.getElementById(id).addEventListener('input', () => {
-                    saveToLocalStorage();
-                    updateTokenCount();
-                    updatePromptPreview();
-                });
-            });
-
-            document.querySelectorAll('.rice-item').forEach(item => {
-                item.addEventListener('click', (e) => {
-                    const riceType = e.currentTarget.dataset.rice;
-                    const value = document.getElementById('rice' + riceType.charAt(0).toUpperCase() + riceType.slice(1)).textContent;
-                    insertRiceToPrompt(riceType, value);
-                });
-            });
-
-            document.querySelectorAll('.export-option').forEach(opt => {
-                opt.addEventListener('click', (e) => {
-                    document.querySelectorAll('.export-option').forEach(o => o.classList.remove('active'));
-                    e.target.classList.add('active');
-                });
-            });
-
-            document.getElementById('closeExportBtn').addEventListener('click', closeExportModal);
-            document.getElementById('confirmExportBtn').addEventListener('click', performExport);
-
-            document.getElementById('closeCompareBtn').addEventListener('click', closeCompareModal);
-            document.getElementById('confirmCompareBtn').addEventListener('click', performComparison);
-        }
-
-        function insertRiceToPrompt(riceType, value) {
-            const editor = document.getElementById('promptEditor');
-            const cursor = editor.selectionStart;
-            const prefix = riceType.charAt(0).toUpperCase() + riceType.slice(1);
-            const insertion = `\n[${prefix.toUpperCase()}: ${value}]\n`;
-            
-            const newText = editor.value.substring(0, cursor) + insertion + editor.value.substring(cursor);
-            editor.value = newText;
-            editor.selectionStart = cursor + insertion.length;
-            editor.focus();
-            
-            updateTokenCount();
-            updatePromptPreview();
-            saveToLocalStorage();
-            showNotification(`Métrica RICE añadida: ${prefix}`, 'info');
-        }
-
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            
-            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
-            document.getElementById(`${tabName}-tab`).classList.add('active');
-        }
-
-        function switchArea(area) {
-            if (!AREAS[area]) return;
-
-            currentArea = area;
-            const areaData = AREAS[area];
-
-            document.querySelectorAll('.menu-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            document.querySelector(`[data-area="${area}"]`).classList.add('active');
-
-            document.getElementById('headerTitle').textContent = areaData.title;
-            document.getElementById('panelTitle').textContent = areaData.panelTitle;
-            document.getElementById('areaInfo').textContent = areaData.title;
-            document.getElementById('modelIndicator').textContent = `📊 ${areaData.model.toUpperCase()}`;
-
-            document.getElementById('promptEditor').value = areaData.prompt;
-            document.getElementById('modelSelect').value = areaData.model;
-            updateRiceFromRoles();
-
-            loadAreaResponse(area);
-            updateTokenCount();
-            updatePromptPreview();
-            saveToLocalStorage();
-        }
-
-        function updateRiceStructure(rice) {
-            if (!rice) {
-                document.getElementById('riceStructure').innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #999; font-size: 11px; padding: 10px;">Estructura no disponible</div>';
-                return;
-            }
-            document.getElementById('riceReach').textContent = rice.reach;
-            document.getElementById('riceImpact').textContent = rice.impact;
-            document.getElementById('riceConfidence').textContent = rice.confidence;
-            document.getElementById('riceEffort').textContent = rice.effort;
-        }
-
-        function sendPrompt() {
-            const apiKey = document.getElementById('apiKey').value.trim();
-            const prompt = document.getElementById('promptEditor').value;
-
-            if (!apiKey) {
-                showNotification('Por favor, introduce tu API Key', 'warning');
-                return;
-            }
-
-            if (!prompt.trim()) {
-                showNotification('Por favor, introduce un prompt', 'warning');
-                return;
-            }
-
-            showLoading();
-            currentResponseRoles = Array.from(selectedRoles);
-            setTimeout(() => generateMockResponse(prompt, currentArea), 1500);
-        }
-
-        function sendCustomPrompt() {
-            const apiKey = document.getElementById('apiKey').value.trim();
-            const prompt = document.getElementById('customPrompt').value;
-            const model = document.getElementById('customModel').value;
-
-            if (!apiKey) {
-                showNotification('Por favor, introduce tu API Key', 'warning');
-                return;
-            }
-
-            if (!prompt.trim()) {
-                showNotification('Por favor, introduce un prompt', 'warning');
-                return;
-            }
-
-            showLoading();
-            setTimeout(() => {
-                const response = `[Respuesta simulada para el modelo ${model}]\n\n` + generateMockResponse(prompt, 'custom', true);
-                addToCustomHistory({
-                    prompt: prompt,
-                    response: response,
-                    model: model,
-                    role: document.getElementById('customRole').value,
-                    timestamp: new Date().toISOString()
-                });
-            }, 1500);
-        }
-
-        function generateMockResponse(prompt, area = 'custom', isCustom = false) {
-            const responses = {
-                salarial: `ANÁLISIS SALARIAL - SECTOR SERVICIOS CCOO
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-1. SITUACIÓN ACTUAL
-├─ Poder adquisitivo: -2.5% interanual
-├─ Inflación acumulada: 6.2%
-└─ Pérdida salarial estimada: 850€/trabajador/año
-
-2. PROPUESTA SALARIAL CCOO
-├─ Incremento del 5.5% para 2024
-├─ Revisión adicional si IPC > 3%
-└─ Mejora complementos diferenciados
-
-3. ANÁLISIS PATRONAL ESPERADO
-├─ Oferta inicial: 2.5-3%
-├─ Argumentación: limitaciones económicas
-└─ Propuesta: incrementos escalonados
-
-4. ARGUMENTACIÓN CCOO
-├─ Crecimiento sector: +4.8%
-├─ Márgenes empresariales en recuperación
-└─ Derecho recuperar poder adquisitivo
-
-5. PUNTOS CRÍTICOS DE NEGOCIACIÓN
-├─ Umbral mínimo aceptable: 4.5%
-├─ Revisión automática si IPC > 2.5%
-└─ Mejora complementos turnicidad
-
-RECOMENDACIÓN: Mantener flexibilidad en 4.8% + revisión automática`,
-                comparativo: `ANÁLISIS COMPARATIVO DE CONVENIOS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-1. ESTRUCTURAS COMPARADAS
-Convenio A (Sector Retail): Base 950€ + Complementos 150€
-Convenio B (Comercio Especializado): Base 980€ + Complementos 180€
-
-2. DIFERENCIAS CLAVE
-├─ Ventaja B: +30€ mensuales (4% mejor)
-├─ Revisiones más automáticas en B
-└─ Garantías empleo superiores en B
-
-3. CONCLUSIÓN: Objetivo debe acercarse a Convenio B`,
-                ipc: `ANÁLISIS IPC Y PROYECCIONES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-1. HISTÓRICO (3 años): -5.2% acumulado pérdida
-2. PROYECCIONES 2024: 2.1% (BCE)
-3. IMPACTO: Sin incrementos = pérdida adicional -0.3%
-4. RECOMENDACIÓN: Revisión automática si IPC > 2.0%`,
-                busqueda: `ANÁLISIS CLÁUSULA
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-1. DEFINICIÓN: Regulación de situación específica
-2. JURISPRUDENCIA: STSJ reconoce derecho ampliado
-3. CONCLUSIÓN: Cláusula muy negociable, margen de mejora alto`,
-                simulacion: `SIMULACIÓN DE NEGOCIACIÓN
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Posición CCOO: 5.5% + revisión automática
-Contrapropuesta Patronal (simulada): 2.5% escalonado
-Distancia inicial: 3 puntos porcentuales
-Acuerdo probable: 4.0% + revisión si IPC > 2.5%`,
-                normativa: `ANÁLISIS NORMATIVA UE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-1. NUEVAS EXIGENCIAS: Transparencia salarial
-2. CLÁUSULAS OBSOLETAS: Revisión recomendada
-3. IMPACTO TRABAJADORES: Máxima protección
-4. ACCIONES: Adaptación inmediata recomendada`
-            };
-
-            const baseResponse = responses[area] || responses.salarial;
-            
-            if (!isCustom && selectedRoles.size > 0) {
-                const rolesStr = Array.from(selectedRoles).map(key => ROLES[key].name).join(' + ');
-                const fullResponse = `✅ RESPUESTA GENERADA CON ROLES: ${rolesStr}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-${baseResponse}`;
-                displayResponse(fullResponse);
-            } else {
-                displayResponse(baseResponse);
-            }
-
-            callCount++;
-            updateMetrics();
-            saveToLocalStorage();
-        }
-
-        function displayResponse(response) {
-            currentResponse = response;
-            const responseArea = document.getElementById('responseArea');
-            
-            let html = '';
-            if (currentResponseRoles && currentResponseRoles.length > 0) {
-                const rolesHtml = Array.from(currentResponseRoles).map(key => `<strong>${ROLES[key].name}</strong>`).join(', ');
-                html = `<div class="response-header">✅ Respuesta generada con roles: ${rolesHtml}</div>`;
-            }
-            
-            html += `<div style="white-space: pre-wrap; word-break: break-word;">${response}</div>`;
-            responseArea.innerHTML = html;
-        }
-
-        function showLoading() {
-            document.getElementById('responseArea').innerHTML = `
-                <div class="response-loading">
-                    <div class="spinner"></div>
-                    <span>Procesando...</span>
                 </div>
-            `;
+            `).join('');
         }
 
-        function resetPrompt() {
-            const area = AREAS[currentArea];
-            document.getElementById('promptEditor').value = area.prompt;
-            updateTokenCount();
-            updatePromptPreview();
-            saveToLocalStorage();
-            showNotification('Prompt restaurado', 'info');
+        function renderAreas() {
+            const selector = document.getElementById('areaSelector');
+            selector.innerHTML = AREAS.map(area => `
+                <button class="area-btn" data-area="${area.id}">
+                    ${area.name}
+                </button>
+            `).join('');
         }
 
-        function copyPrompt() {
-            const text = document.getElementById('promptEditor').value;
-            navigator.clipboard.writeText(text).then(() => {
-                showNotification('Prompt copiado', 'success');
-            });
-        }
-
-        function copyResponse() {
-            navigator.clipboard.writeText(currentResponse).then(() => {
-                showNotification('Respuesta copiada', 'success');
-            });
-        }
-
-        function clearResponse() {
-            document.getElementById('responseArea').innerHTML = '<div class="response-empty">La respuesta aparecerá aquí...</div>';
-            currentResponse = '';
-            currentResponseRoles = [];
-        }
-
-        function clearAllRoles() {
-            selectedRoles.clear();
-            document.querySelectorAll('.role-checkbox-item input').forEach(cb => cb.checked = false);
-            document.querySelectorAll('.role-checkbox-item').forEach(el => el.classList.remove('selected'));
-            updateSelectedRolesDisplay();
-            updatePromptPreview();
-            updateRiceFromRoles();
-            saveToLocalStorage();
-            showNotification('Roles eliminados', 'info');
-        }
-
-        function updateTokenCount() {
-            const text = document.getElementById('promptEditor').value;
-            const words = text.trim().split(/\s+/).length;
-            const chars = text.length;
-            const tokens = Math.ceil(chars / 4);
-            
-            document.getElementById('wordCount').textContent = words;
-            document.getElementById('charCount').textContent = chars;
-            document.getElementById('tokenCount').textContent = tokens;
-        }
-
-        function updateMetrics() {
-            document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString('es-ES');
-            document.getElementById('callCount').textContent = callCount;
-        }
-
-        function saveToLocalStorage() {
-            localStorage.setItem('currentArea', currentArea);
-            localStorage.setItem('selectedRoles', JSON.stringify(Array.from(selectedRoles)));
-            localStorage.setItem('prompt_' + currentArea, document.getElementById('promptEditor').value);
-            localStorage.setItem('callCount', callCount);
-        }
-
-        function loadLocalStorage() {
-            currentArea = localStorage.getItem('currentArea') || 'salarial';
-            callCount = parseInt(localStorage.getItem('callCount') || '0');
-            const savedRoles = localStorage.getItem('selectedRoles');
-            if (savedRoles) {
-                selectedRoles = new Set(JSON.parse(savedRoles));
-            }
-        }
-
-        function loadAreaResponse(area) {
-            const saved = localStorage.getItem('response_' + area);
-            if (saved) {
-                currentResponse = saved;
-                displayResponse(saved);
+        function updateSelectedBadges() {
+            const container = document.getElementById('selectedBadges');
+            if (selectedRoles.length === 0) {
+                container.innerHTML = '<span class="badge-empty">Selecciona al menos un rol arriba</span>';
             } else {
-                clearResponse();
+                container.innerHTML = selectedRoles.map(roleId => {
+                    const role = ROLES.find(r => r.id === roleId);
+                    return `<div class="role-badge">✓ ${role.name}</div>`;
+                }).join('');
             }
         }
 
-        function toggleDarkMode() {
-            isDarkMode = !isDarkMode;
-            document.body.classList.toggle('dark-mode');
-            localStorage.setItem('darkMode', isDarkMode);
+        // ========== EVENT LISTENERS ==========
+        
+        function setupEventListeners() {
+            // Selección de roles
+            document.getElementById('rolesGrid').addEventListener('click', function(e) {
+                const roleItem = e.target.closest('.role-item');
+                if (!roleItem) return;
+                
+                const roleId = roleItem.dataset.role;
+                const checkbox = roleItem.querySelector('input[type="checkbox"]');
+                
+                // Toggle checkbox
+                checkbox.checked = !checkbox.checked;
+                
+                // Toggle selección
+                if (checkbox.checked) {
+                    roleItem.classList.add('selected');
+                    if (!selectedRoles.includes(roleId)) {
+                        selectedRoles.push(roleId);
+                    }
+                } else {
+                    roleItem.classList.remove('selected');
+                    selectedRoles = selectedRoles.filter(id => id !== roleId);
+                }
+                
+                updateSelectedBadges();
+            });
+
+            // Selección de área
+            document.getElementById('areaSelector').addEventListener('click', function(e) {
+                if (!e.target.classList.contains('area-btn')) return;
+                
+                // Remove active class from all
+                document.querySelectorAll('.area-btn').forEach(btn => btn.classList.remove('active'));
+                
+                // Add active to clicked
+                e.target.classList.add('active');
+                selectedArea = e.target.dataset.area;
+            });
+
+            // Botones RICE
+            document.getElementById('riceButtons').addEventListener('click', function(e) {
+                if (!e.target.classList.contains('rice-btn')) return;
+                
+                const riceType = e.target.dataset.rice;
+                e.target.classList.toggle('active');
+                
+                if (selectedRICE.includes(riceType)) {
+                    selectedRICE = selectedRICE.filter(r => r !== riceType);
+                } else {
+                    selectedRICE.push(riceType);
+                }
+            });
+
+            // Generar Prompt
+            document.getElementById('generateBtn').addEventListener('click', generatePrompt);
+
+            // Descargar Word
+            document.getElementById('downloadBtn').addEventListener('click', downloadWord);
+
+            // Copiar al portapapeles
+            document.getElementById('copyBtn').addEventListener('click', copyToClipboard);
         }
 
-        function clearAll() {
-            if (confirm('¿Estás seguro de que deseas limpiar todo?')) {
-                localStorage.clear();
-                location.reload();
+        // ========== GENERACIÓN DE PROMPT ==========
+        
+        function generatePrompt() {
+            if (selectedRoles.length === 0) {
+                showFeedback('⚠️ Por favor, selecciona al menos un rol', 'error');
+                return;
             }
-        }
 
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            setTimeout(() => notification.remove(), 3000);
-        }
+            if (!selectedArea) {
+                showFeedback('⚠️ Por favor, selecciona un área de trabajo', 'error');
+                return;
+            }
 
-        function openExportModal() {
-            document.getElementById('exportModal').classList.add('active');
-        }
+            // Construcción del prompt
+            let prompt = '';
 
-        function closeExportModal() {
-            document.getElementById('exportModal').classList.remove('active');
-        }
+            // 1. Contexto de roles
+            prompt += '# CONTEXTO DE ROLES EXPERTOS\n\n';
+            selectedRoles.forEach(roleId => {
+                const role = ROLES.find(r => r.id === roleId);
+                prompt += `## ${role.name}\n${role.context}\n\n`;
+            });
 
-        function performExport() {
-            showNotification('Exportación simulada (funcionalidad completa con API)', 'info');
-            closeExportModal();
-        }
+            // 2. Separador
+            prompt += '\n' + '='.repeat(80) + '\n\n';
 
-        function openCompareModal() {
-            document.getElementById('compareModal').classList.add('active');
-        }
+            // 3. Template del área
+            const area = AREAS.find(a => a.id === selectedArea);
+            prompt += area.template + '\n\n';
 
-        function closeCompareModal() {
-            document.getElementById('compareModal').classList.remove('active');
-        }
-
-        function performComparison() {
-            showNotification('Comparación simulada', 'info');
-            closeCompareModal();
-        }
-
-        function toggleFavorite() {
-            if (currentResponse) {
-                favorites.push({
-                    response: currentResponse,
-                    timestamp: new Date().toISOString(),
-                    area: currentArea
+            // 4. Estructura RICE (si está seleccionada)
+            if (selectedRICE.length > 0) {
+                prompt += '\n' + '='.repeat(80) + '\n';
+                prompt += '\n# ANÁLISIS RICE\n';
+                selectedRICE.forEach(riceType => {
+                    prompt += RICE_CONTENT[riceType] + '\n';
                 });
-                showNotification('Añadido a favoritos', 'success');
+            }
+
+            // 5. Instrucciones finales
+            prompt += '\n' + '='.repeat(80) + '\n\n';
+            prompt += '## INSTRUCCIONES PARA LA IA\n\n';
+            prompt += `Actúa como ${selectedRoles.map(id => ROLES.find(r => r.id === id).name).join(', ')} y proporciona un análisis detallado, riguroso y profesional basado en el contexto proporcionado.\n\n`;
+            prompt += 'Incluye:\n';
+            prompt += '- Análisis fundamentado con datos\n';
+            prompt += '- Referencias normativas cuando aplique\n';
+            prompt += '- Recomendaciones prácticas y accionables\n';
+            prompt += '- Formato claro y estructurado\n';
+
+            // Insertar en la caja
+            document.getElementById('promptBox').value = prompt;
+
+            // Feedback positivo
+            showFeedback('✅ Prompt generado correctamente', 'success');
+
+            // Scroll suave a la caja de prompt
+            document.getElementById('promptBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // ========== EXPORTACIÓN A WORD ==========
+        
+        async function downloadWord() {
+            const promptText = document.getElementById('promptBox').value;
+
+            if (!promptText.trim()) {
+                showFeedback('⚠️ No hay contenido para descargar. Genera un prompt primero.', 'error');
+                return;
+            }
+
+            try {
+                // Mostrar feedback de procesamiento
+                showFeedback('📄 Generando documento Word...', 'info');
+
+                // Usar la librería docx
+                const { Document, Paragraph, TextRun, HeadingLevel, AlignmentType, Packer } = docx;
+
+                // Procesar el contenido del prompt en párrafos
+                const lines = promptText.split('\n');
+                const documentChildren = [];
+
+                lines.forEach(line => {
+                    if (line.startsWith('# ')) {
+                        // Título principal
+                        documentChildren.push(
+                            new Paragraph({
+                                text: line.replace('# ', ''),
+                                heading: HeadingLevel.HEADING_1,
+                                spacing: { before: 400, after: 200 }
+                            })
+                        );
+                    } else if (line.startsWith('## ')) {
+                        // Subtítulo
+                        documentChildren.push(
+                            new Paragraph({
+                                text: line.replace('## ', ''),
+                                heading: HeadingLevel.HEADING_2,
+                                spacing: { before: 300, after: 150 }
+                            })
+                        );
+                    } else if (line.startsWith('### ')) {
+                        // Subtítulo nivel 3
+                        documentChildren.push(
+                            new Paragraph({
+                                text: line.replace('### ', ''),
+                                heading: HeadingLevel.HEADING_3,
+                                spacing: { before: 200, after: 100 }
+                            })
+                        );
+                    } else if (line.startsWith('- ')) {
+                        // Lista
+                        documentChildren.push(
+                            new Paragraph({
+                                text: line.replace('- ', '• '),
+                                spacing: { before: 50, after: 50 }
+                            })
+                        );
+                    } else if (line.trim() === '='.repeat(80)) {
+                        // Separador visual (línea)
+                        documentChildren.push(
+                            new Paragraph({
+                                text: '',
+                                border: {
+                                    bottom: {
+                                        color: "E74C3C",
+                                        space: 1,
+                                        value: "single",
+                                        size: 6
+                                    }
+                                },
+                                spacing: { before: 200, after: 200 }
+                            })
+                        );
+                    } else {
+                        // Párrafo normal
+                        documentChildren.push(
+                            new Paragraph({
+                                text: line,
+                                spacing: { before: 100, after: 100 }
+                            })
+                        );
+                    }
+                });
+
+                // Crear encabezado del documento
+                const headerChildren = [
+                    new Paragraph({
+                        text: "Generador de Prompts - Negociación Colectiva CCOO",
+                        heading: HeadingLevel.TITLE,
+                        alignment: AlignmentType.CENTER,
+                        spacing: { after: 200 }
+                    }),
+                    new Paragraph({
+                        children: [
+                            new TextRun({
+                                text: `Roles seleccionados: ${selectedRoles.map(id => ROLES.find(r => r.id === id).name).join(', ')}`,
+                                bold: true
+                            })
+                        ],
+                        spacing: { after: 100 }
+                    }),
+                    new Paragraph({
+                        children: [
+                            new TextRun({
+                                text: `Área de trabajo: ${selectedArea ? AREAS.find(a => a.id === selectedArea).name : 'N/A'}`,
+                                bold: true
+                            })
+                        ],
+                        spacing: { after: 200 }
+                    }),
+                    new Paragraph({
+                        text: '',
+                        border: {
+                            bottom: {
+                                color: "E74C3C",
+                                space: 1,
+                                value: "single",
+                                size: 12
+                            }
+                        },
+                        spacing: { after: 300 }
+                    })
+                ];
+
+                // Crear pie de página
+                const footerChildren = [
+                    new Paragraph({
+                        text: '',
+                        border: {
+                            top: {
+                                color: "2C3E50",
+                                space: 1,
+                                value: "single",
+                                size: 6
+                            }
+                        },
+                        spacing: { before: 300, after: 100 }
+                    }),
+                    new Paragraph({
+                        children: [
+                            new TextRun({
+                                text: `Generado el ${new Date().toLocaleDateString('es-ES', { 
+                                    year: 'numeric', 
+                                    month: 'long', 
+                                    day: 'numeric' 
+                                })} | `,
+                                size: 18
+                            }),
+                            new TextRun({
+                                text: 'CCOO - Negociación Colectiva',
+                                bold: true,
+                                size: 18
+                            })
+                        ],
+                        alignment: AlignmentType.CENTER
+                    })
+                ];
+
+                // Crear documento
+                const doc = new Document({
+                    sections: [{
+                        children: [...headerChildren, ...documentChildren, ...footerChildren]
+                    }]
+                });
+
+                // Generar blob y descargar
+                const blob = await Packer.toBlob(doc);
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                
+                const fecha = new Date().toISOString().split('T')[0];
+                const areaName = selectedArea ? AREAS.find(a => a.id === selectedArea).name.replace(/[^a-zA-Z0-9]/g, '_') : 'general';
+                link.download = `prompt_CCOO_${areaName}_${fecha}.docx`;
+                
+                link.click();
+                URL.revokeObjectURL(url);
+
+                showFeedback('✅ Documento Word descargado correctamente', 'success');
+            } catch (error) {
+                console.error('Error al generar Word:', error);
+                showFeedback('❌ Error al generar el documento Word', 'error');
             }
         }
 
-        function addToCustomHistory(item) {
-            customHistory.unshift(item);
-            showNotification('Prueba añadida al historial', 'info');
-        }
+        // ========== COPIAR AL PORTAPAPELES ==========
+        
+        function copyToClipboard() {
+            const promptText = document.getElementById('promptBox').value;
 
-        function exportCustomHistory() {
-            const json = JSON.stringify(customHistory, null, 2);
-            const blob = new Blob([json], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'historial_pruebas.json';
-            a.click();
-            showNotification('Historial exportado', 'success');
-        }
-
-        function importConfig() {
-            showNotification('Importación disponible (selecciona archivo)', 'info');
-        }
-
-        function exportConfig() {
-            const config = {
-                area: currentArea,
-                selectedRoles: Array.from(selectedRoles),
-                prompt: document.getElementById('promptEditor').value
-            };
-            const json = JSON.stringify(config, null, 2);
-            const blob = new Blob([json], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'configuracion_negociacion.json';
-            a.click();
-            showNotification('Configuración exportada', 'success');
-        }
-
-        function updateModelOptions(provider) {
-            const select = document.getElementById('modelSelect');
-            if (provider === 'openai') {
-                select.innerHTML = '<option value="gpt-4">GPT-4</option><option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>';
-            } else {
-                select.innerHTML = '<option value="claude">Claude 3 Opus</option><option value="claude-haiku">Claude 3 Haiku</option>';
+            if (!promptText.trim()) {
+                showFeedback('⚠️ No hay contenido para copiar', 'error');
+                return;
             }
+
+            navigator.clipboard.writeText(promptText).then(() => {
+                showFeedback('✅ Prompt copiado al portapapeles', 'success');
+            }).catch(err => {
+                showFeedback('❌ Error al copiar al portapapeles', 'error');
+                console.error('Error:', err);
+            });
         }
+
+        // ========== FEEDBACK VISUAL ==========
+        
+        function showFeedback(message, type = 'success') {
+            const feedback = document.getElementById('feedback');
+            feedback.textContent = message;
+            feedback.className = 'feedback show';
+            
+            if (type === 'error') {
+                feedback.classList.add('error');
+            } else if (type === 'info') {
+                feedback.style.background = '#3498db';
+            }
+
+            setTimeout(() => {
+                feedback.classList.remove('show');
+                feedback.style.background = '#27ae60';
+            }, 3500);
+        }
+
+        // ========== INICIAR APLICACIÓN ==========
+        
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
